@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+:root {
+  --background: #101724;
+  --foreground: #f1ead8;
+  --muted: #c4bda9;
+  --gold: #e6a900;
+  --gold-strong: #ffc928;
+  --navy: #162235;
+  --navy-deep: #0b111c;
+  --panel: #141e2d;
+  --panel-soft: #1b283b;
+  --border: rgba(255, 201, 40, 0.22);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-gold: var(--gold);
+  --color-gold-strong: var(--gold-strong);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-panel: var(--panel);
+  --color-panel-soft: var(--panel-soft);
+  --color-line: var(--border);
+  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+  background:
+    radial-gradient(circle at 78% 0%, rgba(255, 201, 40, 0.12), transparent 28rem),
+    radial-gradient(circle at 12% 12%, rgba(241, 234, 216, 0.06), transparent 22rem),
+    linear-gradient(180deg, #101724 0%, #0b111c 100%);
+}
+
+::selection {
+  background: rgba(246, 216, 122, 0.28);
+  color: #fff7d6;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
