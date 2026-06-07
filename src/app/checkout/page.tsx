@@ -39,18 +39,18 @@ export default async function CheckoutPage({
                   Assinatura mensal
                 </p>
                 <h1 className="mt-4 max-w-2xl text-4xl font-black leading-tight sm:text-5xl">
-                  Acesso premium à Comunidade Hagios
+                  Acesso premium à Comunidade Hágios
                 </h1>
                 <p className="mt-4 max-w-2xl text-lg leading-8 text-muted">
-                  Entre para uma comunidade de Marketing com IA com aulas, cursos,
-                  materiais, atualizações e grupo exclusivo no WhatsApp.
+                  Entre em um ambiente contínuo para aprender, implementar e
+                  acompanhar a aplicação de IA no seu negócio.
                 </p>
                 <div className="mt-8 grid gap-3 sm:grid-cols-2">
                   {[
-                    "Cursos e aulas práticas",
-                    "Materiais por links externos",
-                    "Grupo oficial no WhatsApp",
-                    "Atualizações constantes",
+                    "Jornada Hágios estruturada",
+                    "Conteúdos recentes e mentorias",
+                    "Desafios de implementação",
+                    "Ferramentas e grupo WhatsApp",
                   ].map((item) => (
                     <div
                       key={item}

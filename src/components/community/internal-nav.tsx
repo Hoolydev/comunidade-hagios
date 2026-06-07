@@ -3,23 +3,29 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  BookOpen,
-  FileText,
+  CircleHelp,
+  Clock3,
   Home,
-  LayoutDashboard,
+  LibraryBig,
+  Map,
   MessageCircle,
   Settings,
-  User,
+  Sparkles,
+  Target,
+  UsersRound,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const nav = [
   { href: "/comunidade", label: "Início", icon: Home },
-  { href: "/comunidade/conteudos", label: "Conteúdos", icon: LayoutDashboard },
-  { href: "/comunidade/cursos", label: "Cursos", icon: BookOpen },
-  { href: "/comunidade/materiais", label: "Materiais", icon: FileText },
-  { href: "/comunidade/whatsapp", label: "WhatsApp", icon: MessageCircle },
-  { href: "/comunidade/conta", label: "Conta", icon: User },
+  { href: "/comunidade/jornada", label: "Jornada Hágios", icon: Map },
+  { href: "/comunidade/conteudos-recentes", label: "Conteúdos Recentes", icon: Clock3 },
+  { href: "/comunidade/mentorias", label: "Mentorias", icon: UsersRound },
+  { href: "/comunidade/desafios", label: "Desafios", icon: Target },
+  { href: "/comunidade/ferramentas", label: "Biblioteca de Ferramentas", icon: LibraryBig },
+  { href: "/comunidade/whatsapp", label: "Grupo WhatsApp", icon: MessageCircle },
+  { href: "/comunidade/duvidas", label: "Área de Dúvidas", icon: CircleHelp },
+  { href: "/comunidade/conta", label: "Minha conta", icon: Sparkles },
 ];
 
 function isActive(pathname: string, href: string) {

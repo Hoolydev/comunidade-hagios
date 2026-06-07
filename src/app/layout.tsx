@@ -14,9 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Comunidade Hagios | Marketing com IA",
+  title: "Comunidade Hágios | IA para negócios",
   description:
-    "Comunidade paga da Hagios Marketing para aprender Marketing com IA na prática.",
+    "Ambiente premium da Hagios Marketing para empresários aprenderem, implementarem e acompanharem a aplicação de IA no negócio.",
 };
 
 export default function RootLayout({

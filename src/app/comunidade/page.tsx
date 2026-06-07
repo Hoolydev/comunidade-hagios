@@ -1,79 +1,253 @@
-import { ArrowRight, BookOpen, FileText, MessageCircle, PlayCircle } from "lucide-react";
-import { CourseCard } from "@/components/community/course-card";
+import Link from "next/link";
+import {
+  ArrowRight,
+  CalendarDays,
+  CheckCircle2,
+  Clock3,
+  LibraryBig,
+  MessageCircle,
+  PlayCircle,
+  Sparkles,
+  Target,
+} from "lucide-react";
+import { OnboardingModal } from "@/components/community/onboarding-modal";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { getCourses, getDashboardStats, getWhatsappLink } from "@/lib/data";
+import { getCurrentProfile } from "@/lib/auth";
+import {
+  getCommunityEvents,
+  getNextActions,
+  getRecentContents,
+  getTools,
+  getWhatsappLink,
+} from "@/lib/data";
+import { cn, formatDate } from "@/lib/utils";
+
+function getFirstName(name?: string | null, email?: string | null) {
+  const value = name || email?.split("@")[0] || "membro";
+  return value.split(" ")[0];
+}
 
 export default async function CommunityHomePage() {
-  const [stats, courses, whatsappLink] = await Promise.all([
-    getDashboardStats(),
-    getCourses(),
-    getWhatsappLink(),
-  ]);
+  const [profile, nextActions, recentContents, events, tools, whatsappLink] =
+    await Promise.all([
+      getCurrentProfile(),
+      getNextActions(),
+      getRecentContents(),
+      getCommunityEvents(),
+      getTools(),
+      getWhatsappLink(),
+    ]);
 
-  const statCards = [
-    { label: "Conteúdos disponíveis", value: stats.lessons + stats.materials, icon: PlayCircle },
-    { label: "Cursos disponíveis", value: stats.courses, icon: BookOpen },
-    { label: "Materiais disponíveis", value: stats.materials, icon: FileText },
-  ];
+  const firstName = getFirstName(profile?.name, profile?.email);
 
   return (
-    <div className="grid gap-7">
-      <section className="relative overflow-hidden rounded-lg border border-line bg-[linear-gradient(135deg,rgba(255,201,40,0.16),rgba(255,255,255,0.045)_46%,rgba(11,17,28,0.1))] p-6 shadow-[0_24px_100px_rgba(0,0,0,0.22)] sm:p-8">
-        <div className="absolute right-0 top-0 h-full w-1/2 bg-[radial-gradient(circle_at_70%_20%,rgba(255,201,40,0.18),transparent_18rem)]" />
-        <div className="relative flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
-              Área interna
-            </p>
-            <h1 className="mt-3 max-w-3xl text-3xl font-black sm:text-5xl">
-              Bem-vindo à Comunidade Hagios
-            </h1>
-            <p className="mt-4 max-w-2xl text-muted">
-              Acesse aulas, cursos, materiais e o grupo oficial para aplicar
-              Marketing com IA com mais clareza e velocidade.
-            </p>
-          </div>
-          <ButtonLink href={whatsappLink} size="lg" className="w-full sm:w-auto">
-            <MessageCircle className="h-5 w-5" />
-            Acessar grupo
-          </ButtonLink>
-        </div>
-      </section>
-
-      <section className="grid gap-4 sm:grid-cols-3">
-        {statCards.map((item) => (
-          <Card key={item.label} className="p-5 transition hover:-translate-y-1 hover:border-gold/35">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-3xl font-black">{item.value}</p>
-                <p className="mt-1 text-sm text-muted">{item.label}</p>
+    <>
+      <OnboardingModal />
+      <div className="grid gap-7">
+        <section className="relative overflow-hidden rounded-lg border border-gold/25 bg-[linear-gradient(135deg,rgba(255,201,40,0.18),rgba(255,255,255,0.055)_42%,rgba(10,15,25,0.82))] p-6 shadow-[0_28px_110px_rgba(0,0,0,0.34)] sm:p-8">
+          <div className="absolute right-0 top-0 h-full w-2/3 bg-[radial-gradient(circle_at_75%_20%,rgba(255,201,40,0.20),transparent_18rem)]" />
+          <div className="relative grid gap-7 xl:grid-cols-[1.15fr_0.85fr] xl:items-end">
+            <div>
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/10 px-3 py-1 text-sm font-semibold text-gold-strong">
+                <Sparkles className="h-4 w-4" />
+                Centro de evolução empresarial
               </div>
-              <div className="grid h-11 w-11 place-items-center rounded-lg border border-gold/20 bg-gold/10">
-                <item.icon className="h-5 w-5 text-gold-strong" />
+              <h1 className="max-w-3xl text-3xl font-black leading-tight sm:text-5xl">
+                Olá, {firstName}. Vamos continuar sua evolução empresarial através da IA.
+              </h1>
+              <p className="mt-4 max-w-2xl text-muted">
+                Aqui o foco é simples: saber o que assistir, o que implementar,
+                o que é novo e onde tirar dúvidas para aplicar IA no negócio com
+                consistência.
+              </p>
+            </div>
+            <Card className="bg-navy-deep/55 p-4">
+              <div className="flex items-start gap-4">
+                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border border-gold/25 bg-gold/10">
+                  <PlayCircle className="h-5 w-5 text-gold-strong" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gold">Aula de boas-vindas</p>
+                  <h2 className="mt-1 text-lg font-black">Reassista quando precisar</h2>
+                  <p className="mt-2 text-sm leading-6 text-muted">
+                    Um guia rápido para entender a Jornada Hágios, conteúdos vivos,
+                    mentorias, desafios e ferramentas.
+                  </p>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </section>
+
+        <section>
+          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gold">
+                Próximo passo
+              </p>
+              <h2 className="mt-2 text-2xl font-black">O que fazer agora?</h2>
+            </div>
+            <ButtonLink href="/comunidade/jornada" variant="secondary" size="sm">
+              Ver Jornada
+              <ArrowRight className="h-4 w-4" />
+            </ButtonLink>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-4">
+            {nextActions.map((action) => (
+              <Card
+                key={action.id}
+                className={cn(
+                  "flex flex-col p-5",
+                  action.priority === "high" &&
+                    "border-gold/35 bg-[linear-gradient(135deg,rgba(255,201,40,0.13),rgba(18,26,42,0.78))]",
+                )}
+              >
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <span className="grid h-10 w-10 place-items-center rounded-lg border border-gold/20 bg-gold/10">
+                    {action.priority === "high" ? (
+                      <Target className="h-5 w-5 text-gold-strong" />
+                    ) : (
+                      <CheckCircle2 className="h-5 w-5 text-gold-strong" />
+                    )}
+                  </span>
+                  {action.priority === "high" ? (
+                    <span className="rounded-full border border-gold/25 bg-gold/10 px-2.5 py-1 text-xs font-semibold text-gold-strong">
+                      recomendado
+                    </span>
+                  ) : null}
+                </div>
+                <h3 className="text-lg font-black leading-snug">{action.title}</h3>
+                <p className="mt-2 flex-1 text-sm leading-6 text-muted">{action.description}</p>
+                <ButtonLink href={action.href} variant="secondary" size="sm" className="mt-5 w-full">
+                  {action.label}
+                  <ArrowRight className="h-4 w-4" />
+                </ButtonLink>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        <section className="grid gap-4 xl:grid-cols-[1.35fr_0.65fr]">
+          <Card className="p-5">
+            <div className="mb-5 flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gold">
+                  Novidades
+                </p>
+                <h2 className="mt-2 text-2xl font-black">Novidades da Comunidade</h2>
+              </div>
+              <ButtonLink href="/comunidade/conteudos-recentes" variant="ghost" size="sm">
+                Ver tudo
+                <ArrowRight className="h-4 w-4" />
+              </ButtonLink>
+            </div>
+            <div className="grid gap-3">
+              {recentContents.slice(0, 3).map((content) => (
+                <Link
+                  key={content.id}
+                  href={content.href}
+                  className="rounded-lg border border-line bg-white/[0.035] p-4 transition hover:border-gold/35 hover:bg-white/[0.06]"
+                >
+                  <div className="flex flex-wrap items-center gap-2 text-xs">
+                    <span className="rounded-full border border-gold/20 bg-gold/10 px-2 py-1 font-semibold text-gold-strong">
+                      {content.category}
+                    </span>
+                    <span className="text-muted">{formatDate(content.published_at)}</span>
+                  </div>
+                  <h3 className="mt-3 font-black">{content.title}</h3>
+                  <p className="mt-1 text-sm leading-6 text-muted">{content.description}</p>
+                </Link>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="p-5">
+            <div className="mb-5 flex items-center gap-3">
+              <div className="grid h-11 w-11 place-items-center rounded-lg border border-gold/25 bg-gold/10">
+                <CalendarDays className="h-5 w-5 text-gold-strong" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gold">Agenda</p>
+                <h2 className="text-xl font-black">Próximos Eventos</h2>
+              </div>
+            </div>
+            <div className="grid gap-3">
+              {events.map((event) => (
+                <Link
+                  key={event.id}
+                  href={event.href}
+                  className="rounded-lg border border-line bg-white/[0.035] p-4 transition hover:border-gold/35"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="rounded-full border border-line bg-white/[0.045] px-2 py-1 text-xs text-muted">
+                      {event.type}
+                    </span>
+                    <span className="text-xs text-muted">{formatDate(event.date)}</span>
+                  </div>
+                  <h3 className="mt-3 font-black">{event.title}</h3>
+                  <p className="mt-1 text-sm leading-6 text-muted">{event.description}</p>
+                </Link>
+              ))}
+            </div>
+          </Card>
+        </section>
+
+        <section className="grid gap-4 xl:grid-cols-[0.8fr_1.2fr]">
+          <Card className="p-5">
+            <div className="flex items-start gap-4">
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border border-emerald-300/25 bg-emerald-400/10">
+                <MessageCircle className="h-5 w-5 text-emerald-100" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-emerald-100">Grupo WhatsApp</p>
+                <h2 className="mt-1 text-2xl font-black">Acompanhe avisos e trocas</h2>
+                <p className="mt-2 text-sm leading-6 text-muted">
+                  Networking, avisos rápidos e conversas da comunidade acontecem no
+                  grupo oficial.
+                </p>
+                <ButtonLink href={whatsappLink} className="mt-5 w-full sm:w-auto">
+                  Entrar no grupo
+                  <MessageCircle className="h-4 w-4" />
+                </ButtonLink>
               </div>
             </div>
           </Card>
-        ))}
-      </section>
 
-      <section>
-        <div className="mb-5 flex items-center justify-between gap-4">
-          <div>
-            <h2 className="text-2xl font-black">Cursos em destaque</h2>
-            <p className="mt-1 text-sm text-muted">Comece por uma trilha prática.</p>
-          </div>
-          <ButtonLink href="/comunidade/conteudos" variant="secondary">
-            Ver todos
-            <ArrowRight className="h-4 w-4" />
-          </ButtonLink>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {courses.slice(0, 3).map((course) => (
-            <CourseCard key={course.id} course={course} />
-          ))}
-        </div>
-      </section>
-    </div>
+          <Card className="p-5">
+            <div className="mb-5 flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gold">
+                  Últimas ferramentas
+                </p>
+                <h2 className="mt-2 text-2xl font-black">Para implementar agora</h2>
+              </div>
+              <ButtonLink href="/comunidade/ferramentas" variant="ghost" size="sm">
+                Buscar
+                <LibraryBig className="h-4 w-4" />
+              </ButtonLink>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {tools.slice(0, 4).map((tool) => (
+                <a
+                  key={tool.id}
+                  href={tool.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded-lg border border-line bg-white/[0.035] p-4 transition hover:border-gold/35"
+                >
+                  <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/10 px-2 py-1 text-xs font-semibold text-gold-strong">
+                    <Clock3 className="h-3.5 w-3.5" />
+                    {tool.category}
+                  </div>
+                  <h3 className="font-black">{tool.title}</h3>
+                  <p className="mt-1 text-sm leading-6 text-muted">{tool.description}</p>
+                </a>
+              ))}
+            </div>
+          </Card>
+        </section>
+      </div>
+    </>
   );
 }

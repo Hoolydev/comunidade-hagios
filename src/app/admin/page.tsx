@@ -59,7 +59,7 @@ export default async function AdminPage() {
             </Link>
             <h1 className="mt-3 text-3xl font-black sm:text-5xl">Painel administrativo</h1>
             <p className="mt-2 text-muted">
-              Gerencie cursos, aulas, materiais, WhatsApp e usuários.
+              Gerencie Jornada, aulas, ferramentas, WhatsApp e usuários.
             </p>
           </div>
           <Badge tone="gold">Admin</Badge>
@@ -67,15 +67,15 @@ export default async function AdminPage() {
         </div>
 
         <section className="grid gap-4 lg:grid-cols-3">
-          <AdminStat icon={BookOpen} label="Cursos cadastrados" value={courses.length} />
+          <AdminStat icon={BookOpen} label="Trilhas cadastradas" value={courses.length} />
           <AdminStat icon={Video} label="Aulas cadastradas" value={lessons.length} />
-          <AdminStat icon={FileText} label="Materiais cadastrados" value={materials.length} />
+          <AdminStat icon={FileText} label="Ferramentas cadastradas" value={materials.length} />
         </section>
 
-        <AdminSectionHeading title="Cursos" description="Crie trilhas, defina categoria e controle publicação." />
+        <AdminSectionHeading title="Jornada" description="Crie trilhas base, defina categoria e controle publicação." />
         <section className="grid gap-6 xl:grid-cols-[420px_1fr]">
           <Card className="p-5 xl:sticky xl:top-6 xl:self-start">
-            <h2 className="text-xl font-bold">Criar curso</h2>
+            <h2 className="text-xl font-bold">Criar trilha</h2>
             <form action={createCourse} className="mt-5 grid gap-4">
               <Field label="Nome" name="title" required />
               <Field label="Slug automático ou customizado" name="slug" />
@@ -86,7 +86,7 @@ export default async function AdminPage() {
                 <Checkbox label="Publicado" name="is_published" defaultChecked />
                 <Checkbox label="Destaque" name="is_featured" />
               </div>
-              <Button type="submit" className="w-full">Criar curso</Button>
+              <Button type="submit" className="w-full">Criar trilha</Button>
             </form>
           </Card>
 
@@ -127,7 +127,7 @@ export default async function AdminPage() {
                       />
                     </div>
                     <Button type="submit" variant="secondary">
-                      Salvar curso
+                      Salvar trilha
                     </Button>
                   </div>
                 </form>
@@ -135,7 +135,7 @@ export default async function AdminPage() {
                   <input type="hidden" name="id" value={course.id} />
                   <Button type="submit" variant="danger" size="sm">
                     <Trash2 className="h-4 w-4" />
-                    Excluir curso
+                    Excluir trilha
                   </Button>
                 </form>
               </Card>
@@ -198,19 +198,19 @@ export default async function AdminPage() {
           </div>
         </section>
 
-        <AdminSectionHeading title="Materiais" description="Adicione links externos de download e vincule a cursos ou aulas." />
+        <AdminSectionHeading title="Ferramentas" description="Adicione links externos e vincule a trilhas ou aulas quando fizer sentido." />
         <section className="grid gap-6 xl:grid-cols-[420px_1fr]">
           <Card className="p-5 xl:sticky xl:top-6 xl:self-start">
-            <h2 className="text-xl font-bold">Criar material</h2>
+            <h2 className="text-xl font-bold">Criar ferramenta</h2>
             <form action={createMaterial} className="mt-5 grid gap-4">
               <CourseSelect courses={courses} optional />
               <LessonSelect lessons={lessons} optional />
               <Field label="Título" name="title" required />
               <TextArea label="Descrição" name="description" />
-              <Field label="Link de download" name="file_url" required />
+              <Field label="Link externo" name="file_url" required />
               <Select label="Categoria" name="category" options={categories} />
               <Checkbox label="Publicado" name="is_published" defaultChecked />
-              <Button type="submit" className="w-full">Criar material</Button>
+              <Button type="submit" className="w-full">Criar ferramenta</Button>
             </form>
           </Card>
 
@@ -253,7 +253,7 @@ export default async function AdminPage() {
                       defaultChecked={material.is_published}
                     />
                     <Button type="submit" variant="secondary">
-                      Salvar material
+                      Salvar ferramenta
                     </Button>
                   </div>
                 </form>
@@ -261,7 +261,7 @@ export default async function AdminPage() {
                   <input type="hidden" name="id" value={material.id} />
                   <Button type="submit" variant="danger" size="sm">
                     <Trash2 className="h-4 w-4" />
-                    Excluir material
+                    Excluir ferramenta
                   </Button>
                 </form>
               </Card>
@@ -401,7 +401,7 @@ function CourseSelect({
 }) {
   return (
     <label className="grid gap-2 text-sm text-muted">
-      Curso relacionado
+      Trilha relacionada
       <select
         name="course_id"
         defaultValue={defaultValue || ""}

@@ -15,7 +15,7 @@ export function PublicHeader() {
             Incluso
           </a>
           <a href="#preco" className="hover:text-foreground">
-            Preco
+            Preço
           </a>
           <a href="#faq" className="hover:text-foreground">
             FAQ

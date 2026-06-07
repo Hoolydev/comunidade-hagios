@@ -1,6 +1,5 @@
 import {
   ArrowRight,
-  Bot,
   BrainCircuit,
   Check,
   Crown,
@@ -19,18 +18,18 @@ import { PublicHeader } from "@/components/landing/public-header";
 import { ButtonLink } from "@/components/ui/button";
 
 const benefits = [
-  ["Aulas sobre Marketing com IA", BrainCircuit],
-  ["Estratégias práticas para vendas", TrendingUp],
-  ["Automações com inteligência artificial", Bot],
-  ["Materiais de apoio", Download],
-  ["Atualizações constantes", RefreshCw],
+  ["Jornada Hágios estruturada", BrainCircuit],
+  ["Conteúdos recentes para aplicar", RefreshCw],
+  ["Mentorias mensais", Users],
+  ["Desafios de implementação", Rocket],
+  ["Biblioteca de ferramentas", Download],
   ["Grupo exclusivo no WhatsApp", MessageCircle],
 ] as const;
 
 const heroStats = [
-  ["IA", "Aplicada ao marketing"],
+  ["IA", "Aplicada ao negócio"],
   ["R$39,90", "Assinatura mensal"],
-  ["WhatsApp", "Networking exclusivo"],
+  ["Mentorias", "Ciclo contínuo"],
 ] as const;
 
 const heroPills = [
@@ -43,7 +42,7 @@ const faqs = [
   {
     question: "O que eu recebo ao entrar?",
     answer:
-      "Você recebe acesso aos cursos, aulas práticas, materiais de apoio, atualizações e ao grupo oficial da Comunidade Hagios.",
+      "Você recebe acesso à Jornada Hágios, conteúdos recentes, mentorias, desafios, ferramentas práticas e ao grupo oficial da comunidade.",
   },
   {
     question: "Preciso ter experiência com IA?",
@@ -84,8 +83,8 @@ export default function Home() {
               Comunidade Hagios
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-muted sm:text-xl">
-              Marketing com IA para quem quer criar conteúdo melhor, vender com
-              mais clareza e usar automações sem ficar perdido em ferramenta.
+              Um ambiente contínuo para empresários aprenderem, implementarem e
+              acompanharem a aplicação da inteligência artificial no negócio.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <ButtonLink
@@ -145,7 +144,8 @@ export default function Home() {
                   </p>
                   <p className="mt-3 text-3xl font-black">R$39,90/mês</p>
                   <p className="mt-2 text-sm text-muted">
-                    Cursos, materiais, aulas e networking em uma assinatura mensal.
+                    Jornada, mentorias, desafios, ferramentas e networking em
+                    uma assinatura mensal.
                   </p>
                 </div>
               </div>
@@ -162,12 +162,12 @@ export default function Home() {
                 O que você vai encontrar
               </p>
               <h2 className="mt-3 text-3xl font-black sm:text-4xl">
-                Conteúdo direto ao ponto para aplicar IA no marketing.
+                Clareza para saber o que assistir, implementar e acompanhar.
               </h2>
             </div>
             <p className="max-w-sm text-sm leading-6 text-muted">
-              Uma biblioteca organizada para aprender, aplicar e acompanhar as
-              atualizações sem ruído.
+              Um centro de evolução empresarial com base permanente, conteúdos
+              vivos e ferramentas para colocar IA em prática.
             </p>
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -212,10 +212,10 @@ export default function Home() {
             </div>
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               {[
-                "Cursos e aulas com YouTube embedado",
-                "Materiais externos para download",
+                "Jornada Hágios com aulas práticas",
+                "Biblioteca de ferramentas por links externos",
                 "Grupo oficial no WhatsApp",
-                "Novos conteúdos e atualizações",
+                "Mentorias, desafios e conteúdos recentes",
               ].map((item) => (
                 <div key={item} className="flex gap-3 text-sm text-muted">
                   <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-strong" />

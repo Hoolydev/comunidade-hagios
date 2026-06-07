@@ -22,10 +22,10 @@ export function InternalShell({
         </Link>
         <div className="mb-5 rounded-lg border border-line bg-navy-deep/35 p-3">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">
-            Área premium
+            Centro de evolução
           </p>
           <p className="mt-1 text-xs leading-5 text-muted">
-            Marketing com IA, aulas e materiais em um só lugar.
+            IA aplicada ao negócio com próximos passos, desafios e suporte.
           </p>
         </div>
         <InternalNav isAdmin={isAdmin} />

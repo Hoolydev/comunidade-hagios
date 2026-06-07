@@ -1,7 +1,28 @@
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
 import { categories } from "@/lib/constants";
-import { getMockCourseWithLessons, mockCourses, mockLessons, mockMaterials } from "@/lib/mock-data";
-import type { Course, CourseWithLessons, Lesson, Material, Profile } from "@/lib/types";
+import {
+  getMockCourseWithLessons,
+  mockChallenges,
+  mockCourses,
+  mockEvents,
+  mockJourneyTracks,
+  mockLessons,
+  mockMaterials,
+  mockMentorships,
+  mockNextActions,
+  mockQuestions,
+  mockRecentContents,
+  mockTools,
+} from "@/lib/mock-data";
+import type {
+  CommunityPost,
+  Course,
+  CourseWithLessons,
+  Lesson,
+  Material,
+  Profile,
+  RecentContent,
+} from "@/lib/types";
 import { getYouTubeThumbnail } from "@/lib/youtube";
 
 function published<T extends { is_published: boolean }>(items: T[]) {
@@ -161,6 +182,88 @@ export async function getDashboardStats() {
     lessons: lessons.length,
     materials: materials.length,
   };
+}
+
+export async function getNextActions() {
+  return mockNextActions;
+}
+
+export async function getJourneyTracks() {
+  return mockJourneyTracks;
+}
+
+export async function getRecentContents() {
+  const posts = await getCommunityPosts();
+  const postContents: RecentContent[] = posts.map((post) => ({
+    id: post.id,
+    title: post.title,
+    description: post.subtitle || post.body.slice(0, 150),
+    category: post.category,
+    type: "Atualização",
+    published_at: post.published_at || post.created_at,
+    href: `/comunidade/posts/${post.slug}`,
+    source_name: post.source_name,
+    source_url: post.source_url,
+  }));
+
+  return [...postContents, ...mockRecentContents].sort(
+    (a, b) => +new Date(b.published_at) - +new Date(a.published_at),
+  );
+}
+
+export async function getCommunityPosts() {
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) return [] as CommunityPost[];
+
+  const { data, error } = await supabase
+    .from("community_posts")
+    .select("*")
+    .eq("status", "published")
+    .order("published_at", { ascending: false });
+
+  if (error || !data) return [] as CommunityPost[];
+
+  return data as CommunityPost[];
+}
+
+export async function getCommunityPostBySlug(slug: string) {
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) return null;
+
+  const { data, error } = await supabase
+    .from("community_posts")
+    .select("*")
+    .eq("slug", slug)
+    .eq("status", "published")
+    .maybeSingle();
+
+  if (error || !data) return null;
+
+  return data as CommunityPost;
+}
+
+export async function getMentorships() {
+  return [...mockMentorships].sort((a, b) => +new Date(b.date) - +new Date(a.date));
+}
+
+export async function getChallenges() {
+  return [...mockChallenges].sort(
+    (a, b) => +new Date(b.published_at) - +new Date(a.published_at),
+  );
+}
+
+export async function getTools() {
+  return [...mockTools].sort((a, b) => +new Date(b.updated_at) - +new Date(a.updated_at));
+}
+
+export async function getCommunityQuestions() {
+  return [...mockQuestions].sort(
+    (a, b) => +new Date(b.created_at) - +new Date(a.created_at),
+  );
+}
+
+export async function getCommunityEvents() {
+  return [...mockEvents].sort((a, b) => +new Date(a.date) - +new Date(b.date));
 }
 
 export async function getWhatsappLink() {

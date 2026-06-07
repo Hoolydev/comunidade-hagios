@@ -37,6 +37,14 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 STRIPE_WEBHOOK_SECRET=
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 STRIPE_PRICE_ID=
+ASSISTANT_API_SECRET=
+UAZAPI_SERVER_URL=
+UAZAPI_INSTANCE_TOKEN=
+UAZAPI_SEND_TEXT_PATH=/send/text
+UAZAPI_CONNECTED_NUMBER=
+UAZAPI_WEBHOOK_SECRET=
+WHATSAPP_APPROVER_NAME=
+WHATSAPP_APPROVER_PHONE=
 ```
 
 `STRIPE_PRICE_ID` é opcional. Se ficar vazio, o app cria o preço mensal de
@@ -93,12 +101,56 @@ Copie o webhook secret gerado para `STRIPE_WEBHOOK_SECRET`.
 - `/login` login, cadastro e recuperação de senha
 - `/checkout` compra da assinatura
 - `/comunidade` dashboard interno protegido
-- `/comunidade/conteudos` grade com filtros
+- `/comunidade/conteudos-recentes` novidades e conteúdos recentes
+- `/comunidade/jornada` trilhas base da Jornada Hágios
+- `/comunidade/ferramentas` biblioteca de ferramentas
+- `/comunidade/mentorias` mentorias mensais
+- `/comunidade/desafios` desafios de implementação
+- `/comunidade/duvidas` área de dúvidas
 - `/comunidade/cursos/[slug]` curso com aulas e vídeos
-- `/comunidade/materiais` materiais externos
 - `/comunidade/whatsapp` grupo oficial
 - `/comunidade/conta` dados e portal Stripe
 - `/admin` CRUD de cursos, aulas, materiais, WhatsApp e usuários
+
+## Assistente editorial por WhatsApp
+
+O assistente recebe um rascunho de conteúdo, salva como pendente, envia título e
+texto para aprovação por WhatsApp via Uazapi e só publica em Conteúdos Recentes
+quando o link de aprovação for confirmado.
+
+1. Rode `supabase/assistant.sql` no SQL Editor do Supabase.
+2. Preencha as envs `ASSISTANT_API_SECRET`, `UAZAPI_SERVER_URL`,
+   `UAZAPI_INSTANCE_TOKEN`, `WHATSAPP_APPROVER_NAME` e
+   `WHATSAPP_APPROVER_PHONE`.
+3. Configure o agente externo para chamar:
+
+```bash
+curl -X POST https://seu-dominio.com/api/assistant/propose \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $ASSISTANT_API_SECRET" \
+  -d '{
+    "title": "Novo conteúdo sobre IA para negócios",
+    "subtitle": "Resumo curto para contextualizar o membro.",
+    "body": "Texto completo que será revisado antes de publicar.",
+    "category": "Atualizações",
+    "tags": ["IA", "Negócios"],
+    "source_name": "Fonte opcional",
+    "source_url": "https://exemplo.com"
+  }'
+```
+
+O endpoint retorna `approval_url` e tenta enviar a mensagem para o WhatsApp. O
+path de envio da Uazapi fica em `UAZAPI_SEND_TEXT_PATH`; ajuste se a sua
+instância usar outro endpoint.
+
+Webhook para cadastrar na Uazapi:
+
+```text
+https://seu-dominio.com/api/whatsapp/uazapi/webhook?secret=SEU_UAZAPI_WEBHOOK_SECRET
+```
+
+A rota responde `GET` para teste de ativação e `POST` para eventos enviados
+pela Uazapi.
 
 ## Pagamento único no futuro
 

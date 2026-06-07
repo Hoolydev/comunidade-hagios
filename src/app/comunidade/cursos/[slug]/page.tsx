@@ -122,7 +122,7 @@ export default async function CoursePage({
                 )}
               </div>
             </Card>
-            <ButtonLink href="/comunidade/conteudos" className="justify-between">
+            <ButtonLink href="/comunidade/conteudos-recentes" className="justify-between">
               Próximo conteúdo
               <ArrowRight className="h-4 w-4" />
             </ButtonLink>
