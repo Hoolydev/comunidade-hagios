@@ -6,11 +6,11 @@ import {
   Clock3,
   LibraryBig,
   MessageCircle,
-  PlayCircle,
   Sparkles,
   Target,
 } from "lucide-react";
 import { OnboardingModal } from "@/components/community/onboarding-modal";
+import { VideoEmbed } from "@/components/community/video-embed";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getCurrentProfile } from "@/lib/auth";
@@ -19,6 +19,7 @@ import {
   getNextActions,
   getRecentContents,
   getTools,
+  getWelcomeContent,
   getWhatsappLink,
 } from "@/lib/data";
 import { cn, formatDate } from "@/lib/utils";
@@ -29,7 +30,7 @@ function getFirstName(name?: string | null, email?: string | null) {
 }
 
 export default async function CommunityHomePage() {
-  const [profile, nextActions, recentContents, events, tools, whatsappLink] =
+  const [profile, nextActions, recentContents, events, tools, whatsappLink, welcome] =
     await Promise.all([
       getCurrentProfile(),
       getNextActions(),
@@ -37,6 +38,7 @@ export default async function CommunityHomePage() {
       getCommunityEvents(),
       getTools(),
       getWhatsappLink(),
+      getWelcomeContent(),
     ]);
 
   const firstName = getFirstName(profile?.name, profile?.email);
@@ -45,13 +47,12 @@ export default async function CommunityHomePage() {
     <>
       <OnboardingModal />
       <div className="grid gap-7">
-        <section className="relative overflow-hidden rounded-lg border border-gold/25 bg-[linear-gradient(135deg,rgba(255,201,40,0.18),rgba(255,255,255,0.055)_42%,rgba(10,15,25,0.82))] p-6 shadow-[0_28px_110px_rgba(0,0,0,0.34)] sm:p-8">
-          <div className="absolute right-0 top-0 h-full w-2/3 bg-[radial-gradient(circle_at_75%_20%,rgba(255,201,40,0.20),transparent_18rem)]" />
-          <div className="relative grid gap-7 xl:grid-cols-[1.15fr_0.85fr] xl:items-end">
+        <section className="rounded-lg border border-line bg-panel p-5 shadow-[0_10px_30px_rgba(0,0,0,0.25)] sm:p-8">
+          <div className="grid gap-7 xl:grid-cols-[1.05fr_0.95fr] xl:items-center">
             <div>
               <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/10 px-3 py-1 text-sm font-semibold text-gold-strong">
                 <Sparkles className="h-4 w-4" />
-                Centro de evolução empresarial
+                {welcome.eyebrow}
               </div>
               <h1 className="max-w-3xl text-3xl font-black leading-tight sm:text-5xl">
                 Olá, {firstName}. Vamos continuar sua evolução empresarial através da IA.
@@ -62,19 +63,12 @@ export default async function CommunityHomePage() {
                 consistência.
               </p>
             </div>
-            <Card className="bg-navy-deep/55 p-4">
-              <div className="flex items-start gap-4">
-                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border border-gold/25 bg-gold/10">
-                  <PlayCircle className="h-5 w-5 text-gold-strong" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-gold">Aula de boas-vindas</p>
-                  <h2 className="mt-1 text-lg font-black">Reassista quando precisar</h2>
-                  <p className="mt-2 text-sm leading-6 text-muted">
-                    Um guia rápido para entender a Jornada Hágios, conteúdos vivos,
-                    mentorias, desafios e ferramentas.
-                  </p>
-                </div>
+            <Card tone="flat" className="overflow-hidden p-3">
+              <VideoEmbed videoId={welcome.video_id} title={welcome.title} />
+              <div className="px-1 pb-1 pt-4">
+                <p className="text-sm font-semibold text-gold">{welcome.label}</p>
+                <h2 className="mt-1 text-lg font-bold">{welcome.title}</h2>
+                <p className="mt-2 text-sm leading-6 text-muted">{welcome.description}</p>
               </div>
             </Card>
           </div>
@@ -99,8 +93,7 @@ export default async function CommunityHomePage() {
                 key={action.id}
                 className={cn(
                   "flex flex-col p-5",
-                  action.priority === "high" &&
-                    "border-gold/35 bg-[linear-gradient(135deg,rgba(255,201,40,0.13),rgba(18,26,42,0.78))]",
+                  action.priority === "high" && "border-gold/35 bg-gold/10",
                 )}
               >
                 <div className="mb-4 flex items-center justify-between gap-3">
@@ -138,7 +131,7 @@ export default async function CommunityHomePage() {
                 <h2 className="mt-2 text-2xl font-black">Novidades da Comunidade</h2>
               </div>
               <ButtonLink href="/comunidade/conteudos-recentes" variant="ghost" size="sm">
-                Ver tudo
+                Ver todas as novidades
                 <ArrowRight className="h-4 w-4" />
               </ButtonLink>
             </div>
@@ -223,7 +216,7 @@ export default async function CommunityHomePage() {
                 <h2 className="mt-2 text-2xl font-black">Para implementar agora</h2>
               </div>
               <ButtonLink href="/comunidade/ferramentas" variant="ghost" size="sm">
-                Buscar
+                Ver todas as ferramentas
                 <LibraryBig className="h-4 w-4" />
               </ButtonLink>
             </div>

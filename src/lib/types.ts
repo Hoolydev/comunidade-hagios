@@ -39,9 +39,13 @@ export type Lesson = {
   course_id: string;
   title: string;
   description: string;
+  content_type?: "video" | "text";
+  body?: string | null;
   youtube_url: string;
   youtube_video_id: string;
+  video_format?: "desktop" | "vertical";
   order_index: number;
+  available_at?: string | null;
   is_published: boolean;
   created_at: string;
   updated_at: string;

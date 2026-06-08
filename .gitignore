@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/test-results
+/playwright-report
 
 # next.js
 /.next/
@@ -43,5 +45,7 @@ next-env.d.ts
 
 # local reference material
 xquads-squads-main/
+ui-ux-pro-max-skill-main/
+ui-ux-pro-max-skill-main.zip
 AGENTS.md
 CLAUDE.md

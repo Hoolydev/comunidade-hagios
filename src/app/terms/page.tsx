@@ -8,8 +8,8 @@ export default function TermsPage() {
       <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
         <h1 className="text-4xl font-black">Termos de uso</h1>
         <p className="mt-5 leading-7 text-muted">
-          Estes termos devem ser revisados pela Hagios Marketing antes da
-          publicação. O acesso à Comunidade Hagios é pessoal, mediante assinatura
+          Estes termos devem ser revisados pela Hágios Marketing antes da
+          publicação. O acesso à Comunidade Hágios é pessoal, mediante assinatura
           ativa, e pode ser cancelado conforme as regras configuradas no Stripe.
         </p>
       </article>

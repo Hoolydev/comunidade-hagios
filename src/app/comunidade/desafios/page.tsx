@@ -1,4 +1,5 @@
 import { ArrowUpRight, CheckCircle2, Trophy } from "lucide-react";
+import { PageHero } from "@/components/community/page-hero";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getChallenges } from "@/lib/data";
@@ -9,18 +10,12 @@ export default async function DesafiosPage() {
 
   return (
     <div className="grid gap-7">
-      <section className="rounded-lg border border-line bg-[linear-gradient(135deg,rgba(255,201,40,0.13),rgba(255,255,255,0.04),rgba(8,13,22,0.72))] p-6 sm:p-8">
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
-          Desafios
-        </p>
-        <h1 className="mt-3 max-w-3xl text-3xl font-black leading-tight sm:text-5xl">
-          Implementação em ciclos curtos.
-        </h1>
-        <p className="mt-4 max-w-2xl text-muted">
-          Cada desafio transforma um tema em ação prática. O objetivo é terminar
-          com uma melhoria real no negócio, mesmo que pequena.
-        </p>
-      </section>
+      <PageHero
+        eyebrow="Desafios"
+        title="Implementação em ciclos curtos."
+        description="Cada desafio transforma um tema em ação prática. O objetivo é terminar com uma melhoria real no negócio, mesmo que pequena."
+        icon={Trophy}
+      />
 
       <div className="grid gap-5">
         {challenges.map((challenge) => {
@@ -56,10 +51,7 @@ export default async function DesafiosPage() {
                     </span>
                   </div>
                   <div className="h-2 rounded-full bg-white/10">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-gold to-gold-strong"
-                      style={{ width: `${progress}%` }}
-                    />
+                    <div className="h-full rounded-full bg-gold-strong" style={{ width: `${progress}%` }} />
                   </div>
                   <p className="mt-3 text-sm text-muted">
                     {challenge.completion_rate}% da comunidade concluiu.

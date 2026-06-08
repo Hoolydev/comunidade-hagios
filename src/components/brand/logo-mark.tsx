@@ -27,7 +27,7 @@ export function LogoMark({
     >
       <Image
         src="/logo-comunidade-hagios.png"
-        alt="Logo Comunidade Hagios"
+        alt="Logo Comunidade Hágios"
         fill
         sizes={size === "lg" ? "144px" : "56px"}
         className="object-cover"

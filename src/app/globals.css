@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #101724;
+  --background: #0d1420;
   --foreground: #f1ead8;
-  --muted: #c4bda9;
-  --gold: #e6a900;
-  --gold-strong: #ffc928;
-  --navy: #162235;
-  --navy-deep: #0b111c;
-  --panel: #141e2d;
-  --panel-soft: #1b283b;
-  --border: rgba(255, 201, 40, 0.22);
+  --muted: #b8b09e;
+  --gold: #d8a31b;
+  --gold-strong: #f3c64a;
+  --navy: #131d2c;
+  --navy-deep: #090f18;
+  --panel: #111a28;
+  --panel-soft: #172335;
+  --border: rgba(216, 163, 27, 0.22);
 }
 
 @theme inline {
@@ -32,6 +32,8 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior-y: contain;
 }
 
 body::before {
@@ -40,10 +42,7 @@ body::before {
   z-index: -1;
   pointer-events: none;
   content: "";
-  background:
-    radial-gradient(circle at 78% 0%, rgba(255, 201, 40, 0.12), transparent 28rem),
-    radial-gradient(circle at 12% 12%, rgba(241, 234, 216, 0.06), transparent 22rem),
-    linear-gradient(180deg, #101724 0%, #0b111c 100%);
+  background: linear-gradient(180deg, #0d1420 0%, #090f18 100%);
 }
 
 ::selection {
@@ -58,4 +57,16 @@ html {
 a,
 button {
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

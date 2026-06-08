@@ -8,7 +8,7 @@ export function PublicHeader() {
       <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-3 font-semibold">
           <LogoMark size="xs" priority />
-          <span>Comunidade Hagios</span>
+          <span>Comunidade Hágios</span>
         </Link>
         <nav className="hidden items-center gap-6 text-sm font-medium text-muted md:flex">
           <a href="#incluso" className="hover:text-foreground">
@@ -25,10 +25,7 @@ export function PublicHeader() {
           <ButtonLink href="/login?next=/comunidade" variant="ghost" size="sm" className="hidden sm:inline-flex">
             Já sou assinante
           </ButtonLink>
-          <ButtonLink
-            href="/login?mode=signup&next=%2Fcheckout%3Fstart%3D1"
-            size="sm"
-          >
+          <ButtonLink href="/checkout" size="sm">
             Assinar
           </ButtonLink>
         </div>

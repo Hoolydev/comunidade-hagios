@@ -9,8 +9,16 @@ export function hasSupabaseAdminEnv() {
   return Boolean(hasSupabaseEnv() && process.env.SUPABASE_SERVICE_ROLE_KEY);
 }
 
+export function getSupabaseUrl() {
+  return process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/rest\/v1\/?$/, "").replace(/\/$/, "");
+}
+
 export function hasStripeEnv() {
   return Boolean(process.env.STRIPE_SECRET_KEY);
+}
+
+export function hasAbacatePayEnv() {
+  return Boolean(process.env.ABACATEPAY_API_KEY && process.env.ABACATEPAY_PRODUCT_ID);
 }
 
 export function getAppUrl() {

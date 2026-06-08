@@ -1,0 +1,319 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
+import { ArrowRight, Check, CreditCard, KeyRound, Lock, Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { cn } from "@/lib/utils";
+
+const included = [
+  "Jornada Hágios estruturada",
+  "Conteúdos recentes e mentorias",
+  "Desafios de implementação",
+  "Biblioteca de ferramentas",
+  "Grupo oficial no WhatsApp",
+];
+
+const STEP_LABELS = ["Seus dados", "Pagamento", "Acesso liberado"];
+
+function Steps({
+  active,
+  canSelect,
+  onSelect,
+}: {
+  active: number;
+  canSelect: (n: number) => boolean;
+  onSelect: (n: number) => void;
+}) {
+  return (
+    <ol className="flex flex-wrap items-center gap-x-3 gap-y-2">
+      {STEP_LABELS.map((label, index) => {
+        const n = index + 1;
+        const done = n < active;
+        const current = n === active;
+        const selectable = canSelect(n);
+
+        const inner = (
+          <>
+            <span
+              className={cn(
+                "grid h-8 w-8 shrink-0 place-items-center rounded-full border text-sm font-bold transition",
+                done && "border-gold bg-gold text-navy-deep",
+                current && "border-gold bg-gold/15 text-gold-strong",
+                !done && !current && "border-line bg-white/[0.03] text-muted",
+              )}
+            >
+              {done ? <Check className="h-4 w-4" /> : n}
+            </span>
+            <span
+              className={cn(
+                "text-sm font-semibold",
+                current ? "text-foreground" : "text-muted",
+              )}
+            >
+              {label}
+            </span>
+          </>
+        );
+
+        return (
+          <li key={label} className="flex items-center gap-3">
+            {selectable ? (
+              <button
+                type="button"
+                onClick={() => onSelect(n)}
+                className="flex items-center gap-3 rounded-lg transition hover:opacity-80"
+              >
+                {inner}
+              </button>
+            ) : (
+              <span className="flex items-center gap-3">{inner}</span>
+            )}
+            {n < STEP_LABELS.length ? (
+              <span className="hidden h-px w-8 bg-line sm:block" />
+            ) : null}
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+function SummaryCard() {
+  return (
+    <Card className="p-6 lg:sticky lg:top-8">
+      <h2 className="text-lg font-bold">Resumo</h2>
+      <div className="mt-4 grid gap-2.5">
+        {included.map((item) => (
+          <div key={item} className="flex gap-3 text-sm text-muted">
+            <Check className="mt-0.5 h-4 w-4 shrink-0 text-gold-strong" />
+            <span>{item}</span>
+          </div>
+        ))}
+      </div>
+      <div className="mt-6 border-t border-line pt-5">
+        <div className="flex items-center justify-between text-sm text-muted">
+          <span>Plano mensal</span>
+          <span>R$49,90</span>
+        </div>
+        <div className="mt-3 flex items-end justify-between">
+          <span className="text-sm text-muted">Total hoje</span>
+          <span className="text-4xl font-black">R$49,90</span>
+        </div>
+        <p className="mt-1 text-xs text-muted">cobrança mensal · cancele quando quiser</p>
+      </div>
+      <div className="mt-5 flex items-center gap-2 rounded-lg border border-line bg-navy-deep/40 p-3 text-xs leading-5 text-muted">
+        <Lock className="h-4 w-4 shrink-0 text-gold" />
+        <span>PIX ou cartão — pagamento seguro processado pelo AbacatePay.</span>
+      </div>
+    </Card>
+  );
+}
+
+export function CheckoutWizard({
+  loggedIn,
+  email,
+  paymentConfigured = true,
+}: {
+  loggedIn: boolean;
+  email?: string | null;
+  paymentConfigured?: boolean;
+}) {
+  const [step, setStep] = useState(loggedIn ? 2 : 1);
+  const [accountEmail, setAccountEmail] = useState(email || "");
+  const [pending, startTransition] = useTransition();
+  const supabase = createSupabaseBrowserClient();
+
+  // Só dá para voltar para "Seus dados" (etapa 1) quando não está logado.
+  const canSelect = (n: number) => n === 1 && step === 2 && !loggedIn;
+  const onSelect = (n: number) => {
+    if (n === 1 && !loggedIn) setStep(1);
+  };
+
+  async function openPayment() {
+    const response = await fetch("/api/abacatepay/checkout", { method: "POST" });
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok || !data.url) {
+      toast.error(data.error || "Não foi possível abrir o pagamento.");
+      return false;
+    }
+
+    window.location.href = data.url;
+    return true;
+  }
+
+  function createAccount(formData: FormData) {
+    startTransition(async () => {
+      if (!supabase) {
+        toast.error("Configure o Supabase para habilitar o cadastro.");
+        return;
+      }
+
+      const emailValue = String(formData.get("email") || "").trim();
+      const password = String(formData.get("password") || "");
+
+      if (!emailValue || password.length < 6) {
+        toast.error("Informe um e-mail válido e senha de no mínimo 6 caracteres.");
+        return;
+      }
+
+      // Cria a conta já confirmada (sem e-mail de confirmação).
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailValue, password }),
+      });
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        toast.error(data.error || "Não foi possível criar a conta.");
+        return;
+      }
+
+      const signIn = await supabase.auth.signInWithPassword({
+        email: emailValue,
+        password,
+      });
+      if (signIn.error) {
+        toast.error(
+          data.status === "exists"
+            ? "Esse e-mail já tem conta. Confira a senha para continuar."
+            : signIn.error.message,
+        );
+        return;
+      }
+
+      await fetch("/api/auth/ensure-profile", { method: "POST" });
+      setAccountEmail(emailValue);
+      setStep(2);
+      toast.success("Conta criada. Abrindo pagamento...");
+      await openPayment();
+    });
+  }
+
+  function goToPayment() {
+    startTransition(async () => {
+      await openPayment();
+    });
+  }
+
+  return (
+    <div className="grid gap-8">
+      <Steps active={step} canSelect={canSelect} onSelect={onSelect} />
+
+      <div className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start">
+        <Card className="p-6 sm:p-8">
+          {step === 1 ? (
+            <form action={createAccount} className="grid gap-4">
+              <div>
+                <h2 className="text-xl font-black">Seus dados</h2>
+                <p className="mt-1 text-sm leading-6 text-muted">
+                  Crie sua conta para continuar. Sem confirmação de e-mail — você
+                  vai direto para o pagamento.
+                </p>
+              </div>
+              <label className="grid gap-2 text-sm text-muted">
+                E-mail
+                <div className="flex h-11 items-center gap-2 rounded-lg border border-line bg-black/30 px-3 focus-within:border-gold">
+                  <Mail className="h-4 w-4 text-gold" />
+                  <input
+                    name="email"
+                    type="email"
+                    required
+                    autoComplete="email"
+                    className="w-full bg-transparent text-foreground outline-none"
+                    placeholder="voce@email.com"
+                  />
+                </div>
+              </label>
+              <label className="grid gap-2 text-sm text-muted">
+                Senha
+                <div className="flex h-11 items-center gap-2 rounded-lg border border-line bg-black/30 px-3 focus-within:border-gold">
+                  <KeyRound className="h-4 w-4 text-gold" />
+                  <input
+                    name="password"
+                    type="password"
+                    required
+                    minLength={6}
+                    autoComplete="new-password"
+                    className="w-full bg-transparent text-foreground outline-none"
+                    placeholder="mínimo 6 caracteres"
+                  />
+                </div>
+              </label>
+              <Button type="submit" size="lg" disabled={pending} className="mt-1 w-full">
+                {pending ? "Criando conta e abrindo pagamento..." : "Criar conta e pagar agora"}
+                <ArrowRight className="h-5 w-5" />
+              </Button>
+            </form>
+          ) : (
+            <div className="grid gap-5">
+              <div>
+                <h2 className="text-xl font-black">Pagamento</h2>
+                <p className="mt-1 text-sm leading-6 text-muted">
+                  {accountEmail ? (
+                    <>
+                      Conta <span className="text-foreground">{accountEmail}</span>{" "}
+                      pronta. Revise e finalize sua assinatura.
+                    </>
+                  ) : (
+                    "Revise e finalize sua assinatura."
+                  )}
+                </p>
+              </div>
+
+              <div className="grid gap-2 rounded-lg border border-line bg-white/[0.025] p-4 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted">Plano</span>
+                  <span className="font-semibold">Comunidade Hágios — mensal</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted">Total hoje</span>
+                  <span className="font-semibold">R$49,90</span>
+                </div>
+              </div>
+
+              <Button
+                onClick={goToPayment}
+                size="lg"
+                disabled={pending || !paymentConfigured}
+                className="w-full"
+              >
+                <CreditCard className="h-5 w-5" />
+                {pending ? "Abrindo pagamento..." : "Ir para o pagamento (PIX ou cartão)"}
+              </Button>
+              {paymentConfigured ? (
+                <p className="text-xs leading-5 text-muted">
+                  Você será levado ao ambiente seguro do AbacatePay para concluir o
+                  pagamento (cartão ou PIX). O acesso é liberado automaticamente
+                  após a confirmação.
+                </p>
+              ) : (
+                <p className="rounded-lg border border-gold/25 bg-gold/10 p-3 text-xs leading-5 text-gold-strong">
+                  Pagamento ainda não ativado. Configure o AbacatePay
+                  (ABACATEPAY_API_KEY + ABACATEPAY_PRODUCT_ID) no ambiente para abrir
+                  o checkout.
+                </p>
+              )}
+
+              {!loggedIn ? (
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className="justify-self-start text-sm text-muted transition hover:text-foreground"
+                >
+                  ← Voltar para os dados
+                </button>
+              ) : null}
+            </div>
+          )}
+        </Card>
+
+        <SummaryCard />
+      </div>
+    </div>
+  );
+}

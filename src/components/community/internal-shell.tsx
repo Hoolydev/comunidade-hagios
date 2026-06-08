@@ -17,7 +17,7 @@ export function InternalShell({
           <LogoMark size="sm" />
           <span className="leading-tight">
             Comunidade
-            <span className="block text-sm font-medium text-gold">Hagios</span>
+            <span className="block text-sm font-medium text-gold">Hágios</span>
           </span>
         </Link>
         <div className="mb-5 rounded-lg border border-line bg-navy-deep/35 p-3">
@@ -38,7 +38,7 @@ export function InternalShell({
           <div className="mb-3 flex items-center justify-between">
             <Link href="/comunidade" className="flex items-center gap-2 font-semibold">
               <LogoMark size="xs" />
-              Hagios
+              Hágios
             </Link>
             <span className="rounded-full border border-gold/25 bg-gold/10 px-3 py-1 text-xs font-semibold text-gold-strong">
               Premium
@@ -46,7 +46,7 @@ export function InternalShell({
           </div>
           <InternalNav isAdmin={isAdmin} mobile />
         </header>
-        <main className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+        <main className="mx-auto w-full max-w-7xl px-4 py-6 pb-[calc(2rem+env(safe-area-inset-bottom))] sm:px-6 lg:px-8 lg:py-8">
           {children}
         </main>
       </div>

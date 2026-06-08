@@ -18,7 +18,7 @@ export function Field({
   className?: string;
 }) {
   return (
-    <label className={cn("grid gap-2 text-sm text-muted", className)}>
+    <label className={cn("grid min-w-0 gap-2 text-sm text-muted", className)}>
       <span>{label}</span>
       <input
         name={name}
@@ -26,7 +26,7 @@ export function Field({
         defaultValue={defaultValue || ""}
         placeholder={placeholder}
         required={required}
-        className="h-11 rounded-lg border border-line bg-navy-deep/45 px-3 text-foreground outline-none transition placeholder:text-muted/55 focus:border-gold focus:ring-2 focus:ring-gold/15"
+        className="h-11 w-full min-w-0 rounded-lg border border-line bg-navy-deep/45 px-3 text-foreground outline-none transition placeholder:text-muted/55 focus:border-gold focus:ring-2 focus:ring-gold/15"
       />
     </label>
   );
@@ -38,6 +38,7 @@ export function TextArea({
   defaultValue,
   placeholder,
   required,
+  rows = 4,
   className,
 }: {
   label: string;
@@ -45,21 +46,32 @@ export function TextArea({
   defaultValue?: string | null;
   placeholder?: string;
   required?: boolean;
+  rows?: number;
   className?: string;
 }) {
   return (
-    <label className={cn("grid gap-2 text-sm text-muted", className)}>
+    <label className={cn("grid min-w-0 gap-2 text-sm text-muted", className)}>
       <span>{label}</span>
       <textarea
         name={name}
         defaultValue={defaultValue || ""}
         placeholder={placeholder}
         required={required}
-        rows={4}
-        className="rounded-lg border border-line bg-navy-deep/45 px-3 py-3 text-foreground outline-none transition placeholder:text-muted/55 focus:border-gold focus:ring-2 focus:ring-gold/15"
+        rows={rows}
+        className="w-full min-w-0 rounded-lg border border-line bg-navy-deep/45 px-3 py-3 text-foreground outline-none transition placeholder:text-muted/55 focus:border-gold focus:ring-2 focus:ring-gold/15"
       />
     </label>
   );
+}
+
+type SelectOption = string | { label: string; value: string };
+
+function getOptionValue(option: SelectOption) {
+  return typeof option === "string" ? option : option.value;
+}
+
+function getOptionLabel(option: SelectOption) {
+  return typeof option === "string" ? option : option.label;
 }
 
 export function Select({
@@ -71,21 +83,27 @@ export function Select({
 }: {
   label: string;
   name: string;
-  options: string[];
+  options: SelectOption[];
   defaultValue?: string | null;
   className?: string;
 }) {
+  const fallbackValue = options[0] ? getOptionValue(options[0]) : "";
+
   return (
-    <label className={cn("grid gap-2 text-sm text-muted", className)}>
+    <label className={cn("grid min-w-0 gap-2 text-sm text-muted", className)}>
       <span>{label}</span>
       <select
         name={name}
-        defaultValue={defaultValue || options[0]}
-        className="h-11 rounded-lg border border-line bg-navy-deep/45 px-3 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/15"
+        defaultValue={defaultValue || fallbackValue}
+        className="h-11 w-full min-w-0 truncate rounded-lg border border-line bg-navy-deep/45 px-3 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/15"
       >
         {options.map((option) => (
-          <option key={option} value={option} className="bg-black text-white">
-            {option}
+          <option
+            key={getOptionValue(option)}
+            value={getOptionValue(option)}
+            className="bg-black text-white"
+          >
+            {getOptionLabel(option)}
           </option>
         ))}
       </select>

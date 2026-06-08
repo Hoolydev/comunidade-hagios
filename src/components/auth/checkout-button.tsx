@@ -14,7 +14,7 @@ export function CheckoutButton({ autoStart = false }: { autoStart?: boolean }) {
     started.current = true;
 
     startTransition(async () => {
-      const response = await fetch("/api/checkout", { method: "POST" });
+      const response = await fetch("/api/abacatepay/checkout", { method: "POST" });
       const payload = await response.json();
 
       if (!response.ok || !payload.url) {
@@ -34,7 +34,7 @@ export function CheckoutButton({ autoStart = false }: { autoStart?: boolean }) {
   return (
     <Button onClick={checkout} disabled={pending} className="w-full sm:w-auto" size="lg">
       <CreditCard className="h-5 w-5" />
-      {pending ? "Abrindo checkout..." : "Assinar por R$39,90/mês"}
+      {pending ? "Abrindo checkout..." : "Assinar por R$49,90/mês"}
     </Button>
   );
 }

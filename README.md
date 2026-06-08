@@ -13,6 +13,7 @@ links externos, grupo de WhatsApp configurável e painel admin.
 - Supabase Auth, banco e controle de usuários
 - Stripe Checkout, Customer Portal e Webhook
 - YouTube Embed
+- PWA com manifest e service worker em produção
 
 ## Instalação
 
@@ -57,7 +58,9 @@ Stripe, informe o ID do price mensal em BRL.
 2. Rode `supabase/schema.sql` no SQL Editor.
 3. Rode `supabase/seed.sql` para dados iniciais.
 4. Ative Email/Password em Authentication.
-5. Para tornar um usuário admin, cadastre-se pela plataforma e rode:
+5. Se o banco já existia antes do campo de formato de vídeo, rode também
+   `supabase/video-format.sql`.
+6. Para tornar um usuário admin, cadastre-se pela plataforma e rode:
 
 ```sql
 update public.profiles
@@ -68,6 +71,11 @@ where email = 'seu-email@dominio.com';
 O acesso à comunidade é liberado quando `profiles.subscription_status` for
 `active` ou `trialing`. Status como `canceled`, `past_due` e `unpaid` bloqueiam
 o acesso.
+
+As aulas aceitam dois formatos de player no admin:
+
+- `desktop`: horizontal 16:9, recomendado para treinamentos principais.
+- `vertical`: 9:16, para gravações mobile no estilo short/TikTok.
 
 ## Stripe
 
@@ -111,6 +119,26 @@ Copie o webhook secret gerado para `STRIPE_WEBHOOK_SECRET`.
 - `/comunidade/whatsapp` grupo oficial
 - `/comunidade/conta` dados e portal Stripe
 - `/admin` CRUD de cursos, aulas, materiais, WhatsApp e usuários
+
+## PWA
+
+O app expõe `/manifest.webmanifest` e registra `/sw.js` apenas em produção.
+O start URL do PWA é `/comunidade`, mantendo a experiência de comunidade como
+destino principal do membro.
+
+## Testes
+
+```bash
+npm run lint
+npm run build
+npm run test:e2e
+```
+
+Os testes E2E usam Playwright em uma porta isolada (`127.0.0.1:3127`) para não
+conflitar com outro projeto aberto em `localhost:3000`. Quando
+`SUPABASE_SERVICE_ROLE_KEY` estiver configurada, a suíte cria um admin temporário,
+testa login, acesso à comunidade, cadastro de trilha/aula/material e remove os
+dados temporários ao final.
 
 ## Assistente editorial por WhatsApp
 

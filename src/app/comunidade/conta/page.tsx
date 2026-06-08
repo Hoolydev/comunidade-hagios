@@ -1,6 +1,8 @@
+import { UserRound } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { BillingPortalButton } from "@/components/community/billing-portal-button";
+import { PageHero } from "@/components/community/page-hero";
 import { SignOutButton } from "@/components/community/sign-out-button";
 import { getCurrentProfile, requireUser } from "@/lib/auth";
 
@@ -9,13 +11,13 @@ export default async function AccountPage() {
   const profile = await getCurrentProfile();
 
   return (
-    <div className="max-w-3xl">
-      <div className="mb-8">
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
-          Minha conta
-        </p>
-        <h1 className="mt-3 text-3xl font-black sm:text-4xl">Dados e assinatura</h1>
-      </div>
+    <div className="grid max-w-4xl gap-6">
+      <PageHero
+        eyebrow="Minha conta"
+        title="Dados e assinatura"
+        description="Consulte seus dados de acesso, status da assinatura e opções de gerenciamento."
+        icon={UserRound}
+      />
       <Card className="p-6">
         <div className="grid gap-5 sm:grid-cols-2">
           <div>

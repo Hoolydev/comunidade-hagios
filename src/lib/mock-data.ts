@@ -710,7 +710,7 @@ export const mockMentorships: Mentorship[] = [
     title: "Diagnóstico de gargalos comerciais com IA",
     description:
       "Mentoria prática para encontrar pontos de perda no funil e definir melhorias para a próxima semana.",
-    teacher: "Equipe Hagios Marketing",
+    teacher: "Time Hágios",
     date: "2026-06-18T19:30:00.000Z",
     recording_url: null,
     materials: ["Roteiro de diagnóstico", "Planilha de priorização"],
@@ -721,7 +721,7 @@ export const mockMentorships: Mentorship[] = [
     title: "Como criar campanhas melhores com IA",
     description:
       "Gravação da mentoria sobre pesquisa de público, ângulos criativos e revisão de anúncios.",
-    teacher: "Equipe Hagios Marketing",
+    teacher: "Time Hágios",
     date: "2026-05-21T19:30:00.000Z",
     recording_url: "https://www.youtube.com/watch?v=M7lc1UVf-VE",
     materials: ["Checklist de campanha", "Banco de prompts de revisão"],
@@ -893,7 +893,7 @@ export const mockQuestions: CommunityQuestion[] = [
       "Comece pelo gargalo mais visível do negócio. Se falta demanda, vá para Marketing com IA. Se existem leads sem fechamento, priorize Vendas. Se o time perde tempo repetindo respostas, avance em Atendimento com IA.",
     category: "Jornada",
     author: "Membro da comunidade",
-    answered_by: "Time Hagios",
+    answered_by: "Time Hágios",
     created_at: "2026-05-29T12:00:00.000Z",
   },
   {
@@ -903,7 +903,7 @@ export const mockQuestions: CommunityQuestion[] = [
       "Sim. Os prompts foram pensados para funcionar em ferramentas diferentes. O mais importante é adaptar contexto, objetivo e formato de saída para a sua empresa.",
     category: "Ferramentas",
     author: "Membro da comunidade",
-    answered_by: "Time Hagios",
+    answered_by: "Time Hágios",
     created_at: "2026-05-24T12:00:00.000Z",
   },
   {
@@ -913,7 +913,7 @@ export const mockQuestions: CommunityQuestion[] = [
       "Não. O ciclo de três dias ajuda a criar foco, mas você pode adaptar ao seu ritmo. O essencial é concluir com uma implementação real, mesmo que pequena.",
     category: "Desafios",
     author: "Membro da comunidade",
-    answered_by: "Time Hagios",
+    answered_by: "Time Hágios",
     created_at: "2026-05-19T12:00:00.000Z",
   },
 ];

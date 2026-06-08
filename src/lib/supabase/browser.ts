@@ -1,6 +1,7 @@
 "use client";
 
 import { createBrowserClient } from "@supabase/ssr";
+import { getSupabaseUrl } from "@/lib/env";
 
 export function createSupabaseBrowserClient() {
   if (
@@ -11,7 +12,7 @@ export function createSupabaseBrowserClient() {
   }
 
   return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    getSupabaseUrl()!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   );
 }

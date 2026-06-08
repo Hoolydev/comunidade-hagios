@@ -59,8 +59,16 @@ export function RecentContentList({ items }: { items: RecentContent[] }) {
         {filtered.map((item, index) => (
           <Card key={item.id} className="overflow-hidden p-5">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-              <div className="grid aspect-video w-full shrink-0 place-items-center rounded-lg border border-line bg-[linear-gradient(135deg,rgba(255,201,40,0.15),rgba(15,23,42,0.7))] sm:w-44">
-                <Sparkles className="h-8 w-8 text-gold" />
+              <div className="flex aspect-video w-full shrink-0 flex-col justify-between rounded-lg border border-line bg-navy-deep/55 p-4 sm:w-44">
+                <Sparkles className="h-6 w-6 text-gold" />
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-gold">
+                    {item.type}
+                  </p>
+                  <p className="mt-1 line-clamp-2 text-sm font-black leading-snug">
+                    {item.category}
+                  </p>
+                </div>
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">

@@ -1,4 +1,5 @@
 import { MessageSquareText } from "lucide-react";
+import { PageHero } from "@/components/community/page-hero";
 import { QuestionForm } from "@/components/community/question-form";
 import { Card } from "@/components/ui/card";
 import { getCommunityQuestions } from "@/lib/data";
@@ -9,18 +10,12 @@ export default async function DuvidasPage() {
 
   return (
     <div className="grid gap-7">
-      <section className="rounded-lg border border-line bg-[linear-gradient(135deg,rgba(255,201,40,0.13),rgba(255,255,255,0.04),rgba(8,13,22,0.72))] p-6 sm:p-8">
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
-          Área de Dúvidas
-        </p>
-        <h1 className="mt-3 max-w-3xl text-3xl font-black leading-tight sm:text-5xl">
-          Perguntas registradas viram suporte, conteúdo e melhoria.
-        </h1>
-        <p className="mt-4 max-w-2xl text-muted">
-          Consulte respostas do time e envie novas dúvidas para acelerar sua
-          implementação com IA.
-        </p>
-      </section>
+      <PageHero
+        eyebrow="Área de Dúvidas"
+        title="Perguntas registradas viram suporte, conteúdo e melhoria."
+        description="Consulte respostas do time e envie novas dúvidas para acelerar sua implementação com IA."
+        icon={MessageSquareText}
+      />
 
       <div className="grid gap-5 xl:grid-cols-[0.75fr_1.25fr]">
         <Card className="h-fit p-5">

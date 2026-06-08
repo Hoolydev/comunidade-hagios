@@ -30,9 +30,13 @@ create table if not exists public.lessons (
   course_id uuid not null references public.courses(id) on delete cascade,
   title text not null,
   description text,
-  youtube_url text not null,
-  youtube_video_id text not null,
+  content_type text not null default 'video' check (content_type in ('video', 'text')),
+  body text,
+  youtube_url text,
+  youtube_video_id text,
+  video_format text not null default 'desktop' check (video_format in ('desktop', 'vertical')),
   order_index integer not null default 1,
+  available_at timestamptz,
   is_published boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -242,5 +246,5 @@ on public.assistant_drafts for select
 using (public.is_admin());
 
 insert into public.settings (key, value)
-values ('whatsapp_group_url', 'https://chat.whatsapp.com/')
+values ('whatsapp_group_url', 'https://chat.whatsapp.com/LrjCUbrxG3HAcqQKbn2Ejv')
 on conflict (key) do nothing;

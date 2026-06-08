@@ -55,7 +55,7 @@ export function InternalNav({
             href={item.href}
             className={cn(
               "group flex items-center gap-3 rounded-lg border text-sm font-medium transition",
-              mobile ? "min-h-10 shrink-0 px-3" : "min-h-11 px-3",
+              mobile ? "min-h-11 shrink-0 px-3" : "min-h-11 px-3",
               active
                 ? "border-gold/35 bg-gold/12 text-gold-strong shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
                 : "border-transparent text-muted hover:border-line hover:bg-white/[0.06] hover:text-foreground",

@@ -18,6 +18,19 @@ export function LoginForm() {
   const supabase = createSupabaseBrowserClient();
   const authConfigured = Boolean(supabase);
 
+  async function startCheckout() {
+    const response = await fetch("/api/abacatepay/checkout", { method: "POST" });
+    const payload = await response.json().catch(() => ({}));
+
+    if (!response.ok || !payload.url) {
+      toast.error(payload.error || "Não foi possível abrir o checkout.");
+      router.push("/checkout");
+      return;
+    }
+
+    window.location.href = payload.url;
+  }
+
   function handleSubmit(formData: FormData) {
     startTransition(async () => {
       const email = String(formData.get("email") || "");
@@ -77,11 +90,13 @@ export function LoginForm() {
 
       const next = searchParams.get("next");
       const safeNext = next?.startsWith("/") ? next : null;
+      const wantsCheckout = safeNext?.startsWith("/checkout");
       const memberDestination = safeNext?.startsWith("/checkout")
         ? "/comunidade"
         : safeNext || "/comunidade";
 
       if (access.hasAccess) router.push(memberDestination);
+      else if (wantsCheckout) await startCheckout();
       else router.push(safeNext || "/checkout");
       router.refresh();
     });
@@ -94,7 +109,7 @@ export function LoginForm() {
   }[mode];
 
   return (
-    <div className="w-full max-w-md rounded-lg border border-line bg-panel p-6 shadow-[0_30px_120px_rgba(0,0,0,0.35)]">
+    <div className="w-full max-w-md rounded-lg border border-line bg-panel p-6 shadow-[0_12px_36px_rgba(0,0,0,0.3)]">
       <div className="mb-7">
         <div className="mb-4 grid h-11 w-11 place-items-center rounded-lg bg-gold/12 text-gold-strong">
           {mode === "signup" ? (
@@ -109,7 +124,7 @@ export function LoginForm() {
         <p className="mt-2 text-sm leading-6 text-muted">
           {mode === "signup"
             ? "Crie sua conta para assinar e liberar a área de membros."
-            : "Entre para acessar sua área de membro da Comunidade Hagios."}
+            : "Entre para acessar sua área de membro da Comunidade Hágios."}
         </p>
       </div>
 
@@ -148,7 +163,9 @@ export function LoginForm() {
         )}
         <Button disabled={pending || !authConfigured} type="submit" className="mt-2">
           {pending
-            ? "Processando..."
+            ? mode === "signup"
+              ? "Criando conta e abrindo checkout..."
+              : "Processando..."
             : mode === "login"
               ? "Entrar como assinante"
               : mode === "signup"

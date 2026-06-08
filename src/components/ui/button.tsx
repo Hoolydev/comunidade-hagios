@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils";
 
 const variants = {
   primary:
-    "bg-gradient-to-b from-gold-strong to-gold text-navy-deep shadow-[0_16px_42px_rgba(230,169,0,0.26)] hover:brightness-110",
+    "bg-gold-strong text-navy-deep shadow-[0_10px_24px_rgba(216,163,27,0.18)] hover:bg-gold",
   secondary:
-    "border border-line bg-white/[0.055] text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] hover:border-gold/70 hover:bg-white/[0.09]",
+    "border border-line bg-white/[0.045] text-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:border-gold/55 hover:bg-white/[0.075]",
   ghost: "text-muted hover:bg-white/[0.08] hover:text-foreground",
   danger:
     "border border-red-400/40 bg-red-500/10 text-red-100 hover:border-red-300/70 hover:bg-red-500/20",
@@ -31,7 +31,7 @@ export function buttonClassName({
   className?: string;
 }) {
   return cn(
-    "inline-flex items-center justify-center gap-2 rounded-lg text-center font-semibold leading-tight transition focus:outline-none focus:ring-2 focus:ring-gold/60 disabled:pointer-events-none disabled:opacity-50",
+    "inline-flex items-center justify-center gap-2 rounded-lg text-center font-semibold leading-tight transition duration-200 focus:outline-none focus:ring-2 focus:ring-gold/55 disabled:pointer-events-none disabled:opacity-50 active:translate-y-px",
     variants[variant],
     sizes[size],
     className,

@@ -1,5 +1,5 @@
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
-import { categories } from "@/lib/constants";
+import { categories, DEFAULT_WHATSAPP_LINK } from "@/lib/constants";
 import {
   getMockCourseWithLessons,
   mockChallenges,
@@ -15,15 +15,26 @@ import {
   mockTools,
 } from "@/lib/mock-data";
 import type {
+  Challenge,
+  ChallengeDay,
+  CommunityEvent,
   CommunityPost,
+  CommunityQuestion,
   Course,
   CourseWithLessons,
   Lesson,
   Material,
+  Mentorship,
+  NextAction,
   Profile,
   RecentContent,
+  ToolResource,
 } from "@/lib/types";
-import { getYouTubeThumbnail } from "@/lib/youtube";
+import { getYouTubeThumbnail, getYouTubeVideoId } from "@/lib/youtube";
+
+function isCompleteWhatsappInvite(value?: string | null) {
+  return Boolean(value && /^https:\/\/chat\.whatsapp\.com\/[A-Za-z0-9_-]+$/.test(value));
+}
 
 function published<T extends { is_published: boolean }>(items: T[]) {
   return items.filter((item) => item.is_published);
@@ -184,8 +195,28 @@ export async function getDashboardStats() {
   };
 }
 
-export async function getNextActions() {
-  return mockNextActions;
+export async function getNextActions({ includeDrafts = false } = {}): Promise<NextAction[]> {
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) return mockNextActions;
+
+  let query = supabase
+    .from("next_actions")
+    .select("*")
+    .order("order_index", { ascending: true });
+  if (!includeDrafts) query = query.eq("is_published", true);
+
+  const { data, error } = await query;
+  if (error || !data) return includeDrafts ? [] : mockNextActions;
+  if (!includeDrafts && data.length === 0) return mockNextActions;
+
+  return data.map((row) => ({
+    id: row.id,
+    title: row.title,
+    description: row.description,
+    href: row.href,
+    label: row.label,
+    priority: row.priority as NextAction["priority"],
+  }));
 }
 
 export async function getJourneyTracks() {
@@ -242,33 +273,143 @@ export async function getCommunityPostBySlug(slug: string) {
   return data as CommunityPost;
 }
 
-export async function getMentorships() {
-  return [...mockMentorships].sort((a, b) => +new Date(b.date) - +new Date(a.date));
+export async function getMentorships({ includeDrafts = false } = {}): Promise<Mentorship[]> {
+  const fallback = [...mockMentorships].sort((a, b) => +new Date(b.date) - +new Date(a.date));
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) return fallback;
+
+  let query = supabase.from("mentorships").select("*").order("date", { ascending: false });
+  if (!includeDrafts) query = query.eq("is_published", true);
+
+  const { data, error } = await query;
+  if (error || !data) return includeDrafts ? [] : fallback;
+  if (!includeDrafts && data.length === 0) return fallback;
+
+  return data.map((row) => ({
+    id: row.id,
+    title: row.title,
+    description: row.description,
+    teacher: row.teacher,
+    date: row.date,
+    recording_url: row.recording_url,
+    materials: row.materials || [],
+    related_challenge: row.related_challenge,
+  }));
 }
 
-export async function getChallenges() {
-  return [...mockChallenges].sort(
+export async function getChallenges({ includeDrafts = false } = {}): Promise<Challenge[]> {
+  const fallback = [...mockChallenges].sort(
     (a, b) => +new Date(b.published_at) - +new Date(a.published_at),
   );
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) return fallback;
+
+  let query = supabase
+    .from("challenges")
+    .select("*")
+    .order("published_at", { ascending: false });
+  if (!includeDrafts) query = query.eq("is_published", true);
+
+  const { data, error } = await query;
+  if (error || !data) return includeDrafts ? [] : fallback;
+  if (!includeDrafts && data.length === 0) return fallback;
+
+  return data.map((row) => ({
+    id: row.id,
+    theme: row.theme,
+    description: row.description,
+    objective: row.objective,
+    days: (row.days as ChallengeDay[]) || [],
+    material_url: row.material_url,
+    expected_result: row.expected_result,
+    participants: row.participants,
+    completion_rate: row.completion_rate,
+    ranking: (row.ranking as Array<{ name: string; points: number }>) || [],
+    published_at: row.published_at,
+  }));
 }
 
-export async function getTools() {
-  return [...mockTools].sort((a, b) => +new Date(b.updated_at) - +new Date(a.updated_at));
+export async function getTools({ includeDrafts = false } = {}): Promise<ToolResource[]> {
+  const fallback = [...mockTools].sort(
+    (a, b) => +new Date(b.updated_at) - +new Date(a.updated_at),
+  );
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) return fallback;
+
+  let query = supabase.from("tools").select("*").order("updated_at", { ascending: false });
+  if (!includeDrafts) query = query.eq("is_published", true);
+
+  const { data, error } = await query;
+  if (error || !data) return includeDrafts ? [] : fallback;
+  if (!includeDrafts && data.length === 0) return fallback;
+
+  return data.map((row) => ({
+    id: row.id,
+    title: row.title,
+    description: row.description,
+    category: row.category as ToolResource["category"],
+    url: row.url,
+    updated_at: row.updated_at,
+  }));
 }
 
-export async function getCommunityQuestions() {
-  return [...mockQuestions].sort(
+export async function getCommunityQuestions({ includeDrafts = false } = {}): Promise<
+  CommunityQuestion[]
+> {
+  const fallback = [...mockQuestions].sort(
     (a, b) => +new Date(b.created_at) - +new Date(a.created_at),
   );
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) return fallback;
+
+  let query = supabase
+    .from("community_questions")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (!includeDrafts) query = query.eq("is_published", true);
+
+  const { data, error } = await query;
+  if (error || !data) return includeDrafts ? [] : fallback;
+  if (!includeDrafts && data.length === 0) return fallback;
+
+  return data.map((row) => ({
+    id: row.id,
+    question: row.question,
+    answer: row.answer,
+    category: row.category,
+    author: row.author,
+    answered_by: row.answered_by,
+    created_at: row.created_at,
+  }));
 }
 
-export async function getCommunityEvents() {
-  return [...mockEvents].sort((a, b) => +new Date(a.date) - +new Date(b.date));
+export async function getCommunityEvents({ includeDrafts = false } = {}): Promise<
+  CommunityEvent[]
+> {
+  const fallback = [...mockEvents].sort((a, b) => +new Date(a.date) - +new Date(b.date));
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) return fallback;
+
+  let query = supabase.from("community_events").select("*").order("date", { ascending: true });
+  if (!includeDrafts) query = query.eq("is_published", true);
+
+  const { data, error } = await query;
+  if (error || !data) return includeDrafts ? [] : fallback;
+  if (!includeDrafts && data.length === 0) return fallback;
+
+  return data.map((row) => ({
+    id: row.id,
+    type: row.type as CommunityEvent["type"],
+    title: row.title,
+    description: row.description,
+    date: row.date,
+    href: row.href,
+  }));
 }
 
 export async function getWhatsappLink() {
   const supabase = getSupabaseAdminClient();
-  if (!supabase) return "https://chat.whatsapp.com/";
+  if (!supabase) return DEFAULT_WHATSAPP_LINK;
 
   const { data } = await supabase
     .from("settings")
@@ -276,7 +417,81 @@ export async function getWhatsappLink() {
     .eq("key", "whatsapp_group_url")
     .maybeSingle();
 
-  return data?.value || "https://chat.whatsapp.com/";
+  return isCompleteWhatsappInvite(data?.value) ? data!.value : DEFAULT_WHATSAPP_LINK;
+}
+
+export async function getSettingsMap(): Promise<Record<string, string>> {
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) return {};
+
+  const { data } = await supabase.from("settings").select("key, value");
+  if (!data) return {};
+
+  return Object.fromEntries(
+    data.map((row) => [row.key as string, (row.value as string) ?? ""]),
+  );
+}
+
+export type WelcomeContent = {
+  eyebrow: string;
+  label: string;
+  title: string;
+  description: string;
+  video_url: string;
+  video_id: string;
+};
+
+export const DEFAULT_WELCOME: WelcomeContent = {
+  eyebrow: "Centro de evolução empresarial",
+  label: "Aula de boas-vindas",
+  title: "Reassista quando precisar",
+  description:
+    "Um guia rápido para entender a Jornada Hágios, conteúdos vivos, mentorias, desafios e ferramentas.",
+  video_url: "https://www.youtube.com/watch?v=M7lc1UVf-VE",
+  video_id: "M7lc1UVf-VE",
+};
+
+export async function getWelcomeContent(): Promise<WelcomeContent> {
+  const settings = await getSettingsMap();
+  const videoUrl = settings.hero_welcome_video_url || DEFAULT_WELCOME.video_url;
+
+  return {
+    eyebrow: settings.hero_welcome_eyebrow || DEFAULT_WELCOME.eyebrow,
+    label: settings.hero_welcome_label || DEFAULT_WELCOME.label,
+    title: settings.hero_welcome_title || DEFAULT_WELCOME.title,
+    description: settings.hero_welcome_description || DEFAULT_WELCOME.description,
+    video_url: videoUrl,
+    video_id: getYouTubeVideoId(videoUrl) || DEFAULT_WELCOME.video_id,
+  };
+}
+
+type CmsTable =
+  | "next_actions"
+  | "community_events"
+  | "mentorships"
+  | "challenges"
+  | "tools"
+  | "community_questions";
+
+/**
+ * Raw rows for the admin CMS forms — returns every column (including drafts and
+ * publication flags) so edit forms can prefill correctly. Empty when Supabase is
+ * not configured (admin can only manage real DB rows).
+ */
+export async function getAdminRows(
+  table: CmsTable,
+  orderColumn: string,
+  ascending = false,
+): Promise<Record<string, unknown>[]> {
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) return [];
+
+  const { data } = await supabase
+    .from(table)
+    .select("*")
+    .order(orderColumn, { ascending });
+
+  return (data || []) as unknown as Record<string, unknown>[];
 }
 
 export async function getAdminUsers() {

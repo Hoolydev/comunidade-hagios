@@ -13,6 +13,7 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     "xquads-squads-main/**",
+    "ui-ux-pro-max-skill-main/**",
   ]),
 ]);
 

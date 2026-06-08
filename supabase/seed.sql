@@ -31,13 +31,14 @@ values
 on conflict (slug) do nothing;
 
 insert into public.lessons
-  (course_id, title, description, youtube_url, youtube_video_id, order_index, is_published)
+  (course_id, title, description, youtube_url, youtube_video_id, video_format, order_index, is_published)
 select
   c.id,
   'Como pensar campanhas com IA',
   'Uma primeira aula pratica para transformar briefing em campanha usando IA.',
   'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
   'dQw4w9WgXcQ',
+  'desktop',
   1,
   true
 from public.courses c
@@ -45,13 +46,14 @@ where c.slug = 'marketing-com-ia-do-zero'
 on conflict do nothing;
 
 insert into public.lessons
-  (course_id, title, description, youtube_url, youtube_video_id, order_index, is_published)
+  (course_id, title, description, youtube_url, youtube_video_id, video_format, order_index, is_published)
 select
   c.id,
   'Mapa simples de automação comercial',
   'Desenhe um fluxo de captação, atendimento e follow-up.',
   'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
   'dQw4w9WgXcQ',
+  'desktop',
   1,
   true
 from public.courses c
@@ -95,3 +97,7 @@ values
     'Vendas',
     true
   );
+
+insert into public.settings (key, value)
+values ('whatsapp_group_url', 'https://chat.whatsapp.com/LrjCUbrxG3HAcqQKbn2Ejv')
+on conflict (key) do update set value = excluded.value;

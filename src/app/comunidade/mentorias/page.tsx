@@ -1,4 +1,5 @@
 import { ArrowUpRight, CalendarDays, PlayCircle, UserRound } from "lucide-react";
+import { PageHero } from "@/components/community/page-hero";
 import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { getMentorships } from "@/lib/data";
@@ -9,18 +10,12 @@ export default async function MentoriasPage() {
 
   return (
     <div className="grid gap-7">
-      <section className="rounded-lg border border-line bg-[linear-gradient(135deg,rgba(255,201,40,0.13),rgba(255,255,255,0.04),rgba(8,13,22,0.72))] p-6 sm:p-8">
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
-          Mentorias
-        </p>
-        <h1 className="mt-3 max-w-3xl text-3xl font-black leading-tight sm:text-5xl">
-          Encontros mensais para transformar dúvida em decisão.
-        </h1>
-        <p className="mt-4 max-w-2xl text-muted">
-          Acompanhe próximas mentorias, gravações, materiais complementares e
-          desafios relacionados.
-        </p>
-      </section>
+      <PageHero
+        eyebrow="Mentorias"
+        title="Encontros mensais para transformar dúvida em decisão."
+        description="Acompanhe próximas mentorias, gravações, materiais complementares e desafios relacionados."
+        icon={CalendarDays}
+      />
 
       <div className="grid gap-4">
         {mentorships.map((mentorship, index) => (
