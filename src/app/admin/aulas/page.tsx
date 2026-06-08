@@ -28,7 +28,7 @@ export default async function AdminLessonsPage() {
       description="Cada trilha tem suas aulas (vídeo do YouTube ou texto). Adicione quantos links quiser — um por aula."
     >
       <section className="grid min-w-0 gap-6 2xl:grid-cols-[380px_minmax(0,1fr)]">
-        <Card className="min-w-0 p-5 2xl:sticky 2xl:top-6 2xl:self-start">
+        <Card className="min-w-0 overflow-hidden p-5 2xl:sticky 2xl:top-6 2xl:self-start">
           <div>
             <h2 className="text-xl font-bold">Criar aula completa</h2>
             <p className="mt-2 text-sm leading-6 text-muted">

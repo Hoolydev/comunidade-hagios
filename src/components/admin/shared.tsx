@@ -71,13 +71,13 @@ export function CourseSelect({
   optional?: boolean;
 }) {
   return (
-    <label className="grid gap-2 text-sm text-muted">
+    <label className="grid min-w-0 gap-2 text-sm text-muted">
       Trilha relacionada
       <select
         name="course_id"
         defaultValue={defaultValue || ""}
         required={!optional}
-        className="h-11 rounded-lg border border-line bg-navy-deep/45 px-3 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/15"
+        className="h-11 w-full min-w-0 max-w-full truncate rounded-lg border border-line bg-navy-deep/45 px-3 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/15"
       >
         {optional && <option value="">Sem curso</option>}
         {courses.map((course) => (
@@ -100,13 +100,13 @@ export function LessonSelect({
   optional?: boolean;
 }) {
   return (
-    <label className="grid gap-2 text-sm text-muted">
+    <label className="grid min-w-0 gap-2 text-sm text-muted">
       Aula relacionada
       <select
         name="lesson_id"
         defaultValue={defaultValue || ""}
         required={!optional}
-        className="h-11 rounded-lg border border-line bg-navy-deep/45 px-3 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/15"
+        className="h-11 w-full min-w-0 max-w-full truncate rounded-lg border border-line bg-navy-deep/45 px-3 text-foreground outline-none transition focus:border-gold focus:ring-2 focus:ring-gold/15"
       >
         {optional && <option value="">Sem aula</option>}
         {lessons.map((lesson) => (
