@@ -27,9 +27,15 @@ export default async function AdminLessonsPage() {
       title="Aulas"
       description="Cada trilha tem suas aulas (vídeo do YouTube ou texto). Adicione quantos links quiser — um por aula."
     >
-      <section className="grid gap-6 xl:grid-cols-[390px_1fr]">
-        <Card className="p-5 xl:sticky xl:top-6 xl:self-start">
-          <h2 className="text-xl font-bold">Criar aula (completa)</h2>
+      <section className="grid min-w-0 gap-6 2xl:grid-cols-[380px_minmax(0,1fr)]">
+        <Card className="min-w-0 p-5 2xl:sticky 2xl:top-6 2xl:self-start">
+          <div>
+            <h2 className="text-xl font-bold">Criar aula completa</h2>
+            <p className="mt-2 text-sm leading-6 text-muted">
+              Use este formulário quando precisar configurar descrição, formato,
+              liberação ou conteúdo em texto.
+            </p>
+          </div>
           <form action={createLesson} className="mt-5 grid gap-4" data-testid="create-lesson-form">
             <CourseSelect courses={courses} />
             <Select label="Tipo de conteúdo" name="content_type" options={contentTypeOptions} defaultValue="video" />
@@ -43,15 +49,14 @@ export default async function AdminLessonsPage() {
             </div>
             <Field label="Data de liberação (opcional)" name="available_at" type="datetime-local" />
             <p className="text-xs leading-5 text-muted">
-              Use este formulário para uma aula com todos os detalhes. Para adicionar
-              vários links rápido, use o botão <strong>Adicionar aula</strong> em cada trilha.
+              Para links simples, abra o formulário rápido dentro da trilha desejada.
             </p>
             <Checkbox label="Publicado" name="is_published" defaultChecked />
             <Button type="submit" className="w-full">Criar aula</Button>
           </form>
         </Card>
 
-        <div className="grid gap-7">
+        <div className="grid min-w-0 gap-5">
           {courses.length === 0 ? (
             <Card tone="flat" className="p-6 text-sm text-muted">
               Crie uma trilha primeiro para poder adicionar aulas.
@@ -63,16 +68,31 @@ export default async function AdminLessonsPage() {
                 .sort((a, b) => a.order_index - b.order_index);
 
               return (
-                <div key={course.id} className="grid gap-3">
-                  <div className="flex items-center justify-between gap-3 border-b border-line pb-2">
-                    <h3 className="text-lg font-bold">{course.title}</h3>
+                <Card key={course.id} tone="flat" className="min-w-0 p-4 sm:p-5">
+                  <div className="flex min-w-0 items-start justify-between gap-4 border-b border-line pb-3">
+                    <div className="min-w-0">
+                      <h3 className="text-lg font-bold leading-snug break-words">
+                        {course.title}
+                      </h3>
+                      <p className="mt-1 text-xs text-muted">
+                        Organize as aulas desta trilha em ordem de execução.
+                      </p>
+                    </div>
                     <Badge tone="neutral">{courseLessons.length} aula(s)</Badge>
                   </div>
-                  {courseLessons.map((lesson) => (
-                    <LessonEditCard key={lesson.id} lesson={lesson} />
-                  ))}
-                  <AddLessonForm courseId={course.id} nextOrder={courseLessons.length + 1} />
-                </div>
+                  <div className="mt-4 grid min-w-0 gap-3">
+                    {courseLessons.length ? (
+                      courseLessons.map((lesson) => (
+                        <LessonEditCard key={lesson.id} lesson={lesson} />
+                      ))
+                    ) : (
+                      <div className="rounded-lg border border-dashed border-line/70 bg-black/10 p-4 text-sm leading-6 text-muted">
+                        Nenhuma aula cadastrada nesta trilha ainda.
+                      </div>
+                    )}
+                    <AddLessonForm courseId={course.id} nextOrder={courseLessons.length + 1} />
+                  </div>
+                </Card>
               );
             })
           )}

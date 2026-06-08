@@ -20,7 +20,7 @@ export function AdminSubpage({
 }) {
   return (
     <main className="min-h-screen bg-background px-4 py-6 text-foreground sm:px-6 lg:py-8">
-      <div className="mx-auto grid w-full max-w-7xl gap-8">
+      <div className="mx-auto grid w-full max-w-[1500px] gap-8">
         <div className="rounded-lg border border-line bg-panel p-5 shadow-[0_10px_30px_rgba(0,0,0,0.25)] sm:p-7">
           <div>
             <Link href="/admin" className="inline-flex items-center gap-2 text-sm text-muted transition hover:text-gold">
@@ -199,10 +199,18 @@ export function AddLessonForm({
   nextOrder: number;
 }) {
   return (
-    <Card tone="flat" className="p-4">
+    <details className="group overflow-hidden rounded-lg border border-line/60 bg-white/[0.025]">
+      <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-semibold text-foreground transition hover:bg-white/[0.035] [&::-webkit-details-marker]:hidden">
+        <span className="inline-flex min-w-0 items-center gap-2">
+          <Plus className="h-4 w-4 shrink-0 text-gold-strong" />
+          <span className="truncate">Adicionar aula rápida</span>
+        </span>
+        <ChevronDown className="h-4 w-4 shrink-0 text-muted transition group-open:rotate-180" />
+      </summary>
+      <div className="border-t border-line p-4">
       <form
         action={createLesson}
-        className="grid gap-3 sm:grid-cols-2 md:grid-cols-[1.2fr_1.6fr_84px_auto] md:items-end"
+        className="grid min-w-0 gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_92px] xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_92px] xl:items-end"
       >
         <input type="hidden" name="course_id" value={courseId} />
         <input type="hidden" name="content_type" value="video" />
@@ -210,11 +218,12 @@ export function AddLessonForm({
         <Field label="Título da aula" name="title" required />
         <Field label="Link do YouTube" name="youtube_url" />
         <Field label="Ordem" name="order_index" type="number" defaultValue={nextOrder} />
-        <Button type="submit" className="h-11 w-full md:w-auto">
+        <Button type="submit" className="h-11 w-full lg:col-span-3 xl:col-span-1">
           <Plus className="h-4 w-4" />
           Adicionar
         </Button>
       </form>
-    </Card>
+      </div>
+    </details>
   );
 }
