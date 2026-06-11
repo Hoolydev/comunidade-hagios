@@ -15,7 +15,7 @@ export function InternalShell({
       <aside className="sticky top-0 hidden h-screen border-r border-line bg-panel/88 p-4 backdrop-blur lg:block">
         <Link href="/comunidade" className="mb-7 flex items-center gap-3 rounded-lg px-2 py-2 font-semibold">
           <LogoMark size="sm" />
-          <span className="text-lg leading-tight">Hágios</span>
+          <span className="text-lg leading-tight">Comunidade Hágios</span>
         </Link>
         <div className="mb-5 rounded-lg border border-line bg-navy-deep/35 p-3">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">
@@ -35,7 +35,7 @@ export function InternalShell({
           <div className="mb-3 flex items-center justify-between">
             <Link href="/comunidade" className="flex items-center gap-2 font-semibold">
               <LogoMark size="xs" />
-              Hágios
+              Comunidade Hágios
             </Link>
             <span className="rounded-full border border-gold/25 bg-gold/10 px-3 py-1 text-xs font-semibold text-gold-strong">
               Premium
