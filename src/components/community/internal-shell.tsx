@@ -15,10 +15,7 @@ export function InternalShell({
       <aside className="sticky top-0 hidden h-screen border-r border-line bg-panel/88 p-4 backdrop-blur lg:block">
         <Link href="/comunidade" className="mb-7 flex items-center gap-3 rounded-lg px-2 py-2 font-semibold">
           <LogoMark size="sm" />
-          <span className="leading-tight">
-            Comunidade
-            <span className="block text-sm font-medium text-gold">Hágios</span>
-          </span>
+          <span className="text-lg leading-tight">Hágios</span>
         </Link>
         <div className="mb-5 rounded-lg border border-line bg-navy-deep/35 p-3">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold">

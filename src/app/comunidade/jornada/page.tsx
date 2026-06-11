@@ -13,17 +13,19 @@ export default async function JornadaPage() {
 
   return (
     <div className="grid gap-7">
-      <section className="rounded-lg border border-line bg-panel p-6 shadow-[0_10px_30px_rgba(0,0,0,0.25)] sm:p-8">
+      <section className="py-2">
         <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
           Jornada Hágios
         </p>
-        <h1 className="mt-3 max-w-3xl text-3xl font-black leading-tight sm:text-5xl">
-          A base permanente para aplicar IA no negócio com método.
+        <h1 className="mt-3 max-w-4xl text-4xl font-black leading-tight sm:text-5xl">
+          A Jornada vai te guiar para suas primeiras implementações.
         </h1>
-        <p className="mt-4 max-w-2xl text-muted">
-          A jornada organiza os fundamentos. Ela não substitui os conteúdos vivos,
-          mentorias e desafios, mas dá estrutura para você implementar melhor cada
-          novidade da comunidade.
+        <p className="mt-4 max-w-3xl text-sm leading-6 text-muted sm:text-base sm:leading-7">
+          A jornada é organizada em trilhas, que são implementações de soluções
+          de IA dentro de um macro tema. Nas trilhas você tem implementações
+          fundamentais. São aulas práticas, você assiste fazendo. Isso significa
+          que ao final de cada missão você já implementou aquela IA na sua
+          operação.
         </p>
       </section>
 
@@ -33,7 +35,7 @@ export default async function JornadaPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gold">
               Trilhas da comunidade
             </p>
-            <h2 className="text-2xl font-black">Escolha uma trilha para assistir</h2>
+            <h2 className="text-2xl font-black">Escolha uma trilha para implementar</h2>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {courses.map((course) => (

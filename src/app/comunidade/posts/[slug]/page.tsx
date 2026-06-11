@@ -59,7 +59,7 @@ export default async function CommunityPostPage({
 
           {post.source_url ? (
             <div className="border-t border-line pt-5">
-              <ButtonLink href={post.source_url} variant="secondary">
+              <ButtonLink href={post.source_url}>
                 Ver fonte original
                 <ExternalLink className="h-4 w-4" />
               </ButtonLink>

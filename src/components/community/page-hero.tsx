@@ -19,7 +19,7 @@ export function PageHero({
   return (
     <section
       className={cn(
-        "rounded-lg border border-line bg-panel p-5 shadow-[0_10px_30px_rgba(0,0,0,0.25)] sm:p-8",
+        "py-2",
         className,
       )}
     >
@@ -35,7 +35,7 @@ export function PageHero({
               {eyebrow}
             </p>
           </div>
-          <h1 className="max-w-3xl text-3xl font-black leading-tight sm:text-5xl">
+          <h1 className="max-w-4xl text-4xl font-black leading-tight sm:text-5xl">
             {title}
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-muted sm:text-base sm:leading-7">

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
   title: "Comunidade Hágios | IA para negócios",
   description:
-    "Ambiente premium da Hágios Marketing para empresários aprenderem, implementarem e acompanharem a aplicação de IA no negócio.",
+    "Ambiente premium da Comunidade Hágios para empresários aprenderem, implementarem e acompanharem a aplicação de IA no negócio.",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

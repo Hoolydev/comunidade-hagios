@@ -205,7 +205,6 @@ export default async function CoursePage({
                     <ButtonLink
                       key={material.id}
                       href={material.file_url}
-                      variant="secondary"
                       className="justify-between"
                     >
                       <span className="truncate">{material.title}</span>

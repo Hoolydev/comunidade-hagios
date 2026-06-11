@@ -11,7 +11,9 @@ test.describe("Comunidade Hagios public flow", () => {
   test("landing page presents the offer and the simplified member flow", async ({ page }) => {
     await page.goto("/");
 
-    await expect(page.getByRole("heading", { name: /Use IA para vender mais/i })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /Implemente IA em pelo menos 3 áreas/i }),
+    ).toBeVisible();
     await expect(page.getByRole("link", { name: /Assinar comunidade/i }).first()).toBeVisible();
     await expect(page.getByRole("link", { name: /Já sou assinante/i }).first()).toBeVisible();
     await expect(page.getByText("R$49,90").first()).toBeVisible();

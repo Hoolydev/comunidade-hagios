@@ -64,7 +64,7 @@ export function JourneyProgressBoard({ tracks }: { tracks: JourneyTrack[] }) {
             </p>
             <h2 className="mt-2 text-2xl font-black">Avanço geral da Jornada</h2>
             <p className="mt-2 text-sm leading-6 text-muted">
-              Marque as aulas concluídas para acompanhar sua evolução nas trilhas.
+              Marque as missões concluídas para acompanhar sua evolução nas trilhas.
             </p>
           </div>
           <div>
@@ -96,7 +96,7 @@ export function JourneyProgressBoard({ tracks }: { tracks: JourneyTrack[] }) {
                     {track.category}
                   </span>
                   <span className="rounded-full border border-line bg-white/[0.045] px-2.5 py-1 text-xs text-muted">
-                    {track.modules.length} módulos
+                    {track.modules.length} missões
                   </span>
                 </div>
                 <h2 className="mt-3 text-2xl font-black">{track.title}</h2>
@@ -178,7 +178,7 @@ export function JourneyProgressBoard({ tracks }: { tracks: JourneyTrack[] }) {
         <div className="flex items-start gap-3">
           <BookOpen className="mt-1 h-5 w-5 shrink-0 text-gold" />
           <div>
-            <h2 className="text-xl font-black">Regra simples: avance uma aula por vez.</h2>
+            <h2 className="text-xl font-black">Regra simples: avance uma missão por vez.</h2>
             <p className="mt-1 text-sm leading-6 text-muted">
               A progressão ajuda a manter foco sem transformar a comunidade em uma lista infinita.
             </p>

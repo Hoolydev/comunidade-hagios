@@ -54,13 +54,11 @@ export default async function CommunityHomePage() {
                 <Sparkles className="h-4 w-4" />
                 {welcome.eyebrow}
               </div>
-              <h1 className="max-w-3xl text-3xl font-black leading-tight sm:text-5xl">
-                Olá, {firstName}. Vamos continuar sua evolução empresarial através da IA.
+              <h1 className="max-w-3xl text-4xl font-black leading-tight sm:text-6xl">
+                Olá, {firstName}.
               </h1>
-              <p className="mt-4 max-w-2xl text-muted">
-                Aqui o foco é simples: saber o que assistir, o que implementar,
-                o que é novo e onde tirar dúvidas para aplicar IA no negócio com
-                consistência.
+              <p className="mt-3 max-w-2xl text-xl leading-8 text-muted sm:text-2xl">
+                Vamos continuar sua evolução empresarial através da IA.
               </p>
             </div>
             <Card tone="flat" className="overflow-hidden p-3">
@@ -82,7 +80,7 @@ export default async function CommunityHomePage() {
               </p>
               <h2 className="mt-2 text-2xl font-black">O que fazer agora?</h2>
             </div>
-            <ButtonLink href="/comunidade/jornada" variant="secondary" size="sm">
+            <ButtonLink href="/comunidade/jornada" size="sm">
               Ver Jornada
               <ArrowRight className="h-4 w-4" />
             </ButtonLink>
@@ -112,7 +110,7 @@ export default async function CommunityHomePage() {
                 </div>
                 <h3 className="text-lg font-black leading-snug">{action.title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-6 text-muted">{action.description}</p>
-                <ButtonLink href={action.href} variant="secondary" size="sm" className="mt-5 w-full">
+                <ButtonLink href={action.href} size="sm" className="mt-5 w-full">
                   {action.label}
                   <ArrowRight className="h-4 w-4" />
                 </ButtonLink>
@@ -187,25 +185,31 @@ export default async function CommunityHomePage() {
         </section>
 
         <section className="grid gap-4 xl:grid-cols-[0.8fr_1.2fr]">
-          <Card className="p-5">
-            <div className="flex items-start gap-4">
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border border-emerald-300/25 bg-emerald-400/10">
-                <MessageCircle className="h-5 w-5 text-emerald-100" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-emerald-100">Grupo WhatsApp</p>
-                <h2 className="mt-1 text-2xl font-black">Acompanhe avisos e trocas</h2>
-                <p className="mt-2 text-sm leading-6 text-muted">
-                  Networking, avisos rápidos e conversas da comunidade acontecem no
-                  grupo oficial.
-                </p>
-                <ButtonLink href={whatsappLink} className="mt-5 w-full sm:w-auto">
-                  Entrar no grupo
-                  <MessageCircle className="h-4 w-4" />
-                </ButtonLink>
-              </div>
+          <div>
+            <div className="mb-4">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gold">
+                Grupo WhatsApp
+              </p>
+              <h2 className="mt-2 text-3xl font-black">Acompanhe avisos e trocas</h2>
             </div>
-          </Card>
+            <Card className="border-2 border-gold/45 bg-gold/10 p-5 shadow-[0_18px_70px_rgba(216,163,27,0.12)]">
+              <div className="flex items-start gap-4">
+                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg border border-gold/35 bg-gold/15">
+                  <MessageCircle className="h-5 w-5 text-gold-strong" />
+                </div>
+                <div>
+                  <p className="text-sm leading-6 text-muted">
+                    Networking, avisos rápidos e conversas da comunidade acontecem no
+                    grupo oficial.
+                  </p>
+                  <ButtonLink href={whatsappLink} className="mt-5 w-full sm:w-auto">
+                    Entrar no grupo
+                    <MessageCircle className="h-4 w-4" />
+                  </ButtonLink>
+                </div>
+              </div>
+            </Card>
+          </div>
 
           <Card className="p-5">
             <div className="mb-5 flex items-center justify-between gap-4">

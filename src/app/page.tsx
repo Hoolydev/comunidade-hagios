@@ -2,12 +2,10 @@ import {
   ArrowRight,
   BrainCircuit,
   Check,
-  Crown,
   Download,
   MessageCircle,
   RefreshCw,
   Rocket,
-  TrendingUp,
   Users,
 } from "lucide-react";
 import Image from "next/image";
@@ -19,45 +17,39 @@ import { ButtonLink } from "@/components/ui/button";
 
 const benefits = [
   ["Jornada Hágios estruturada", BrainCircuit],
-  ["Conteúdos recentes para aplicar", RefreshCw],
+  ["Implementações práticas com IA", RefreshCw],
   ["Mentorias mensais", Users],
   ["Desafios de implementação", Rocket],
   ["Biblioteca de ferramentas", Download],
   ["Grupo exclusivo no WhatsApp", MessageCircle],
 ] as const;
 
-const heroStats = [
-  ["IA", "Aplicada ao negócio"],
-  ["R$49,90", "Assinatura mensal"],
-  ["Mentorias", "Ciclo contínuo"],
-] as const;
-
-const heroPills = [
-  { label: "IA aplicada", icon: Crown },
-  { label: "Vendas", icon: TrendingUp },
-  { label: "Comunidade", icon: Users },
+const successRules = [
+  "Não medimos sucesso por aulas assistidas.",
+  "Não medimos sucesso por horas consumidas.",
+  "Medimos sucesso por implementação.",
 ] as const;
 
 const faqs = [
   {
-    question: "O que eu recebo ao entrar?",
+    question: "O que é a Comunidade Hágios?",
     answer:
-      "Você recebe acesso à Jornada Hágios, conteúdos recentes, mentorias, desafios, ferramentas práticas e ao grupo oficial da comunidade.",
+      "É um ambiente de implementação para empresários que querem aplicar IA em áreas importantes da empresa, com trilhas, conteúdos vivos, ferramentas, desafios, mentorias e comunidade.",
   },
   {
     question: "Preciso ter experiência com IA?",
     answer:
-      "Não. A comunidade foi pensada para quem quer aplicar IA no marketing com clareza, mesmo começando do zero.",
+      "Não. A comunidade foi pensada para empreendedores que querem começar de forma prática, com orientação clara e foco em implementação.",
   },
   {
-    question: "Para quem a comunidade é mais indicada?",
+    question: "Em quais áreas posso aplicar IA?",
     answer:
-      "Para empreendedores, social medias, gestores de tráfego, vendedores, donos de negócios e profissionais que querem vender mais usando IA.",
+      "Você pode aplicar IA em marketing, vendas, atendimento, gestão, produtividade, finanças, criação de conteúdo, análise e processos operacionais.",
   },
   {
-    question: "O conteúdo é prático ou só teoria?",
+    question: "O conteúdo é prático?",
     answer:
-      "A proposta é prática: estratégias, exemplos, materiais e ideias para aplicar em campanhas, vendas, conteúdo e automações.",
+      "Sim. A ideia é assistir fazendo. Cada missão deve ajudar você a implementar uma solução, melhorar um processo ou tomar uma decisão melhor no negócio.",
   },
   {
     question: "Posso cancelar quando quiser?",
@@ -70,22 +62,34 @@ export default function Home() {
   return (
     <main className="min-h-screen overflow-hidden bg-background text-foreground">
       <PublicHeader />
-      <section className="relative">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_-10%,rgba(216,163,27,0.08),transparent_45%)]" />
-        <div className="relative mx-auto grid min-h-[calc(100svh-64px)] w-full max-w-7xl items-center gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1.02fr_0.98fr] lg:py-14">
-          <div>
+      <section className="relative min-h-[calc(100svh-64px)] overflow-hidden">
+        <Image
+          src="/hagios-hero-bg.png"
+          alt="Comunidade Hágios"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[58%_center]"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,15,24,0.98)_0%,rgba(9,15,24,0.88)_38%,rgba(9,15,24,0.48)_68%,rgba(9,15,24,0.18)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,15,24,0.28)_0%,rgba(9,15,24,0.82)_100%)]" />
+        <div className="relative mx-auto flex min-h-[calc(100svh-64px)] w-full max-w-7xl flex-col justify-center px-4 py-12 sm:px-6 lg:py-16">
+          <div className="max-w-4xl">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/10 px-3 py-1 text-sm font-semibold text-gold-strong">
               <Rocket className="h-4 w-4" aria-hidden="true" />
-              Hágios Marketing apresenta
+              Hágios apresenta
             </div>
-            <LogoMark size="lg" className="mb-6 lg:hidden" priority />
-            <h1 className="max-w-4xl text-5xl font-black leading-[0.94] tracking-normal text-foreground sm:text-6xl lg:text-7xl">
-              Use IA para vender mais — mesmo começando do zero.
+            <LogoMark size="lg" className="mb-6" priority />
+            <h1 className="max-w-4xl text-4xl font-black leading-[0.95] tracking-normal text-foreground sm:text-6xl lg:text-7xl">
+              Implemente IA em pelo menos 3 áreas da sua empresa nos próximos 90 dias.
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-muted sm:text-xl">
-              A Comunidade Hágios transforma inteligência artificial em campanhas,
-              vendas e automações prontas para rodar no seu negócio — com método,
-              conteúdos vivos e suporte toda semana.
+            <p className="mt-6 max-w-3xl text-base leading-8 text-muted sm:text-lg">
+              Nosso propósito é ajudar empreendedores a aplicar a Inteligência
+              Artificial de forma prática em seus negócios, modernizando suas
+              operações e preparando suas empresas para a nova era do mercado.
+              Mais do que ensinar ferramentas, a Comunidade Hágios ensina
+              empresários a utilizarem a IA para gerar resultados reais em áreas
+              fundamentais da empresa.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <ButtonLink
@@ -102,54 +106,20 @@ export default function Home() {
             <p className="mt-3 text-sm text-muted">
               Assinatura mensal de R$49,90. Acesso liberado após o pagamento.
             </p>
-            <div className="mt-9 grid gap-3 sm:grid-cols-3">
-              {heroStats.map(([value, label]) => (
-                <div key={value} className="rounded-lg border border-line bg-white/[0.04] p-4">
-                  <p className="text-lg font-black text-gold-strong">{value}</p>
-                  <p className="mt-1 text-xs leading-5 text-muted">{label}</p>
-                </div>
-              ))}
-            </div>
           </div>
-          <div className="relative min-h-[520px] overflow-hidden rounded-lg border border-line bg-panel shadow-[0_30px_120px_rgba(0,0,0,0.45)]">
-            <div className="absolute inset-0 bg-[linear-gradient(160deg,#16212f,#0b111c)]" />
-            <div className="absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] [background-size:26px_26px]" />
-            <div className="relative flex h-full min-h-[520px] flex-col justify-between p-5 sm:p-8">
-              <div className="flex justify-center pt-3">
-                <div className="relative aspect-square w-full max-w-[360px]">
-                  <Image
-                    src="/logo-comunidade-hagios.png"
-                    alt="Logo Comunidade Hágios"
-                    fill
-                    priority
-                    sizes="330px"
-                    className="object-contain drop-shadow-[0_24px_38px_rgba(0,0,0,0.45)]"
-                  />
-                </div>
+          <div className="mt-10 grid max-w-5xl gap-3 sm:grid-cols-3">
+            {successRules.map((rule) => (
+              <div key={rule} className="rounded-lg border border-gold/25 bg-navy-deep/72 p-4 backdrop-blur">
+                <p className="text-sm font-semibold leading-6 text-foreground">{rule}</p>
               </div>
-              <div>
-                <div className="mb-5 grid grid-cols-3 gap-3 text-center">
-                  {heroPills.map(({ label, icon: Icon }) => (
-                    <div
-                      key={label}
-                      className="rounded-lg border border-gold/20 bg-navy-deep/60 p-3"
-                    >
-                      <Icon className="mx-auto mb-2 h-4 w-4 text-gold-strong" />
-                      <p className="text-xs text-muted">{label}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="rounded-lg border border-gold/30 bg-navy-deep/70 p-5 backdrop-blur">
-                  <p className="text-sm uppercase tracking-[0.22em] text-gold-strong">
-                    Acesso premium
-                  </p>
-                  <p className="mt-3 text-3xl font-black">R$49,90/mês</p>
-                  <p className="mt-2 text-sm text-muted">
-                    Jornada, mentorias, desafios, ferramentas e networking em
-                    uma assinatura mensal.
-                  </p>
-                </div>
-              </div>
+            ))}
+            <div className="rounded-lg border border-gold/35 bg-gold/12 p-4 backdrop-blur sm:col-span-3">
+              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
+                Como definimos sucesso
+              </p>
+              <p className="mt-2 text-lg font-black">
+                “O que você implementou na sua empresa este mês?”
+              </p>
             </div>
           </div>
         </div>
@@ -190,10 +160,10 @@ export default function Home() {
             </h2>
           </div>
           <p className="text-lg leading-8 text-muted">
-            A Comunidade Hágios foi criada para empreendedores, social medias,
-            gestores de tráfego, vendedores, donos de negócios e profissionais que
-            querem usar IA para vender mais, produzir melhor e criar processos mais
-            inteligentes sem perder clareza estratégica.
+            A Comunidade Hágios foi criada para empreendedores, gestores,
+            profissionais comerciais e donos de negócios que querem usar IA para
+            modernizar operações, tomar decisões melhores, ganhar produtividade e
+            criar processos mais inteligentes sem perder clareza estratégica.
           </p>
         </div>
       </section>
@@ -229,8 +199,7 @@ export default function Home() {
               <p className="text-sm font-semibold text-gold-strong">Plano mensal</p>
               <h3 className="mt-3 text-2xl font-black">Comece pela comunidade completa.</h3>
               <p className="mt-3 text-sm leading-6 text-muted">
-                Pagamento seguro via Stripe e liberação automática quando a
-                assinatura estiver ativa.
+                Pagamento seguro e liberação automática quando a assinatura estiver ativa.
               </p>
               <ButtonLink
                 href="/checkout"

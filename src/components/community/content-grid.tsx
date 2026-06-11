@@ -93,7 +93,7 @@ export function ContentGrid({ items }: { items: ContentCard[] }) {
                 <p className="mt-2 line-clamp-3 text-sm leading-6 text-muted">
                   {item.description}
                 </p>
-                <ButtonLink href={item.href} variant="secondary" className="mt-5 w-full">
+                <ButtonLink href={item.href} className="mt-5 w-full">
                   Acessar
                   <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
                 </ButtonLink>

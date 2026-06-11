@@ -478,7 +478,7 @@ export const mockNextActions: NextAction[] = [
     id: "continue-fundamentos",
     title: "Continue a trilha Fundamentos da IA",
     description:
-      "Finalize o módulo de prompts empresariais para criar comandos mais úteis no dia a dia.",
+      "Finalize a missão de prompts empresariais para criar comandos mais úteis no dia a dia.",
     href: "/comunidade/jornada",
     label: "Continuar jornada",
     priority: "high",

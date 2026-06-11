@@ -92,7 +92,7 @@ export function RecentContentList({ items }: { items: RecentContent[] }) {
                     {formatDate(item.published_at)}
                     {item.duration ? <span>{item.duration}</span> : null}
                   </div>
-                  <ButtonLink href={item.href} variant="secondary" size="sm">
+                  <ButtonLink href={item.href} size="sm">
                     Acessar
                     <ArrowRight className="h-4 w-4" />
                   </ButtonLink>

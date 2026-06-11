@@ -63,7 +63,7 @@ export default async function MentoriasPage() {
                   <PlayCircle className="h-4 w-4" />
                 </ButtonLink>
               ) : (
-                <ButtonLink href="/comunidade/whatsapp" variant="secondary" className="mt-4 w-full">
+                <ButtonLink href="/comunidade/whatsapp" className="mt-4 w-full">
                   Acompanhar avisos
                   <ArrowUpRight className="h-4 w-4" />
                 </ButtonLink>

@@ -29,7 +29,7 @@ export default async function WhatsappPage() {
       />
 
       <section className="grid gap-4 lg:grid-cols-[1fr_340px]">
-        <Card className="p-5">
+        <Card className="border-2 border-gold/45 bg-gold/10 p-5 shadow-[0_18px_70px_rgba(216,163,27,0.12)]">
           <h2 className="text-2xl font-black">O canal vivo da comunidade</h2>
           <p className="mt-2 text-sm leading-6 text-muted">
             Use o WhatsApp para acompanhar avisos rápidos, participar das conversas

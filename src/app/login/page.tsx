@@ -13,13 +13,13 @@ export default function LoginPage() {
         </Link>
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
-            Marketing com IA
+            Empreenda com IA
           </p>
           <h2 className="mt-4 max-w-xl text-5xl font-black leading-tight">
-            Conteúdo, estratégia e comunidade para vender mais com IA.
+            Conteúdo, implementação e comunidade para otimizar suas operações.
           </h2>
         </div>
-        <p className="text-sm text-muted">Hágios Marketing</p>
+        <p className="text-sm text-muted">Comunidade Hágios</p>
       </section>
       <section className="flex min-h-screen items-center justify-center">
         <Suspense>

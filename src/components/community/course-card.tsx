@@ -31,7 +31,6 @@ export function CourseCard({ course }: { course: Course }) {
         </p>
         <ButtonLink
           href={`/comunidade/cursos/${course.slug}`}
-          variant="secondary"
           className="mt-5 w-full justify-between"
         >
           Acessar

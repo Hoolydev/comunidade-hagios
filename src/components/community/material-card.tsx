@@ -14,7 +14,7 @@ export function MaterialCard({ material }: { material: Material }) {
       <p className="mt-2 line-clamp-3 text-sm leading-6 text-muted">
         {material.description}
       </p>
-      <ButtonLink href={material.file_url} variant="secondary" className="mt-5 w-full">
+      <ButtonLink href={material.file_url} className="mt-5 w-full">
         Abrir material
         <ExternalLink className="h-4 w-4" />
       </ButtonLink>

@@ -81,7 +81,7 @@ export function ToolsLibrary({ tools }: { tools: ToolResource[] }) {
               </div>
               <h2 className="text-xl font-black">{tool.title}</h2>
               <p className="mt-3 flex-1 text-sm leading-6 text-muted">{tool.description}</p>
-              <ButtonLink href={tool.url} variant="secondary" className="mt-5 w-full">
+              <ButtonLink href={tool.url} className="mt-5 w-full">
                 Abrir ferramenta
                 <ArrowUpRight className="h-4 w-4" />
               </ButtonLink>
