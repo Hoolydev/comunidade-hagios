@@ -5,12 +5,29 @@ create table if not exists public.profiles (
   user_id uuid not null unique references auth.users(id) on delete cascade,
   name text,
   email text,
+  company_role text,
+  company_name text,
+  company_sector text,
+  phone text,
+  city_state text,
+  urgent_operation_1 text,
+  urgent_operation_2 text,
+  urgent_operation_3 text,
   role text not null default 'member' check (role in ('admin', 'member')),
   stripe_customer_id text unique,
   subscription_status text not null default 'none',
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+alter table public.profiles add column if not exists company_role text;
+alter table public.profiles add column if not exists company_name text;
+alter table public.profiles add column if not exists company_sector text;
+alter table public.profiles add column if not exists phone text;
+alter table public.profiles add column if not exists city_state text;
+alter table public.profiles add column if not exists urgent_operation_1 text;
+alter table public.profiles add column if not exists urgent_operation_2 text;
+alter table public.profiles add column if not exists urgent_operation_3 text;
 
 create table if not exists public.courses (
   id uuid primary key default gen_random_uuid(),

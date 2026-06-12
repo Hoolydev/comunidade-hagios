@@ -45,11 +45,14 @@ export default async function AdminCommunityPage() {
             </div>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[680px] text-left text-sm">
+            <table className="w-full min-w-[980px] text-left text-sm">
               <thead className="bg-white/[0.04] text-muted">
                 <tr>
                   <th className="px-4 py-3">Nome</th>
                   <th className="px-4 py-3">E-mail</th>
+                  <th className="px-4 py-3">Empresa</th>
+                  <th className="px-4 py-3">Telefone</th>
+                  <th className="px-4 py-3">Cidade/UF</th>
                   <th className="px-4 py-3">Role</th>
                   <th className="px-4 py-3">Assinatura</th>
                 </tr>
@@ -59,6 +62,12 @@ export default async function AdminCommunityPage() {
                   <tr key={user.id} className="border-t border-line">
                     <td className="px-4 py-3">{user.name || "-"}</td>
                     <td className="px-4 py-3 text-muted">{user.email || "-"}</td>
+                    <td className="px-4 py-3 text-muted">
+                      <div className="font-medium text-foreground">{user.company_name || "-"}</div>
+                      <div className="text-xs">{user.company_role || user.company_sector || ""}</div>
+                    </td>
+                    <td className="px-4 py-3 text-muted">{user.phone || "-"}</td>
+                    <td className="px-4 py-3 text-muted">{user.city_state || "-"}</td>
                     <td className="px-4 py-3">{user.role}</td>
                     <td className="px-4 py-3">
                       <Badge
@@ -76,7 +85,7 @@ export default async function AdminCommunityPage() {
                 ))}
                 {!users.length && (
                   <tr>
-                    <td colSpan={4} className="px-4 py-8 text-center text-muted">
+                    <td colSpan={7} className="px-4 py-8 text-center text-muted">
                       Nenhum usuário encontrado.
                     </td>
                   </tr>

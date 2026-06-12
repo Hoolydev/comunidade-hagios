@@ -1,8 +1,21 @@
 "use client";
 
+import type { ComponentType, InputHTMLAttributes, ReactNode } from "react";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { ArrowRight, Check, CreditCard, KeyRound, Lock, Mail } from "lucide-react";
+import {
+  ArrowRight,
+  BriefcaseBusiness,
+  Building2,
+  Check,
+  CreditCard,
+  KeyRound,
+  Lock,
+  Mail,
+  MapPin,
+  Phone,
+  User,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
@@ -106,9 +119,43 @@ function SummaryCard() {
       </div>
       <div className="mt-5 flex items-center gap-2 rounded-lg border border-line bg-navy-deep/40 p-3 text-xs leading-5 text-muted">
         <Lock className="h-4 w-4 shrink-0 text-gold" />
-        <span>PIX ou cartão — pagamento seguro processado pelo AbacatePay.</span>
+        <span>Cartão de crédito — pagamento seguro processado pelo AbacatePay.</span>
       </div>
     </Card>
+  );
+}
+
+function FieldShell({
+  label,
+  children,
+  className,
+}: {
+  label: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <label className={cn("grid gap-2 text-sm text-muted", className)}>
+      {label}
+      {children}
+    </label>
+  );
+}
+
+function InputShell({
+  icon: Icon,
+  ...props
+}: InputHTMLAttributes<HTMLInputElement> & {
+  icon: ComponentType<{ className?: string }>;
+}) {
+  return (
+    <div className="flex min-h-11 items-center gap-2 rounded-lg border border-line bg-black/30 px-3 focus-within:border-gold">
+      <Icon className="h-4 w-4 shrink-0 text-gold" />
+      <input
+        {...props}
+        className="w-full bg-transparent text-foreground outline-none placeholder:text-muted/60"
+      />
+    </div>
   );
 }
 
@@ -154,9 +201,25 @@ export function CheckoutWizard({
 
       const emailValue = String(formData.get("email") || "").trim();
       const password = String(formData.get("password") || "");
+      const profile = {
+        name: String(formData.get("name") || "").trim(),
+        company_role: String(formData.get("company_role") || "").trim(),
+        company_name: String(formData.get("company_name") || "").trim(),
+        company_sector: String(formData.get("company_sector") || "").trim(),
+        phone: String(formData.get("phone") || "").trim(),
+        city_state: String(formData.get("city_state") || "").trim(),
+        urgent_operation_1: String(formData.get("urgent_operation_1") || "").trim(),
+        urgent_operation_2: String(formData.get("urgent_operation_2") || "").trim(),
+        urgent_operation_3: String(formData.get("urgent_operation_3") || "").trim(),
+      };
 
       if (!emailValue || password.length < 6) {
         toast.error("Informe um e-mail válido e senha de no mínimo 6 caracteres.");
+        return;
+      }
+
+      if (Object.values(profile).some((value) => !value)) {
+        toast.error("Preencha seus dados e as 3 operações que deseja otimizar.");
         return;
       }
 
@@ -164,7 +227,7 @@ export function CheckoutWizard({
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: emailValue, password }),
+        body: JSON.stringify({ email: emailValue, password, profile }),
       });
       const data = await response.json().catch(() => ({}));
 
@@ -186,7 +249,11 @@ export function CheckoutWizard({
         return;
       }
 
-      await fetch("/api/auth/ensure-profile", { method: "POST" });
+      await fetch("/api/auth/ensure-profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profile }),
+      });
       setAccountEmail(emailValue);
       setStep(2);
       toast.success("Conta criada. Abrindo pagamento...");
@@ -207,45 +274,114 @@ export function CheckoutWizard({
       <div className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start">
         <Card className="p-6 sm:p-8">
           {step === 1 ? (
-            <form action={createAccount} className="grid gap-4">
+            <form action={createAccount} className="grid gap-5">
               <div>
                 <h2 className="text-xl font-black">Seus dados</h2>
                 <p className="mt-1 text-sm leading-6 text-muted">
-                  Crie sua conta para continuar. Sem confirmação de e-mail — você
-                  vai direto para o pagamento.
+                  Conte um pouco sobre você e sua empresa para entrarmos com mais
+                  contexto desde o primeiro acesso.
                 </p>
               </div>
-              <label className="grid gap-2 text-sm text-muted">
-                E-mail
-                <div className="flex h-11 items-center gap-2 rounded-lg border border-line bg-black/30 px-3 focus-within:border-gold">
-                  <Mail className="h-4 w-4 text-gold" />
-                  <input
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FieldShell label="Nome completo">
+                  <InputShell
+                    icon={User}
+                    name="name"
+                    required
+                    autoComplete="name"
+                    placeholder="Seu nome"
+                  />
+                </FieldShell>
+                <FieldShell label="Cargo na empresa">
+                  <InputShell
+                    icon={BriefcaseBusiness}
+                    name="company_role"
+                    required
+                    autoComplete="organization-title"
+                    placeholder="Ex: Sócio, CEO, gerente"
+                  />
+                </FieldShell>
+                <FieldShell label="Nome da empresa">
+                  <InputShell
+                    icon={Building2}
+                    name="company_name"
+                    required
+                    autoComplete="organization"
+                    placeholder="Nome do negócio"
+                  />
+                </FieldShell>
+                <FieldShell label="Setor da empresa">
+                  <InputShell
+                    icon={Building2}
+                    name="company_sector"
+                    required
+                    placeholder="Ex: varejo, saúde, serviços"
+                  />
+                </FieldShell>
+                <FieldShell label="Telefone pessoal">
+                  <InputShell
+                    icon={Phone}
+                    name="phone"
+                    type="tel"
+                    required
+                    autoComplete="tel"
+                    placeholder="(00) 00000-0000"
+                  />
+                </FieldShell>
+                <FieldShell label="Cidade/estado">
+                  <InputShell
+                    icon={MapPin}
+                    name="city_state"
+                    required
+                    autoComplete="address-level2"
+                    placeholder="Goiânia/GO"
+                  />
+                </FieldShell>
+                <FieldShell label="E-mail">
+                  <InputShell
+                    icon={Mail}
                     name="email"
                     type="email"
                     required
                     autoComplete="email"
-                    className="w-full bg-transparent text-foreground outline-none"
                     placeholder="voce@email.com"
                   />
-                </div>
-              </label>
-              <label className="grid gap-2 text-sm text-muted">
-                Senha
-                <div className="flex h-11 items-center gap-2 rounded-lg border border-line bg-black/30 px-3 focus-within:border-gold">
-                  <KeyRound className="h-4 w-4 text-gold" />
-                  <input
+                </FieldShell>
+                <FieldShell label="Senha">
+                  <InputShell
+                    icon={KeyRound}
                     name="password"
                     type="password"
                     required
                     minLength={6}
                     autoComplete="new-password"
-                    className="w-full bg-transparent text-foreground outline-none"
                     placeholder="mínimo 6 caracteres"
                   />
+                </FieldShell>
+              </div>
+
+              <div className="rounded-lg border border-gold/20 bg-gold/5 p-4">
+                <p className="text-sm font-semibold text-foreground">
+                  Quais são as 3 operações dentro do seu negócio que você precisa
+                  otimizar com urgência e por quê?
+                </p>
+                <div className="mt-4 grid gap-3">
+                  {[1, 2, 3].map((n) => (
+                    <textarea
+                      key={n}
+                      name={`urgent_operation_${n}`}
+                      required
+                      rows={2}
+                      className="min-h-20 resize-y rounded-lg border border-line bg-black/30 px-3 py-2 text-sm text-foreground outline-none transition placeholder:text-muted/60 focus:border-gold"
+                      placeholder={`Operação ${n}`}
+                    />
+                  ))}
                 </div>
-              </label>
+              </div>
+
               <Button type="submit" size="lg" disabled={pending} className="mt-1 w-full">
-                {pending ? "Criando conta e abrindo pagamento..." : "Criar conta e pagar agora"}
+                {pending ? "Finalizando..." : "Finalizar agora"}
                 <ArrowRight className="h-5 w-5" />
               </Button>
             </form>
@@ -283,13 +419,13 @@ export function CheckoutWizard({
                 className="w-full"
               >
                 <CreditCard className="h-5 w-5" />
-                {pending ? "Abrindo pagamento..." : "Ir para o pagamento (PIX ou cartão)"}
+                {pending ? "Abrindo pagamento..." : "Finalizar agora"}
               </Button>
               {paymentConfigured ? (
                 <p className="text-xs leading-5 text-muted">
                   Você será levado ao ambiente seguro do AbacatePay para concluir o
-                  pagamento (cartão ou PIX). O acesso é liberado automaticamente
-                  após a confirmação.
+                  pagamento no cartão. O acesso é liberado automaticamente após a
+                  confirmação.
                 </p>
               ) : (
                 <p className="rounded-lg border border-gold/25 bg-gold/10 p-3 text-xs leading-5 text-gold-strong">

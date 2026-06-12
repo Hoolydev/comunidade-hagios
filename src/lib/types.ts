@@ -14,6 +14,14 @@ export type Profile = {
   user_id: string;
   name: string | null;
   email: string | null;
+  company_role: string | null;
+  company_name: string | null;
+  company_sector: string | null;
+  phone: string | null;
+  city_state: string | null;
+  urgent_operation_1: string | null;
+  urgent_operation_2: string | null;
+  urgent_operation_3: string | null;
   role: UserRole;
   stripe_customer_id: string | null;
   subscription_status: SubscriptionStatus;

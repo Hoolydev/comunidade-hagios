@@ -34,9 +34,8 @@ test.describe("Comunidade Hagios public flow", () => {
 
     await expect(page.getByRole("heading", { name: /Acesso premium/i })).toBeVisible();
     await expect(page.getByText("R$49,90").first()).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: /Criar conta e pagar agora/i }),
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: /Finalizar agora/i })).toBeVisible();
+    await expect(page.getByText(/PIX/i)).toHaveCount(0);
     await expectNoHorizontalOverflow(page);
   });
 

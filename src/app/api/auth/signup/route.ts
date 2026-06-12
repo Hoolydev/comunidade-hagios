@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ensureProfile } from "@/lib/auth";
+import { hasProfileIntake, normalizeProfileIntake } from "@/lib/profile-intake";
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
@@ -13,10 +14,13 @@ export async function POST(request: Request) {
   const body = (await request.json().catch(() => ({}))) as {
     email?: string;
     password?: string;
+    profile?: unknown;
   };
 
   const email = (body.email || "").trim();
   const password = body.password || "";
+  const profileIntake = normalizeProfileIntake(body.profile);
+  const name = profileIntake.name || email.split("@")[0];
 
   if (!email || password.length < 6) {
     return NextResponse.json(
@@ -37,7 +41,10 @@ export async function POST(request: Request) {
     email,
     password,
     email_confirm: true,
-    user_metadata: { name: email.split("@")[0] },
+    user_metadata: {
+      ...profileIntake,
+      name,
+    },
   });
 
   if (error) {
@@ -55,6 +62,15 @@ export async function POST(request: Request) {
 
   if (data.user) {
     await ensureProfile(data.user.id, data.user.email);
+    if (hasProfileIntake(profileIntake)) {
+      await supabase
+        .from("profiles")
+        .update({
+          ...profileIntake,
+          name,
+        })
+        .eq("user_id", data.user.id);
+    }
   }
 
   return NextResponse.json({ status: "created" });

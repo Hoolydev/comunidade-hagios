@@ -12,12 +12,12 @@ function getApiKey() {
 }
 
 function getMethods(): string[] {
-  // PIX recorrente + cartão por padrão; ajustável via env (ex: "CARD").
-  const raw = process.env.ABACATEPAY_METHODS || "PIX,CARD";
+  // Assinatura recorrente: manter apenas cartão, mesmo se a env antiga tiver PIX.
+  const raw = process.env.ABACATEPAY_METHODS || "CARD";
   return raw
     .split(",")
     .map((m) => m.trim().toUpperCase())
-    .filter(Boolean);
+    .filter((method) => method === "CARD");
 }
 
 async function abacateFetch<T>(
