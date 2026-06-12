@@ -64,32 +64,37 @@ export default function Home() {
       <PublicHeader />
       <section className="relative min-h-[calc(100svh-64px)] overflow-hidden">
         <Image
-          src="/hagios-hero-bg.png"
+          src="/hagios-hero-mobile.png"
           alt="Comunidade Hágios"
           fill
           priority
-          sizes="100vw"
-          className="object-cover object-[58%_center]"
+          sizes="(max-width: 767px) 100vw, 0px"
+          className="object-cover object-top md:hidden"
         />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,15,24,0.98)_0%,rgba(9,15,24,0.88)_38%,rgba(9,15,24,0.48)_68%,rgba(9,15,24,0.18)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,15,24,0.28)_0%,rgba(9,15,24,0.82)_100%)]" />
-        <div className="relative mx-auto flex min-h-[calc(100svh-64px)] w-full max-w-7xl flex-col justify-center px-4 py-12 sm:px-6 lg:py-16">
-          <div className="max-w-4xl">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/10 px-3 py-1 text-sm font-semibold text-gold-strong">
+        <Image
+          src="/hagios-hero-desktop.png"
+          alt="Comunidade Hágios"
+          fill
+          priority
+          sizes="(min-width: 768px) 100vw, 0px"
+          className="hidden object-cover object-center md:block"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,15,24,0.02)_0%,rgba(9,15,24,0.04)_42%,rgba(9,15,24,0.28)_62%,rgba(9,15,24,0.88)_86%,rgba(9,15,24,0.98)_100%)] md:bg-[linear-gradient(90deg,rgba(9,15,24,0.9)_0%,rgba(9,15,24,0.6)_34%,rgba(9,15,24,0.12)_66%,rgba(9,15,24,0.03)_100%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-[44%] bg-[linear-gradient(180deg,rgba(9,15,24,0)_0%,rgba(9,15,24,0.78)_42%,rgba(9,15,24,0.98)_100%)] md:h-[42%]" />
+        <div className="relative mx-auto flex min-h-[calc(100svh-64px)] w-full max-w-7xl flex-col justify-start px-4 pb-10 pt-[94svh] sm:px-6 sm:pb-14 md:justify-center md:py-16 lg:py-20">
+          <div className="max-w-4xl md:max-w-[540px] lg:max-w-[560px]">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-gold/25 bg-gold/10 px-3 py-1 text-sm font-semibold text-gold-strong backdrop-blur">
               <Rocket className="h-4 w-4" aria-hidden="true" />
               Hágios apresenta
             </div>
-            <LogoMark size="lg" className="mb-6" priority />
-            <h1 className="max-w-4xl text-4xl font-black leading-[0.95] tracking-normal text-foreground sm:text-6xl lg:text-7xl">
+            <LogoMark size="lg" className="mb-5" priority />
+            <h1 className="max-w-4xl text-4xl font-black leading-[0.95] tracking-normal text-foreground sm:text-6xl lg:text-5xl">
               Implemente IA em pelo menos 3 áreas da sua empresa nos próximos 90 dias.
             </h1>
-            <p className="mt-6 max-w-3xl text-base leading-8 text-muted sm:text-lg">
+            <p className="mt-5 max-w-2xl text-base leading-8 text-muted sm:text-lg">
               Nosso propósito é ajudar empreendedores a aplicar a Inteligência
               Artificial de forma prática em seus negócios, modernizando suas
               operações e preparando suas empresas para a nova era do mercado.
-              Mais do que ensinar ferramentas, a Comunidade Hágios ensina
-              empresários a utilizarem a IA para gerar resultados reais em áreas
-              fundamentais da empresa.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <ButtonLink
