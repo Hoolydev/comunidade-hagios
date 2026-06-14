@@ -56,7 +56,10 @@ export function buildApprovalMessage({
   approvalUrl,
   approverName,
 }: {
-  draft: Pick<AssistantDraft, "title" | "subtitle" | "body" | "category" | "tags" | "source_url">;
+  draft: Pick<
+    AssistantDraft,
+    "title" | "subtitle" | "body" | "category" | "tags" | "source_url" | "review_token"
+  >;
   approvalUrl: string;
   approverName?: string | null;
 }) {
@@ -80,6 +83,10 @@ export function buildApprovalMessage({
     "",
     "Para aprovar ou rejeitar, acesse:",
     approvalUrl,
+    "",
+    "Se preferir, responda esta mensagem com:",
+    `APROVAR ${draft.review_token}`,
+    `REJEITAR ${draft.review_token}`,
   ]
     .filter(Boolean)
     .join("\n");
