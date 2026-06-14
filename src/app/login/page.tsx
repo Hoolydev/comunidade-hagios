@@ -7,9 +7,9 @@ export default function LoginPage() {
   return (
     <main className="grid min-h-screen bg-background px-4 py-8 text-foreground lg:grid-cols-[0.95fr_1.05fr] lg:p-0">
       <section className="hidden min-h-screen flex-col justify-between border-r border-line bg-panel-soft/40 p-10 lg:flex">
-        <Link href="/" className="flex items-center gap-3 font-semibold">
-          <LogoMark size="sm" priority />
-          Comunidade Hágios
+        <Link href="/" className="mx-auto flex flex-col items-center gap-3 text-center font-semibold">
+          <LogoMark size="lg" priority />
+          <span>Comunidade Hágios</span>
         </Link>
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">

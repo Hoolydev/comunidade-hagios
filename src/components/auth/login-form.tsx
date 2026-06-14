@@ -3,7 +3,8 @@
 import { useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-import { Eye, KeyRound, Mail, UserPlus } from "lucide-react";
+import { Mail } from "lucide-react";
+import { LogoMark } from "@/components/brand/logo-mark";
 import { Button } from "@/components/ui/button";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 
@@ -110,15 +111,9 @@ export function LoginForm() {
 
   return (
     <div className="w-full max-w-md rounded-lg border border-line bg-panel p-6 shadow-[0_12px_36px_rgba(0,0,0,0.3)]">
-      <div className="mb-7">
-        <div className="mb-4 grid h-11 w-11 place-items-center rounded-lg bg-gold/12 text-gold-strong">
-          {mode === "signup" ? (
-            <UserPlus className="h-5 w-5" />
-          ) : mode === "reset" ? (
-            <KeyRound className="h-5 w-5" />
-          ) : (
-            <Eye className="h-5 w-5" />
-          )}
+      <div className="mb-7 text-center">
+        <div className="mb-5 flex justify-center">
+          <LogoMark size="lg" priority />
         </div>
         <h1 className="text-2xl font-black">{title}</h1>
         <p className="mt-2 text-sm leading-6 text-muted">
