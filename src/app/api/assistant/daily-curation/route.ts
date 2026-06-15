@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { runDailyAssistantCuration } from "@/lib/assistant/daily-curation";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 function isAuthorized(request: NextRequest) {
   const secrets = [process.env.CRON_SECRET, process.env.ASSISTANT_API_SECRET].filter(Boolean);

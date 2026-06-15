@@ -5,7 +5,11 @@ import {
   markDraftsWhatsappSent,
   type AssistantDraftInput,
 } from "@/lib/assistant/content-approval";
-import { sendUazapiMenuWithTextFallback } from "@/lib/whatsapp/uazapi";
+import { generateAssistantCover } from "@/lib/assistant/cover-generation";
+import {
+  getWhatsAppRecipients,
+  sendUazapiMenuWithTextFallback,
+} from "@/lib/whatsapp/uazapi";
 
 type NewsSource = {
   name: string;
@@ -24,19 +28,49 @@ type NewsItem = {
 
 const sources: NewsSource[] = [
   {
-    name: "Google News - IA nos negócios",
-    rss: "https://news.google.com/rss/search?q=intelig%C3%AAncia%20artificial%20neg%C3%B3cios%20empresas&hl=pt-BR&gl=BR&ceid=BR:pt-419",
+    name: "OpenAI",
+    rss: "https://openai.com/news/rss.xml",
+    trust: 96,
+  },
+  {
+    name: "Google AI",
+    rss: "https://blog.google/technology/ai/rss/",
     trust: 94,
   },
   {
-    name: "Google News - IA em empresas",
-    rss: "https://news.google.com/rss/search?q=IA%20empresas%20opera%C3%A7%C3%B5es%20gest%C3%A3o&hl=pt-BR&gl=BR&ceid=BR:pt-419",
+    name: "Google Innovation & AI",
+    rss: "https://blog.google/innovation-and-ai/rss/",
     trust: 92,
   },
   {
-    name: "Google News - automação com IA",
-    rss: "https://news.google.com/rss/search?q=automa%C3%A7%C3%A3o%20intelig%C3%AAncia%20artificial%20neg%C3%B3cios&hl=pt-BR&gl=BR&ceid=BR:pt-419",
-    trust: 92,
+    name: "Marketing AI Institute",
+    rss: "https://www.marketingaiinstitute.com/blog/rss.xml",
+    trust: 88,
+  },
+  {
+    name: "VentureBeat AI",
+    rss: "https://venturebeat.com/category/ai/feed/",
+    trust: 82,
+  },
+  {
+    name: "Google News - IA nos negócios",
+    rss: "https://news.google.com/rss/search?q=intelig%C3%AAncia%20artificial%20neg%C3%B3cios%20empresas&hl=pt-BR&gl=BR&ceid=BR:pt-419",
+    trust: 84,
+  },
+  {
+    name: "Google News - IA em atendimento",
+    rss: "https://news.google.com/rss/search?q=intelig%C3%AAncia%20artificial%20atendimento%20cliente%20empresas&hl=pt-BR&gl=BR&ceid=BR:pt-419",
+    trust: 84,
+  },
+  {
+    name: "Google News - IA em vendas",
+    rss: "https://news.google.com/rss/search?q=intelig%C3%AAncia%20artificial%20vendas%20crm%20empresas&hl=pt-BR&gl=BR&ceid=BR:pt-419",
+    trust: 84,
+  },
+  {
+    name: "Google News - IA em gestão",
+    rss: "https://news.google.com/rss/search?q=intelig%C3%AAncia%20artificial%20gest%C3%A3o%20produtividade%20empresas&hl=pt-BR&gl=BR&ceid=BR:pt-419",
+    trust: 84,
   },
 ];
 
@@ -170,9 +204,31 @@ function areaLabel(category: string) {
   return value;
 }
 
+function getBusinessSubject(item: NewsItem) {
+  const text = `${item.title} ${item.description} ${item.source}`.toLowerCase();
+
+  if (/chatgpt|openai/.test(text)) return "ChatGPT e OpenAI";
+  if (/gemini|google/.test(text)) return "Gemini e Google AI";
+  if (/claude|anthropic/.test(text)) return "Claude e Anthropic";
+  if (/agent|agente/.test(text)) return "agentes de IA";
+  if (/automation|automacao|automação|workflow/.test(text)) return "automação com IA";
+  if (/customer|support|atendimento|whatsapp|chatbot/.test(text)) return "atendimento com IA";
+  if (/sales|vendas|crm|lead|comercial/.test(text)) return "vendas com IA";
+  if (/marketing|content|criativo|campaign|anuncio|ads|campanha/.test(text)) {
+    return "marketing com IA";
+  }
+  if (/finance|financas|finanças|custo|receita/.test(text)) return "finanças com IA";
+  if (/gestao|gestão|productivity|produtividade|operation|operacao|operação/.test(text)) {
+    return "gestão com IA";
+  }
+
+  return "IA aplicada ao negócio";
+}
+
 function communityTitle(item: NewsItem) {
   const category = getCategory(`${item.title} ${item.description}`);
-  return `Novidade de IA para ${areaLabel(category)} nas empresas`;
+  const subject = getBusinessSubject(item);
+  return `${subject}: aplicação prática para ${areaLabel(category)} nas empresas`;
 }
 
 function communitySummary(item: NewsItem) {
@@ -180,6 +236,68 @@ function communitySummary(item: NewsItem) {
   const area = areaLabel(category);
 
   return `Uma atualização recente sobre inteligência artificial aponta novas oportunidades para ${area}. Para a Comunidade Hágios, o ponto central é transformar essa tendência em um teste prático dentro da empresa, com foco em processo, implementação e resultado.`;
+}
+
+function implementationPlaybook(category: string) {
+  const value = category.toLowerCase();
+
+  if (value === "atendimento") {
+    return {
+      action: "revisar as 20 dúvidas mais frequentes recebidas no WhatsApp, Instagram ou e-mail e criar uma base de respostas assistida por IA.",
+      steps: [
+        "Liste perguntas recorrentes, objeções e solicitações que travam o atendimento.",
+        "Transforme cada pergunta em uma resposta padrão com tom humano, objetivo e alinhado à marca.",
+        "Crie um processo de revisão: a IA sugere, o time valida e só depois a resposta vira padrão.",
+      ],
+      metric: "tempo médio de primeira resposta, quantidade de atendimentos resolvidos sem retrabalho e satisfação percebida do cliente.",
+    };
+  }
+
+  if (value === "vendas") {
+    return {
+      action: "usar IA para qualificar leads, identificar intenção de compra e sugerir o próximo passo comercial.",
+      steps: [
+        "Separe conversas recentes de vendas em três grupos: frio, morno e pronto para comprar.",
+        "Crie critérios objetivos para a IA classificar cada lead com base em urgência, orçamento e dor.",
+        "Monte mensagens de follow-up específicas para cada grupo, evitando abordagem genérica.",
+      ],
+      metric: "taxa de resposta no follow-up, reuniões agendadas e conversões por etapa do funil.",
+    };
+  }
+
+  if (value === "marketing") {
+    return {
+      action: "transformar a notícia em um teste de conteúdo, campanha ou criativo com mensagem mais clara para o público.",
+      steps: [
+        "Escolha uma oferta ou serviço que precisa de mais clareza comercial.",
+        "Use IA para criar três ângulos de comunicação: dor, oportunidade e prova.",
+        "Publique ou anuncie o melhor ângulo e compare resposta, cliques e conversas geradas.",
+      ],
+      metric: "CTR, comentários qualificados, leads gerados e custo por conversa.",
+    };
+  }
+
+  if (value === "gestão" || value === "produtividade") {
+    return {
+      action: "mapear uma rotina repetitiva da operação e criar um fluxo simples de melhoria com IA.",
+      steps: [
+        "Escolha uma tarefa que consome tempo toda semana, como relatórios, propostas ou organização de demandas.",
+        "Documente entrada, transformação e saída esperada dessa tarefa.",
+        "Use IA para gerar a primeira versão do processo e deixe uma pessoa responsável por validar o resultado.",
+      ],
+      metric: "tempo economizado por semana, erros evitados e previsibilidade da entrega.",
+    };
+  }
+
+  return {
+    action: "selecionar um processo pequeno do negócio e testar uma melhoria de IA em escala controlada.",
+    steps: [
+      "Escolha uma rotina com impacto claro em receita, atendimento, gestão ou produtividade.",
+      "Defina o antes e depois: como é feito hoje e como a IA pode apoiar.",
+      "Rode um teste por sete dias antes de automatizar ou escalar.",
+    ],
+    metric: "tempo economizado, qualidade da entrega e impacto percebido no cliente ou no time.",
+  };
 }
 
 async function readFeed(source: NewsSource) {
@@ -214,21 +332,34 @@ async function readFeed(source: NewsSource) {
 
 function newsToDraft(item: NewsItem): AssistantDraftInput {
   const text = `${item.title} ${item.description}`;
+  const category = getCategory(text);
+  const playbook = implementationPlaybook(category);
+  const sourceContext = decodeXml(item.description).slice(0, 320) || shortTitle(item.title);
 
   return {
     title: communityTitle(item),
-    subtitle: "Curadoria para empresários aplicarem IA com foco em implementação.",
+    subtitle: communitySummary(item),
     body: [
       `Resumo da novidade: ${communitySummary(item)}`,
       "",
-      "Por que isso importa para empresários da Comunidade Hágios:",
-      "- A IA está deixando de ser tendência e virando melhoria prática de operação, atendimento, marketing, vendas e gestão.",
-      "- O melhor uso agora é escolher um processo específico, testar uma melhoria pequena e medir resultado antes de escalar.",
-      "- Use esta notícia como gatilho para revisar uma rotina da empresa que ainda depende de trabalho manual repetitivo.",
+      `Contexto da fonte: ${sourceContext}`,
       "",
-      "Pergunta de implementação: qual processo do negócio pode ganhar velocidade, qualidade ou previsibilidade com IA ainda esta semana?",
+      "Por que isso importa para empresários da Comunidade Hágios:",
+      "- A notícia só vira valor quando ajuda a melhorar uma operação real da empresa.",
+      "- O foco não é acompanhar tendência por curiosidade, é transformar IA em processo, rotina e resultado.",
+      "- O melhor caminho é começar com um teste pequeno, medir o ganho e só depois escalar.",
+      "",
+      "Aplicação prática sugerida:",
+      `Use este tema para ${playbook.action}`,
+      "",
+      "Como implementar ainda esta semana:",
+      ...playbook.steps.map((step, index) => `${index + 1}. ${step}`),
+      "",
+      `Indicador para acompanhar: ${playbook.metric}`,
+      "",
+      "Pergunta de implementação: qual processo do negócio pode ganhar velocidade, qualidade ou previsibilidade com IA nos próximos 7 dias?",
     ].join("\n"),
-    category: getCategory(text),
+    category,
     tags: getTags(text),
     source_name: item.source,
     source_url: item.link,
@@ -238,6 +369,7 @@ function newsToDraft(item: NewsItem): AssistantDraftInput {
 export async function collectDailyCuration(limit = 3) {
   const allItems = (await Promise.all(sources.map(readFeed))).flat();
   const seen = new Set<string>();
+  const seenDraftTitles = new Map<string, number>();
 
   return allItems
     .filter((item) => item.title && item.link)
@@ -249,7 +381,19 @@ export async function collectDailyCuration(limit = 3) {
       return true;
     })
     .slice(0, Math.max(3, limit))
-    .map(newsToDraft);
+    .map(newsToDraft)
+    .map((draft) => {
+      const titleKey = draft.title.toLowerCase();
+      const count = seenDraftTitles.get(titleKey) || 0;
+      seenDraftTitles.set(titleKey, count + 1);
+
+      if (!count) return draft;
+
+      return {
+        ...draft,
+        title: `${draft.title} (${draft.source_name})`,
+      };
+    });
 }
 
 export async function runDailyAssistantCuration(limit = 3) {
@@ -258,23 +402,48 @@ export async function runDailyAssistantCuration(limit = 3) {
     throw new Error("A curadoria encontrou menos de 3 notícias úteis para aprovação.");
   }
 
-  const drafts = await createAssistantDrafts(items);
+  const coverUrls = await Promise.all(
+    items.map((item) =>
+      generateAssistantCover({
+        title: item.title,
+        summary: item.subtitle || item.body.slice(0, 240),
+        category: item.category || "IA",
+      }).catch(() => null),
+    ),
+  );
+  const drafts = await createAssistantDrafts(
+    items.map((item, index) => ({
+      ...item,
+      cover_url: coverUrls[index],
+    })),
+  );
   const whatsappMessages = [];
+  const recipients = getWhatsAppRecipients();
 
-  for (const [index, draft] of drafts.entries()) {
-    const message = buildDraftApprovalMessage({
-      draft,
-      index: index + 1,
-      total: drafts.length,
-      approverName: process.env.WHATSAPP_APPROVER_NAME,
-    });
-    const whatsapp = await sendUazapiMenuWithTextFallback({
-      text: message,
-      choices: buildDraftApprovalChoices(index + 1),
-      footerText: "Comunidade Hágios | Curadoria diária de IA",
-    });
+  for (const recipient of recipients) {
+    for (const [index, draft] of drafts.entries()) {
+      const message = buildDraftApprovalMessage({
+        draft,
+        index: index + 1,
+        total: drafts.length,
+        approverName: recipient.name,
+      });
+      const whatsapp = await sendUazapiMenuWithTextFallback(
+        {
+          text: message,
+          choices: buildDraftApprovalChoices(index + 1),
+          footerText: "Comunidade Hágios | Curadoria diária de IA",
+          imageButton: coverUrls[index],
+        },
+        recipient,
+      );
 
-    whatsappMessages.push(whatsapp);
+      whatsappMessages.push({
+        ...whatsapp,
+        recipient: recipient.phone,
+        cover_url: coverUrls[index],
+      });
+    }
   }
 
   const whatsapp = {
@@ -285,10 +454,10 @@ export async function runDailyAssistantCuration(limit = 3) {
     error: whatsappMessages.find((message) => message.error)?.error,
   };
 
-  if (whatsapp.ok && process.env.WHATSAPP_APPROVER_PHONE) {
+  if (whatsapp.ok && recipients.length) {
     await markDraftsWhatsappSent(
       drafts.map((draft) => draft.id),
-      process.env.WHATSAPP_APPROVER_PHONE,
+      recipients.map((recipient) => recipient.phone).join(","),
     );
   }
 
@@ -296,6 +465,7 @@ export async function runDailyAssistantCuration(limit = 3) {
     count: drafts.length,
     draft_ids: drafts.map((draft) => draft.id),
     titles: drafts.map((draft) => draft.title),
+    cover_urls: coverUrls,
     whatsapp,
   };
 }

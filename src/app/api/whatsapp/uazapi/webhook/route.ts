@@ -41,16 +41,24 @@ function walkPayload(value: unknown, visitor: (key: string, value: unknown) => v
 }
 
 function getPayloadString(payload: unknown, keys: string[]) {
-  const found: string[] = [];
+  const found = new Map<string, string[]>();
 
   walkPayload(payload, (key, value) => {
     if (typeof value !== "string") return;
-    if (keys.includes(key.toLowerCase()) && value.trim()) {
-      found.push(value.trim());
+    const normalizedKey = key.toLowerCase();
+    if (keys.includes(normalizedKey) && value.trim()) {
+      found.set(normalizedKey, [...(found.get(normalizedKey) || []), value.trim()]);
     }
   });
 
-  return found.sort((a, b) => b.length - a.length)[0] || "";
+  for (const key of keys) {
+    const values = found.get(key);
+    if (values?.length) {
+      return values.sort((a, b) => b.length - a.length)[0];
+    }
+  }
+
+  return "";
 }
 
 function isOwnMessage(payload: unknown) {
@@ -189,42 +197,57 @@ async function getLatestPendingDraftsForPhone(phone: string) {
   if (!supabase) return [];
 
   const candidates = phoneCandidates(phone);
-  if (!candidates.length) return [];
-
-  const { data: latest } = await supabase
-    .from("assistant_drafts")
-    .select("review_token, whatsapp_sent_at, created_at")
-    .in("whatsapp_recipient", candidates)
-    .eq("status", "pending")
-    .not("whatsapp_sent_at", "is", null)
-    .order("whatsapp_sent_at", { ascending: false })
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle<PendingDraftReference>();
-
-  if (latest?.whatsapp_sent_at) {
-    const { data: batch } = await supabase
+  const baseQuery = () =>
+    supabase
       .from("assistant_drafts")
       .select("review_token, whatsapp_sent_at, created_at")
-      .in("whatsapp_recipient", candidates)
-      .eq("status", "pending")
-      .eq("whatsapp_sent_at", latest.whatsapp_sent_at)
+      .eq("status", "pending");
+
+  const { data: latest } = candidates.length
+    ? await baseQuery()
+        .in("whatsapp_recipient", candidates)
+        .not("whatsapp_sent_at", "is", null)
+        .order("whatsapp_sent_at", { ascending: false })
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle<PendingDraftReference>()
+    : { data: null };
+
+  const latestDraft =
+    latest ||
+    (
+      await baseQuery()
+        .not("whatsapp_sent_at", "is", null)
+        .order("whatsapp_sent_at", { ascending: false })
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle<PendingDraftReference>()
+    ).data;
+
+  if (latestDraft?.whatsapp_sent_at) {
+    let query = baseQuery().eq("whatsapp_sent_at", latestDraft.whatsapp_sent_at);
+    if (candidates.length && latest) query = query.in("whatsapp_recipient", candidates);
+
+    const { data: batch } = await query
       .order("created_at", { ascending: true })
       .returns<PendingDraftReference[]>();
 
     return batch || [];
   }
 
-  const { data: fallback } = await supabase
-    .from("assistant_drafts")
-    .select("review_token, whatsapp_sent_at, created_at")
-    .in("whatsapp_recipient", candidates)
-    .eq("status", "pending")
+  let fallbackQuery = baseQuery().order("created_at", { ascending: false }).limit(3);
+  if (candidates.length) fallbackQuery = fallbackQuery.in("whatsapp_recipient", candidates);
+
+  const { data: fallback } = await fallbackQuery.returns<PendingDraftReference[]>();
+
+  if (fallback?.length) return fallback.reverse();
+
+  const { data: globalFallback } = await baseQuery()
     .order("created_at", { ascending: false })
     .limit(3)
     .returns<PendingDraftReference[]>();
 
-  return (fallback || []).reverse();
+  return (globalFallback || []).reverse();
 }
 
 async function applyApproval(decision: ApprovalDecision, reviewToken: string) {

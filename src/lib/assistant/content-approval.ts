@@ -12,6 +12,7 @@ export type AssistantDraftInput = {
   tags?: string[] | string | null;
   source_name?: string | null;
   source_url?: string | null;
+  cover_url?: string | null;
 };
 
 export function normalizeTags(tags?: string[] | string | null) {
@@ -44,6 +45,7 @@ export function validateDraftInput(input: Partial<AssistantDraftInput>) {
     tags: normalizeTags(input.tags),
     source_name: String(input.source_name || "").trim() || null,
     source_url: String(input.source_url || "").trim() || null,
+    cover_url: String(input.cover_url || "").trim() || null,
   };
 }
 
@@ -120,6 +122,12 @@ function getSourceLabel(sourceName?: string | null) {
   if (/google/i.test(value)) return "Google";
 
   return value.replace(/\s*[-|].*$/, "").trim();
+}
+
+function withoutCoverUrl<T extends { cover_url?: string | null }>(value: T) {
+  const copy = { ...value };
+  delete copy.cover_url;
+  return copy;
 }
 
 export function buildBatchApprovalMessage({
@@ -218,6 +226,24 @@ export async function createAssistantDraft(input: AssistantDraftInput) {
     .select("*")
     .single();
 
+  if (error?.message?.includes("cover_url")) {
+    const { data: retryData, error: retryError } = await supabase
+      .from("assistant_drafts")
+      .insert({
+        ...withoutCoverUrl(draft),
+        review_token: reviewToken,
+        status: "pending",
+      })
+      .select("*")
+      .single();
+
+    if (retryError || !retryData) {
+      throw new Error(retryError?.message || "Não foi possível criar o rascunho.");
+    }
+
+    return retryData as AssistantDraft;
+  }
+
   if (error || !data) {
     throw new Error(error?.message || "Não foi possível criar o rascunho.");
   }
@@ -242,6 +268,20 @@ export async function createAssistantDrafts(inputs: AssistantDraftInput[]) {
   }));
 
   const { data, error } = await supabase.from("assistant_drafts").insert(drafts).select("*");
+
+  if (error?.message?.includes("cover_url")) {
+    const draftsWithoutCover = drafts.map((draft) => withoutCoverUrl(draft));
+    const { data: retryData, error: retryError } = await supabase
+      .from("assistant_drafts")
+      .insert(draftsWithoutCover)
+      .select("*");
+
+    if (retryError || !retryData) {
+      throw new Error(retryError?.message || "Não foi possível criar os rascunhos.");
+    }
+
+    return retryData as AssistantDraft[];
+  }
 
   if (error || !data) {
     throw new Error(error?.message || "Não foi possível criar os rascunhos.");
@@ -295,25 +335,51 @@ export async function approveAssistantDraft(token: string) {
   const now = new Date().toISOString();
   const slug = await createUniquePostSlug(draft.title);
 
+  const postPayload = {
+    title: draft.title,
+    slug,
+    subtitle: draft.subtitle,
+    body: draft.body,
+    category: draft.category,
+    tags: draft.tags,
+    source_name: draft.source_name,
+    source_url: draft.source_url,
+    cover_url: draft.cover_url || null,
+    status: "published" as const,
+    published_at: now,
+  };
+
   const { data: post, error: postError } = await supabase
     .from("community_posts")
-    .insert({
-      title: draft.title,
-      slug,
-      subtitle: draft.subtitle,
-      body: draft.body,
-      category: draft.category,
-      tags: draft.tags,
-      source_name: draft.source_name,
-      source_url: draft.source_url,
-      status: "published",
-      published_at: now,
-    })
+    .insert(postPayload)
     .select("*")
     .single();
 
+  if (postError?.message?.includes("cover_url")) {
+    const { data: retryPost, error: retryPostError } = await supabase
+      .from("community_posts")
+      .insert(withoutCoverUrl(postPayload))
+      .select("*")
+      .single();
+
+    if (retryPostError || !retryPost) {
+      throw new Error(retryPostError?.message || "Não foi possível publicar o conteúdo.");
+    }
+
+    return updateApprovedDraft(token, now, retryPost as CommunityPost);
+  }
+
   if (postError || !post) {
     throw new Error(postError?.message || "Não foi possível publicar o conteúdo.");
+  }
+
+  return updateApprovedDraft(token, now, post as CommunityPost);
+}
+
+async function updateApprovedDraft(token: string, now: string, post: CommunityPost) {
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) {
+    throw new Error("Supabase admin não configurado.");
   }
 
   const { data, error } = await supabase
@@ -321,7 +387,7 @@ export async function approveAssistantDraft(token: string) {
     .update({
       status: "approved",
       approved_at: now,
-      published_post_id: (post as CommunityPost).id,
+      published_post_id: post.id,
     })
     .eq("review_token", token)
     .select("*")

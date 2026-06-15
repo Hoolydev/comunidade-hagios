@@ -116,6 +116,7 @@ export type RecentContent = {
   id: string;
   title: string;
   description: string;
+  cover_url?: string | null;
   category: string;
   type: "Vídeo" | "Atualização" | "Ferramenta" | "Caso prático" | "Tendência";
   published_at: string;
@@ -135,6 +136,7 @@ export type CommunityPost = {
   tags: string[];
   source_name: string | null;
   source_url: string | null;
+  cover_url?: string | null;
   status: "published" | "draft" | "archived";
   published_at: string | null;
   created_at: string;
@@ -150,6 +152,7 @@ export type AssistantDraft = {
   tags: string[];
   source_name: string | null;
   source_url: string | null;
+  cover_url?: string | null;
   status: "pending" | "approved" | "rejected";
   review_token: string;
   whatsapp_recipient: string | null;

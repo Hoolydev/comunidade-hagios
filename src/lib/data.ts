@@ -229,6 +229,7 @@ export async function getRecentContents() {
     id: post.id,
     title: post.title,
     description: post.subtitle || post.body.slice(0, 150),
+    cover_url: post.cover_url || null,
     category: post.category,
     type: "Atualização",
     published_at: post.published_at || post.created_at,
