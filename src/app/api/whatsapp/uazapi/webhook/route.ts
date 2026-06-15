@@ -67,6 +67,12 @@ function isOwnMessage(payload: unknown) {
 
 function extractIncomingText(payload: unknown) {
   return getPayloadString(payload, [
+    "selectedbuttonid",
+    "selecteddisplaytext",
+    "selectedrowid",
+    "buttonid",
+    "buttontext",
+    "displaytext",
     "text",
     "body",
     "message",

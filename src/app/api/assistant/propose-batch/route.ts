@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
   type AssistantDraftInput,
+  buildBatchApprovalChoices,
   buildBatchApprovalMessage,
   createAssistantDrafts,
   markDraftsWhatsappSent,
 } from "@/lib/assistant/content-approval";
-import { sendUazapiTextMessage } from "@/lib/whatsapp/uazapi";
+import { sendUazapiMenuWithTextFallback } from "@/lib/whatsapp/uazapi";
 
 export const dynamic = "force-dynamic";
 
@@ -52,7 +53,11 @@ export async function POST(request: NextRequest) {
       drafts,
       approverName: process.env.WHATSAPP_APPROVER_NAME,
     });
-    const whatsapp = await sendUazapiTextMessage(message);
+    const whatsapp = await sendUazapiMenuWithTextFallback({
+      text: message,
+      choices: buildBatchApprovalChoices(),
+      footerText: "Comunidade Hágios | Curadoria diária de IA",
+    });
 
     if (whatsapp.ok && process.env.WHATSAPP_APPROVER_PHONE) {
       await markDraftsWhatsappSent(

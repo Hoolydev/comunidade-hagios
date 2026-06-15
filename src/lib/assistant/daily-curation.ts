@@ -1,10 +1,11 @@
 import {
+  buildBatchApprovalChoices,
   buildBatchApprovalMessage,
   createAssistantDrafts,
   markDraftsWhatsappSent,
   type AssistantDraftInput,
 } from "@/lib/assistant/content-approval";
-import { sendUazapiTextMessage } from "@/lib/whatsapp/uazapi";
+import { sendUazapiMenuWithTextFallback } from "@/lib/whatsapp/uazapi";
 
 type NewsSource = {
   name: string;
@@ -256,7 +257,11 @@ export async function runDailyAssistantCuration(limit = 3) {
     drafts,
     approverName: process.env.WHATSAPP_APPROVER_NAME,
   });
-  const whatsapp = await sendUazapiTextMessage(message);
+  const whatsapp = await sendUazapiMenuWithTextFallback({
+    text: message,
+    choices: buildBatchApprovalChoices(),
+    footerText: "Comunidade Hágios | Curadoria diária de IA",
+  });
 
   if (whatsapp.ok && process.env.WHATSAPP_APPROVER_PHONE) {
     await markDraftsWhatsappSent(

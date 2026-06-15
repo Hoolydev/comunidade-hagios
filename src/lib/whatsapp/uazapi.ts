@@ -6,6 +6,12 @@ export type UazapiSendResult = {
   error?: string;
 };
 
+type UazapiMenuInput = {
+  text: string;
+  choices: string[];
+  footerText?: string;
+};
+
 function cleanPhone(value: string) {
   return value.replace(/\D/g, "");
 }
@@ -19,6 +25,49 @@ export function hasUazapiEnv() {
 }
 
 export async function sendUazapiTextMessage(message: string): Promise<UazapiSendResult> {
+  return sendUazapiRequest({
+    path: process.env.UAZAPI_SEND_TEXT_PATH || "/send/text",
+    payload: {
+      text: message,
+      message,
+    },
+    missingError: "Uazapi não configurada. Rascunho criado sem envio por WhatsApp.",
+  });
+}
+
+export async function sendUazapiMenuMessage({
+  text,
+  choices,
+  footerText,
+}: UazapiMenuInput): Promise<UazapiSendResult> {
+  return sendUazapiRequest({
+    path: process.env.UAZAPI_SEND_MENU_PATH || "/send/menu",
+    payload: {
+      type: "button",
+      text,
+      choices,
+      footerText,
+    },
+    missingError: "Uazapi não configurada. Rascunho criado sem envio de menu por WhatsApp.",
+  });
+}
+
+export async function sendUazapiMenuWithTextFallback(input: UazapiMenuInput) {
+  const menu = await sendUazapiMenuMessage(input);
+  if (menu.ok || menu.skipped) return menu;
+
+  return sendUazapiTextMessage(input.text);
+}
+
+async function sendUazapiRequest({
+  path,
+  payload,
+  missingError,
+}: {
+  path: string;
+  payload: Record<string, unknown>;
+  missingError: string;
+}): Promise<UazapiSendResult> {
   const serverUrl = process.env.UAZAPI_SERVER_URL?.replace(/\/$/, "");
   const token = process.env.UAZAPI_INSTANCE_TOKEN;
   const recipient = process.env.WHATSAPP_APPROVER_PHONE;
@@ -27,12 +76,12 @@ export async function sendUazapiTextMessage(message: string): Promise<UazapiSend
     return {
       ok: false,
       skipped: true,
-      error: "Uazapi não configurada. Rascunho criado sem envio por WhatsApp.",
+      error: missingError,
     };
   }
 
-  const sendTextPath = process.env.UAZAPI_SEND_TEXT_PATH || "/send/text";
-  const endpoint = `${serverUrl}${sendTextPath.startsWith("/") ? sendTextPath : `/${sendTextPath}`}`;
+  const endpoint = `${serverUrl}${path.startsWith("/") ? path : `/${path}`}`;
+  const number = cleanPhone(recipient);
 
   const response = await fetch(endpoint, {
     method: "POST",
@@ -41,11 +90,10 @@ export async function sendUazapiTextMessage(message: string): Promise<UazapiSend
       token,
     },
     body: JSON.stringify({
-      number: cleanPhone(recipient),
-      phone: cleanPhone(recipient),
-      to: cleanPhone(recipient),
-      text: message,
-      message,
+      number,
+      phone: number,
+      to: number,
+      ...payload,
     }),
   });
 

@@ -92,6 +92,23 @@ function previewText(value: string, maxLength: number) {
   return value.length > maxLength ? `${value.slice(0, maxLength).trim()}...` : value;
 }
 
+function cleanWhatsappMarkdown(value: string) {
+  return value.replace(/[*_~`]/g, "").trim();
+}
+
+function getDraftSummary(draft: Pick<AssistantDraft, "subtitle" | "body">) {
+  const firstLine = draft.body
+    .split("\n")
+    .map((line) => line.trim())
+    .find(Boolean);
+
+  return (
+    firstLine?.replace(/^Resumo da novidade:\s*/i, "").trim() ||
+    draft.subtitle ||
+    "Resumo em revisão."
+  );
+}
+
 export function buildBatchApprovalMessage({
   drafts,
   approverName,
@@ -101,13 +118,11 @@ export function buildBatchApprovalMessage({
 }) {
   const greeting = approverName ? `Olá, ${approverName}.` : "Olá.";
   const items = drafts.flatMap((draft, index) => [
-    `Sugestão ${index + 1}`,
-    `Título: ${draft.title}`,
-    draft.subtitle ? `Resumo: ${draft.subtitle}` : null,
+    `*BLOCO ${index + 1}*`,
+    `*${index + 1}. ${cleanWhatsappMarkdown(draft.title)}*`,
+    `> ${previewText(cleanWhatsappMarkdown(getDraftSummary(draft)), 360)}`,
     `Categoria: ${draft.category}`,
     draft.source_url ? `Fonte: ${draft.source_url}` : null,
-    "Texto:",
-    previewText(draft.body, 520),
     "",
   ]);
 
@@ -115,10 +130,10 @@ export function buildBatchApprovalMessage({
     greeting,
     "",
     `Separei ${drafts.length} novidades para aprovação na Comunidade Hágios.`,
-    "Responda com números, sem token:",
+    "Use os botões abaixo ou responda por número:",
     "",
     ...items,
-    "Como responder:",
+    "*Como responder por texto:*",
     "- aprovar 1, 2 e 3",
     "- rejeitar 2",
     "- aprovar todas",
@@ -128,6 +143,14 @@ export function buildBatchApprovalMessage({
   ]
     .filter(Boolean)
     .join("\n");
+}
+
+export function buildBatchApprovalChoices() {
+  return [
+    "Aprovar todas|aprovar todas",
+    "Rejeitar todas|rejeitar todas",
+    "Responder por número|responder por numero",
+  ];
 }
 
 export async function createAssistantDraft(input: AssistantDraftInput) {
