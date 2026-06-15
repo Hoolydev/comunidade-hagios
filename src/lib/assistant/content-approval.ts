@@ -153,6 +153,44 @@ export function buildBatchApprovalChoices() {
   ];
 }
 
+export function buildDraftApprovalMessage({
+  draft,
+  index,
+  total,
+  approverName,
+}: {
+  draft: AssistantDraft;
+  index: number;
+  total: number;
+  approverName?: string | null;
+}) {
+  const greeting = approverName ? `Olá, ${approverName}.` : "Olá.";
+
+  return [
+    greeting,
+    "",
+    `*NOTÍCIA ${index} DE ${total}*`,
+    `*${cleanWhatsappMarkdown(draft.title)}*`,
+    `> ${previewText(cleanWhatsappMarkdown(getDraftSummary(draft)), 420)}`,
+    "",
+    `Categoria: ${draft.category}`,
+    draft.source_url ? `Fonte: ${draft.source_url}` : null,
+    "",
+    "Use os botões abaixo para aprovar ou rejeitar esta notícia.",
+    `Também pode responder: aprovar ${index} ou rejeitar ${index}.`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+export function buildDraftApprovalChoices(index: number) {
+  return [
+    `Aprovar notícia ${index}|aprovar ${index}`,
+    `Rejeitar notícia ${index}|rejeitar ${index}`,
+    "Responder depois|responder depois",
+  ];
+}
+
 export async function createAssistantDraft(input: AssistantDraftInput) {
   const supabase = getSupabaseAdminClient();
   if (!supabase) {

@@ -1,6 +1,6 @@
 import {
-  buildBatchApprovalChoices,
-  buildBatchApprovalMessage,
+  buildDraftApprovalChoices,
+  buildDraftApprovalMessage,
   createAssistantDrafts,
   markDraftsWhatsappSent,
   type AssistantDraftInput,
@@ -37,16 +37,6 @@ const sources: NewsSource[] = [
     name: "Google News - automação com IA",
     rss: "https://news.google.com/rss/search?q=automa%C3%A7%C3%A3o%20intelig%C3%AAncia%20artificial%20neg%C3%B3cios&hl=pt-BR&gl=BR&ceid=BR:pt-419",
     trust: 92,
-  },
-  {
-    name: "VentureBeat AI",
-    rss: "https://venturebeat.com/category/ai/feed/",
-    trust: 72,
-  },
-  {
-    name: "MIT News AI",
-    rss: "https://news.mit.edu/rss/topic/artificial-intelligence2",
-    trust: 74,
   },
 ];
 
@@ -174,6 +164,24 @@ function shortTitle(title: string) {
   return title.replace(/\s*[-|].*$/, "").trim().slice(0, 92);
 }
 
+function areaLabel(category: string) {
+  const value = category.toLowerCase();
+  if (value === "ia") return "operações com IA";
+  return value;
+}
+
+function communityTitle(item: NewsItem) {
+  const category = getCategory(`${item.title} ${item.description}`);
+  return `Novidade de IA para ${areaLabel(category)} nas empresas`;
+}
+
+function communitySummary(item: NewsItem) {
+  const category = getCategory(`${item.title} ${item.description}`);
+  const area = areaLabel(category);
+
+  return `Uma atualização recente sobre inteligência artificial aponta novas oportunidades para ${area}. Para a Comunidade Hágios, o ponto central é transformar essa tendência em um teste prático dentro da empresa, com foco em processo, implementação e resultado.`;
+}
+
 async function readFeed(source: NewsSource) {
   try {
     const response = await fetch(source.rss, {
@@ -205,15 +213,13 @@ async function readFeed(source: NewsSource) {
 }
 
 function newsToDraft(item: NewsItem): AssistantDraftInput {
-  const title = shortTitle(item.title);
-  const context = decodeXml(item.description).slice(0, 260);
   const text = `${item.title} ${item.description}`;
 
   return {
-    title: `Novidade de IA: ${title}`,
+    title: communityTitle(item),
     subtitle: "Curadoria para empresários aplicarem IA com foco em implementação.",
     body: [
-      `Resumo da novidade: ${context || title}.`,
+      `Resumo da novidade: ${communitySummary(item)}`,
       "",
       "Por que isso importa para empresários da Comunidade Hágios:",
       "- A IA está deixando de ser tendência e virando melhoria prática de operação, atendimento, marketing, vendas e gestão.",
@@ -253,15 +259,31 @@ export async function runDailyAssistantCuration(limit = 3) {
   }
 
   const drafts = await createAssistantDrafts(items);
-  const message = buildBatchApprovalMessage({
-    drafts,
-    approverName: process.env.WHATSAPP_APPROVER_NAME,
-  });
-  const whatsapp = await sendUazapiMenuWithTextFallback({
-    text: message,
-    choices: buildBatchApprovalChoices(),
-    footerText: "Comunidade Hágios | Curadoria diária de IA",
-  });
+  const whatsappMessages = [];
+
+  for (const [index, draft] of drafts.entries()) {
+    const message = buildDraftApprovalMessage({
+      draft,
+      index: index + 1,
+      total: drafts.length,
+      approverName: process.env.WHATSAPP_APPROVER_NAME,
+    });
+    const whatsapp = await sendUazapiMenuWithTextFallback({
+      text: message,
+      choices: buildDraftApprovalChoices(index + 1),
+      footerText: "Comunidade Hágios | Curadoria diária de IA",
+    });
+
+    whatsappMessages.push(whatsapp);
+  }
+
+  const whatsapp = {
+    ok: whatsappMessages.every((message) => message.ok),
+    skipped: whatsappMessages.every((message) => message.skipped),
+    status: whatsappMessages.find((message) => message.status)?.status,
+    data: whatsappMessages,
+    error: whatsappMessages.find((message) => message.error)?.error,
+  };
 
   if (whatsapp.ok && process.env.WHATSAPP_APPROVER_PHONE) {
     await markDraftsWhatsappSent(
