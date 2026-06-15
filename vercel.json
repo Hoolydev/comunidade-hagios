@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/assistant/daily-curation",
+      "schedule": "0 10 * * *"
+    }
+  ]
+}
