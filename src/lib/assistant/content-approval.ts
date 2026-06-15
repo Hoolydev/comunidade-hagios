@@ -109,6 +109,19 @@ function getDraftSummary(draft: Pick<AssistantDraft, "subtitle" | "body">) {
   );
 }
 
+function getSourceLabel(sourceName?: string | null) {
+  const value = (sourceName || "").trim();
+  if (!value) return null;
+
+  if (/google news/i.test(value)) return "Google News";
+  if (/anthropic/i.test(value)) return "Anthropic";
+  if (/openai/i.test(value)) return "OpenAI";
+  if (/microsoft/i.test(value)) return "Microsoft";
+  if (/google/i.test(value)) return "Google";
+
+  return value.replace(/\s*[-|].*$/, "").trim();
+}
+
 export function buildBatchApprovalMessage({
   drafts,
   approverName,
@@ -174,21 +187,16 @@ export function buildDraftApprovalMessage({
     `> ${previewText(cleanWhatsappMarkdown(getDraftSummary(draft)), 420)}`,
     "",
     `Categoria: ${draft.category}`,
-    draft.source_url ? `Fonte: ${draft.source_url}` : null,
+    getSourceLabel(draft.source_name) ? `Fonte: ${getSourceLabel(draft.source_name)}` : null,
     "",
-    "Use os botões abaixo para aprovar ou rejeitar esta notícia.",
-    `Também pode responder: aprovar ${index} ou rejeitar ${index}.`,
+    "Use o botão abaixo para aprovar esta notícia.",
   ]
     .filter(Boolean)
     .join("\n");
 }
 
 export function buildDraftApprovalChoices(index: number) {
-  return [
-    `Aprovar notícia ${index}|aprovar ${index}`,
-    `Rejeitar notícia ${index}|rejeitar ${index}`,
-    "Responder depois|responder depois",
-  ];
+  return [`Aprovar|aprovar ${index}`];
 }
 
 export async function createAssistantDraft(input: AssistantDraftInput) {
