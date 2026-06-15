@@ -58,7 +58,7 @@ export function buildApprovalMessage({
 }: {
   draft: Pick<
     AssistantDraft,
-    "title" | "subtitle" | "body" | "category" | "tags" | "source_url" | "review_token"
+    "title" | "subtitle" | "body" | "category" | "tags" | "source_url"
   >;
   approvalUrl: string;
   approverName?: string | null;
@@ -83,10 +83,48 @@ export function buildApprovalMessage({
     "",
     "Para aprovar ou rejeitar, acesse:",
     approvalUrl,
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+function previewText(value: string, maxLength: number) {
+  return value.length > maxLength ? `${value.slice(0, maxLength).trim()}...` : value;
+}
+
+export function buildBatchApprovalMessage({
+  drafts,
+  approverName,
+}: {
+  drafts: AssistantDraft[];
+  approverName?: string | null;
+}) {
+  const greeting = approverName ? `Olá, ${approverName}.` : "Olá.";
+  const items = drafts.flatMap((draft, index) => [
+    `Sugestão ${index + 1}`,
+    `Título: ${draft.title}`,
+    draft.subtitle ? `Resumo: ${draft.subtitle}` : null,
+    `Categoria: ${draft.category}`,
+    draft.source_url ? `Fonte: ${draft.source_url}` : null,
+    "Texto:",
+    previewText(draft.body, 520),
     "",
-    "Se preferir, responda esta mensagem com:",
-    `APROVAR ${draft.review_token}`,
-    `REJEITAR ${draft.review_token}`,
+  ]);
+
+  return [
+    greeting,
+    "",
+    `Separei ${drafts.length} novidades para aprovação na Comunidade Hágios.`,
+    "Responda com números, sem token:",
+    "",
+    ...items,
+    "Como responder:",
+    "- aprovar 1, 2 e 3",
+    "- rejeitar 2",
+    "- aprovar todas",
+    "- aprovar 1 e rejeitar 3",
+    "",
+    "Se quiser revisar com mais calma, abra o painel do assistente na plataforma.",
   ]
     .filter(Boolean)
     .join("\n");
@@ -116,6 +154,31 @@ export async function createAssistantDraft(input: AssistantDraftInput) {
   }
 
   return data as AssistantDraft;
+}
+
+export async function createAssistantDrafts(inputs: AssistantDraftInput[]) {
+  const supabase = getSupabaseAdminClient();
+  if (!supabase) {
+    throw new Error("Supabase admin não configurado.");
+  }
+
+  if (inputs.length < 3) {
+    throw new Error("Envie pelo menos 3 sugestões para aprovação em lote.");
+  }
+
+  const drafts = inputs.map((input) => ({
+    ...validateDraftInput(input),
+    review_token: crypto.randomUUID(),
+    status: "pending",
+  }));
+
+  const { data, error } = await supabase.from("assistant_drafts").insert(drafts).select("*");
+
+  if (error || !data) {
+    throw new Error(error?.message || "Não foi possível criar os rascunhos.");
+  }
+
+  return data as AssistantDraft[];
 }
 
 export async function getAssistantDraftByToken(token: string) {
@@ -239,4 +302,17 @@ export async function markDraftWhatsappSent(id: string, recipient: string) {
       whatsapp_sent_at: new Date().toISOString(),
     })
     .eq("id", id);
+}
+
+export async function markDraftsWhatsappSent(ids: string[], recipient: string) {
+  const supabase = getSupabaseAdminClient();
+  if (!supabase || !ids.length) return;
+
+  await supabase
+    .from("assistant_drafts")
+    .update({
+      whatsapp_recipient: recipient,
+      whatsapp_sent_at: new Date().toISOString(),
+    })
+    .in("id", ids);
 }
