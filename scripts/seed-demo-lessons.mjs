@@ -51,7 +51,7 @@ for (const course of courses) {
   const rows = demos.map((demo, i) => ({
     course_id: course.id,
     title: demo.title,
-    description: "Vídeo de demonstração para visualizar a comunidade.",
+    description: "Vídeo de demonstração para visualizar o Movimento.",
     youtube_url: demo.url,
     youtube_video_id: demo.vid,
     order_index: i + 1,

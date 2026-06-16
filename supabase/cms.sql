@@ -1,4 +1,4 @@
--- CMS da comunidade: torna editável o conteúdo que antes era fixo no código
+-- CMS do Movimento: torna editável o conteúdo que antes era fixo no código
 -- (Próximo passo, Eventos, Mentorias, Desafios, Ferramentas, Dúvidas).
 -- Seguro para rodar em bancos já existentes.
 
@@ -6,7 +6,7 @@ create table if not exists public.next_actions (
   id uuid primary key default gen_random_uuid(),
   title text not null,
   description text not null,
-  href text not null default '/comunidade',
+  href text not null default '/movimento',
   label text not null default 'Abrir',
   priority text not null default 'medium' check (priority in ('high', 'medium', 'low')),
   order_index integer not null default 1,
@@ -15,13 +15,13 @@ create table if not exists public.next_actions (
   updated_at timestamptz not null default now()
 );
 
-create table if not exists public.community_events (
+create table if not exists public.movement_events (
   id uuid primary key default gen_random_uuid(),
   type text not null default 'Mentoria',
   title text not null,
   description text not null,
   date timestamptz not null default now(),
-  href text not null default '/comunidade',
+  href text not null default '/movimento',
   is_published boolean not null default true,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -69,12 +69,12 @@ create table if not exists public.tools (
   updated_at timestamptz not null default now()
 );
 
-create table if not exists public.community_questions (
+create table if not exists public.movement_questions (
   id uuid primary key default gen_random_uuid(),
   question text not null,
   answer text not null,
   category text not null default 'Jornada',
-  author text not null default 'Membro da comunidade',
+  author text not null default 'Membro do Movimento',
   answered_by text not null default 'Time Hágios',
   is_published boolean not null default true,
   created_at timestamptz not null default now(),
@@ -87,9 +87,9 @@ create trigger touch_next_actions_updated_at
 before update on public.next_actions
 for each row execute function public.touch_updated_at();
 
-drop trigger if exists touch_community_events_updated_at on public.community_events;
-create trigger touch_community_events_updated_at
-before update on public.community_events
+drop trigger if exists touch_movement_events_updated_at on public.movement_events;
+create trigger touch_movement_events_updated_at
+before update on public.movement_events
 for each row execute function public.touch_updated_at();
 
 drop trigger if exists touch_mentorships_updated_at on public.mentorships;
@@ -107,25 +107,25 @@ create trigger touch_tools_updated_at
 before update on public.tools
 for each row execute function public.touch_updated_at();
 
-drop trigger if exists touch_community_questions_updated_at on public.community_questions;
-create trigger touch_community_questions_updated_at
-before update on public.community_questions
+drop trigger if exists touch_movement_questions_updated_at on public.movement_questions;
+create trigger touch_movement_questions_updated_at
+before update on public.movement_questions
 for each row execute function public.touch_updated_at();
 
 -- RLS: leitura pública do que está publicado; admin enxerga tudo.
 alter table public.next_actions enable row level security;
-alter table public.community_events enable row level security;
+alter table public.movement_events enable row level security;
 alter table public.mentorships enable row level security;
 alter table public.challenges enable row level security;
 alter table public.tools enable row level security;
-alter table public.community_questions enable row level security;
+alter table public.movement_questions enable row level security;
 
 drop policy if exists "next_actions_read" on public.next_actions;
 create policy "next_actions_read" on public.next_actions for select
 using (is_published = true or public.is_admin());
 
-drop policy if exists "community_events_read" on public.community_events;
-create policy "community_events_read" on public.community_events for select
+drop policy if exists "movement_events_read" on public.movement_events;
+create policy "movement_events_read" on public.movement_events for select
 using (is_published = true or public.is_admin());
 
 drop policy if exists "mentorships_read" on public.mentorships;
@@ -140,8 +140,8 @@ drop policy if exists "tools_read" on public.tools;
 create policy "tools_read" on public.tools for select
 using (is_published = true or public.is_admin());
 
-drop policy if exists "community_questions_read" on public.community_questions;
-create policy "community_questions_read" on public.community_questions for select
+drop policy if exists "movement_questions_read" on public.movement_questions;
+create policy "movement_questions_read" on public.movement_questions for select
 using (is_published = true or public.is_admin());
 
 -- Conteúdo do banner "Aula de boas-vindas" (settings key/value).

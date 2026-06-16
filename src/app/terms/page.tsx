@@ -9,7 +9,7 @@ export default function TermsPage() {
         <h1 className="text-4xl font-black">Termos de uso</h1>
         <p className="mt-5 leading-7 text-muted">
           Estes termos devem ser revisados pela Hágios Marketing antes da
-          publicação. O acesso à Comunidade Hágios é pessoal, mediante assinatura
+          publicação. O acesso ao Movimento Hágios é pessoal, mediante assinatura
           ativa, e pode ser cancelado conforme as regras configuradas no Stripe.
         </p>
       </article>

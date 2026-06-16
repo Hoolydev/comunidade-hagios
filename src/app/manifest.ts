@@ -2,11 +2,11 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Comunidade Hágios",
+    name: "Movimento Hágios",
     short_name: "Hágios",
     description:
       "Ambiente premium para empresários aplicarem inteligência artificial no negócio.",
-    start_url: "/comunidade",
+    start_url: "/movimento",
     scope: "/",
     display: "standalone",
     orientation: "portrait",

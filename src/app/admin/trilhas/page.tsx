@@ -62,11 +62,11 @@ export default async function AdminCoursesPage() {
                     </div>
                     <div className="flex items-center gap-3">
                       <Link
-                        href={`/comunidade/cursos/${course.slug}`}
+                        href={`/movimento/cursos/${course.slug}`}
                         target="_blank"
                         className="inline-flex items-center gap-1 text-sm text-muted transition hover:text-gold"
                       >
-                        Ver na comunidade
+                        Ver na área do membro
                         <ArrowUpRight className="h-4 w-4" />
                       </Link>
                       <Button type="submit" variant="secondary">Salvar trilha</Button>

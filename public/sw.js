@@ -1,5 +1,5 @@
-const CACHE_NAME = "hagios-community-v1";
-const APP_SHELL = ["/", "/login", "/checkout", "/logo-comunidade-hagios.png"];
+const CACHE_NAME = "hagios-movement-v1";
+const APP_SHELL = ["/", "/login", "/checkout", "/logo-movimento-hagios.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

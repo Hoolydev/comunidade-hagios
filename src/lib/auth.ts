@@ -89,7 +89,7 @@ export async function requireAdmin() {
   const profile = await getCurrentProfile();
 
   if (profile?.role !== "admin") {
-    redirect("/comunidade");
+    redirect("/movimento");
   }
 
   return { user, profile };

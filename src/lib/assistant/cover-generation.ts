@@ -21,12 +21,12 @@ type GeminiPart = {
 
 function buildCoverPrompt({ title, summary, category }: CoverInput) {
   return [
-    "Crie uma capa editorial premium para a Comunidade Hágios.",
+    "Crie uma capa editorial premium para o Movimento Hágios.",
     "Formato obrigatório: 16:9, 1280x720, composição limpa, segura para cards responsivos.",
     "Estética: fundo azul-marinho/grafite, detalhes dourados sofisticados, visual moderno de negócios com IA.",
     "Tema: empresário aplicando inteligência artificial em processos reais da empresa.",
     "Não use textos pequenos, não use logotipos, não use marcas reais, não use interface poluída.",
-    "A imagem deve funcionar como thumbnail de conteúdo dentro de uma comunidade premium.",
+    "A imagem deve funcionar como thumbnail de conteúdo dentro de um movimento empresarial premium.",
     `Categoria: ${category}.`,
     `Título de contexto: ${title}.`,
     `Resumo visual: ${summary}.`,

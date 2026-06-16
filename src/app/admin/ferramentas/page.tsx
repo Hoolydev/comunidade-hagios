@@ -14,7 +14,7 @@ export default async function AdminToolsPage() {
   return (
     <AdminSubpage
       title="Biblioteca de ferramentas"
-      description="Recursos autônomos (prompts, templates, planilhas) exibidos em /comunidade/ferramentas."
+      description="Recursos autônomos (prompts, templates, planilhas) exibidos em /movimento/ferramentas."
     >
       <CrudSection
         title="Criar ferramenta"

@@ -14,7 +14,7 @@ export default async function AdminMentorshipsPage() {
   return (
     <AdminSubpage
       title="Mentorias"
-      description="Encontros ao vivo e gravações exibidos em /comunidade/mentorias."
+      description="Encontros ao vivo e gravações exibidos em /movimento/mentorias."
     >
       <CrudSection
         title="Criar mentoria"

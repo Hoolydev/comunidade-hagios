@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminEventsPage() {
   await requireAdmin();
-  const items = await getAdminRows("community_events", "date", true);
+  const items = await getAdminRows("movement_events", "date", true);
 
   return (
     <AdminSubpage

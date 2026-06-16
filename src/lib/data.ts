@@ -17,9 +17,9 @@ import {
 import type {
   Challenge,
   ChallengeDay,
-  CommunityEvent,
-  CommunityPost,
-  CommunityQuestion,
+  MovementEvent,
+  MovementPost,
+  MovementQuestion,
   Course,
   CourseWithLessons,
   Lesson,
@@ -151,7 +151,7 @@ export async function getContentCards() {
       category: course.category,
       thumbnail: course.thumbnail_url,
       type: "curso" as const,
-      href: `/comunidade/cursos/${course.slug}`,
+      href: `/movimento/cursos/${course.slug}`,
       created_at: course.created_at,
     })),
     ...lessons.map((lesson) => {
@@ -164,7 +164,7 @@ export async function getContentCards() {
         category: course?.category || "Marketing com IA",
         thumbnail: getYouTubeThumbnail(lesson.youtube_video_id),
         type: "vídeo" as const,
-        href: course ? `/comunidade/cursos/${course.slug}` : "/comunidade/cursos",
+        href: course ? `/movimento/cursos/${course.slug}` : "/movimento/cursos",
         created_at: lesson.created_at,
       };
     }),
@@ -224,7 +224,7 @@ export async function getJourneyTracks() {
 }
 
 export async function getRecentContents() {
-  const posts = await getCommunityPosts();
+  const posts = await getMovementPosts();
   const postContents: RecentContent[] = posts.map((post) => ({
     id: post.id,
     title: post.title,
@@ -233,7 +233,7 @@ export async function getRecentContents() {
     category: post.category,
     type: "Atualização",
     published_at: post.published_at || post.created_at,
-    href: `/comunidade/posts/${post.slug}`,
+    href: `/movimento/posts/${post.slug}`,
     source_name: post.source_name,
     source_url: post.source_url,
   }));
@@ -243,27 +243,27 @@ export async function getRecentContents() {
   );
 }
 
-export async function getCommunityPosts() {
+export async function getMovementPosts() {
   const supabase = getSupabaseAdminClient();
-  if (!supabase) return [] as CommunityPost[];
+  if (!supabase) return [] as MovementPost[];
 
   const { data, error } = await supabase
-    .from("community_posts")
+    .from("movement_posts")
     .select("*")
     .eq("status", "published")
     .order("published_at", { ascending: false });
 
-  if (error || !data) return [] as CommunityPost[];
+  if (error || !data) return [] as MovementPost[];
 
-  return data as CommunityPost[];
+  return data as MovementPost[];
 }
 
-export async function getCommunityPostBySlug(slug: string) {
+export async function getMovementPostBySlug(slug: string) {
   const supabase = getSupabaseAdminClient();
   if (!supabase) return null;
 
   const { data, error } = await supabase
-    .from("community_posts")
+    .from("movement_posts")
     .select("*")
     .eq("slug", slug)
     .eq("status", "published")
@@ -271,7 +271,7 @@ export async function getCommunityPostBySlug(slug: string) {
 
   if (error || !data) return null;
 
-  return data as CommunityPost;
+  return data as MovementPost;
 }
 
 export async function getMentorships({ includeDrafts = false } = {}): Promise<Mentorship[]> {
@@ -354,8 +354,8 @@ export async function getTools({ includeDrafts = false } = {}): Promise<ToolReso
   }));
 }
 
-export async function getCommunityQuestions({ includeDrafts = false } = {}): Promise<
-  CommunityQuestion[]
+export async function getMovementQuestions({ includeDrafts = false } = {}): Promise<
+  MovementQuestion[]
 > {
   const fallback = [...mockQuestions].sort(
     (a, b) => +new Date(b.created_at) - +new Date(a.created_at),
@@ -364,7 +364,7 @@ export async function getCommunityQuestions({ includeDrafts = false } = {}): Pro
   if (!supabase) return fallback;
 
   let query = supabase
-    .from("community_questions")
+    .from("movement_questions")
     .select("*")
     .order("created_at", { ascending: false });
   if (!includeDrafts) query = query.eq("is_published", true);
@@ -384,14 +384,14 @@ export async function getCommunityQuestions({ includeDrafts = false } = {}): Pro
   }));
 }
 
-export async function getCommunityEvents({ includeDrafts = false } = {}): Promise<
-  CommunityEvent[]
+export async function getMovementEvents({ includeDrafts = false } = {}): Promise<
+  MovementEvent[]
 > {
   const fallback = [...mockEvents].sort((a, b) => +new Date(a.date) - +new Date(b.date));
   const supabase = getSupabaseAdminClient();
   if (!supabase) return fallback;
 
-  let query = supabase.from("community_events").select("*").order("date", { ascending: true });
+  let query = supabase.from("movement_events").select("*").order("date", { ascending: true });
   if (!includeDrafts) query = query.eq("is_published", true);
 
   const { data, error } = await query;
@@ -400,7 +400,7 @@ export async function getCommunityEvents({ includeDrafts = false } = {}): Promis
 
   return data.map((row) => ({
     id: row.id,
-    type: row.type as CommunityEvent["type"],
+    type: row.type as MovementEvent["type"],
     title: row.title,
     description: row.description,
     date: row.date,
@@ -468,11 +468,11 @@ export async function getWelcomeContent(): Promise<WelcomeContent> {
 
 type CmsTable =
   | "next_actions"
-  | "community_events"
+  | "movement_events"
   | "mentorships"
   | "challenges"
   | "tools"
-  | "community_questions";
+  | "movement_questions";
 
 /**
  * Raw rows for the admin CMS forms — returns every column (including drafts and

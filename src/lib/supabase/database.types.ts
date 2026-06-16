@@ -86,7 +86,7 @@ export type Database = {
         created_at: string;
         updated_at: string;
       }>;
-      community_posts: Table<{
+      movement_posts: Table<{
         id: string;
         title: string;
         slug: string;
@@ -114,7 +114,7 @@ export type Database = {
         created_at: string;
         updated_at: string;
       }>;
-      community_events: Table<{
+      movement_events: Table<{
         id: string;
         type: string;
         title: string;
@@ -164,7 +164,7 @@ export type Database = {
         created_at: string;
         updated_at: string;
       }>;
-      community_questions: Table<{
+      movement_questions: Table<{
         id: string;
         question: string;
         answer: string;

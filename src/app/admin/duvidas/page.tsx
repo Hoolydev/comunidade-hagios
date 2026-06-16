@@ -9,12 +9,12 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminQuestionsPage() {
   await requireAdmin();
-  const items = await getAdminRows("community_questions", "created_at", false);
+  const items = await getAdminRows("movement_questions", "created_at", false);
 
   return (
     <AdminSubpage
       title="Dúvidas"
-      description="Perguntas e respostas exibidas em /comunidade/duvidas."
+      description="Perguntas e respostas exibidas em /movimento/duvidas."
     >
       <CrudSection
         title="Criar dúvida"

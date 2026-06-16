@@ -26,7 +26,7 @@ const included = [
   "Conteúdos recentes e mentorias",
   "Desafios de implementação",
   "Biblioteca de ferramentas",
-  "Grupo oficial no WhatsApp",
+  "Canal oficial no WhatsApp",
 ];
 
 const STEP_LABELS = ["Seus dados", "Pagamento", "Acesso liberado"];
@@ -404,7 +404,7 @@ export function CheckoutWizard({
               <div className="grid gap-2 rounded-lg border border-line bg-white/[0.025] p-4 text-sm">
                 <div className="flex items-center justify-between">
                   <span className="text-muted">Plano</span>
-                  <span className="font-semibold">Comunidade Hágios — mensal</span>
+                  <span className="font-semibold">Movimento Hágios — mensal</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted">Total hoje</span>

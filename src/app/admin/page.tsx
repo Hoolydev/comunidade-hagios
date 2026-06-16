@@ -46,11 +46,11 @@ export default async function AdminPage() {
       getMaterials({ includeDrafts: true }),
       getAdminUsers(),
       getAdminRows("next_actions", "order_index", true),
-      getAdminRows("community_events", "date", true),
+      getAdminRows("movement_events", "date", true),
       getAdminRows("mentorships", "date", false),
       getAdminRows("challenges", "published_at", false),
       getAdminRows("tools", "updated_at", false),
-      getAdminRows("community_questions", "created_at", false),
+      getAdminRows("movement_questions", "created_at", false),
     ]);
 
   const home: AdminCategory[] = [
@@ -58,7 +58,7 @@ export default async function AdminPage() {
       href: "/admin/banner",
       icon: Megaphone,
       title: "Banner de boas-vindas",
-      description: "Texto e vídeo do topo da comunidade.",
+      description: "Texto e vídeo do topo do Movimento.",
     },
     {
       href: "/admin/proximo-passo",
@@ -123,17 +123,17 @@ export default async function AdminPage() {
       href: "/admin/duvidas",
       icon: HelpCircle,
       title: "Dúvidas",
-      description: "Perguntas e respostas da comunidade.",
+      description: "Perguntas e respostas do Movimento.",
       count: questions.length,
     },
   ];
 
-  const community: AdminCategory[] = [
+  const members: AdminCategory[] = [
     {
-      href: "/admin/comunidade",
+      href: "/admin/membros",
       icon: UsersRound,
-      title: "Comunidade e usuários",
-      description: "Grupo do WhatsApp e lista de membros.",
+      title: "Membros e WhatsApp",
+      description: "Canal oficial do WhatsApp e lista de membros.",
       count: users.length,
     },
   ];
@@ -144,9 +144,9 @@ export default async function AdminPage() {
         <div className="rounded-lg border border-line bg-panel p-5 shadow-[0_10px_30px_rgba(0,0,0,0.25)] sm:p-7">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <Link href="/comunidade" className="inline-flex items-center gap-2 text-sm text-muted transition hover:text-gold">
+              <Link href="/movimento" className="inline-flex items-center gap-2 text-sm text-muted transition hover:text-gold">
                 <ArrowLeft className="h-4 w-4" />
-                Voltar para comunidade
+                Voltar para área do membro
               </Link>
               <h1 className="mt-3 text-3xl font-black sm:text-5xl">Painel administrativo</h1>
               <p className="mt-2 max-w-2xl text-muted">
@@ -165,7 +165,7 @@ export default async function AdminPage() {
 
         <CategoryGroup title="Página inicial" items={home} />
         <CategoryGroup title="Conteúdo" items={content} />
-        <CategoryGroup title="Comunidade" items={community} />
+        <CategoryGroup title="Membros" items={members} />
       </div>
     </main>
   );

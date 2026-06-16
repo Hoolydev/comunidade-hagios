@@ -16,13 +16,13 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
-  title: "Comunidade Hágios | IA para negócios",
+  title: "Movimento Hágios | IA para negócios",
   description:
-    "Ambiente premium da Comunidade Hágios para empresários aprenderem, implementarem e acompanharem a aplicação de IA no negócio.",
+    "Ambiente premium do Movimento Hágios para empresários aprenderem, implementarem e acompanharem a aplicação de IA no negócio.",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Comunidade Hágios",
+    title: "Movimento Hágios",
   },
   formatDetection: {
     telephone: false,

@@ -37,7 +37,7 @@ const toolCategoryOptions = [
 export const nextActionFields: CrudField[] = [
   { name: "title", label: "Título", type: "text", required: true, fullWidth: true },
   { name: "description", label: "Descrição", type: "textarea", fullWidth: true },
-  { name: "href", label: "Link (rota interna)", type: "text", createDefault: "/comunidade" },
+  { name: "href", label: "Link (rota interna)", type: "text", createDefault: "/movimento" },
   { name: "label", label: "Texto do botão", type: "text", createDefault: "Abrir" },
   { name: "priority", label: "Prioridade", type: "select", options: priorityOptions },
   { name: "order_index", label: "Ordem", type: "number", createDefault: "1" },
@@ -49,7 +49,7 @@ export const eventFields: CrudField[] = [
   { name: "title", label: "Título", type: "text", required: true },
   { name: "description", label: "Descrição", type: "textarea", fullWidth: true },
   { name: "date", label: "Data e hora", type: "datetime", format: "datetime" },
-  { name: "href", label: "Link", type: "text", createDefault: "/comunidade" },
+  { name: "href", label: "Link", type: "text", createDefault: "/movimento" },
   { name: "is_published", label: "Publicado", type: "checkbox", defaultChecked: true },
 ];
 
@@ -112,7 +112,7 @@ export const questionFields: CrudField[] = [
   { name: "question", label: "Pergunta", type: "text", required: true, fullWidth: true },
   { name: "answer", label: "Resposta", type: "textarea", fullWidth: true, rows: 5 },
   { name: "category", label: "Categoria", type: "text", createDefault: "Jornada" },
-  { name: "author", label: "Autor", type: "text", createDefault: "Membro da comunidade" },
+  { name: "author", label: "Autor", type: "text", createDefault: "Membro do Movimento" },
   { name: "answered_by", label: "Respondido por", type: "text", createDefault: "Time Hágios" },
   { name: "is_published", label: "Publicado", type: "checkbox", defaultChecked: true },
 ];

@@ -1,7 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { getAppUrl } from "@/lib/env";
 import { getSupabaseAdminClient } from "@/lib/supabase/server";
-import type { AssistantDraft, CommunityPost } from "@/lib/types";
+import type { AssistantDraft, MovementPost } from "@/lib/types";
 import { slugify } from "@/lib/utils";
 
 export type AssistantDraftInput = {
@@ -72,7 +72,7 @@ export function buildApprovalMessage({
   return [
     greeting,
     "",
-    "Tenho um novo conteúdo para aprovação na Comunidade Hágios.",
+    "Tenho um novo conteúdo para aprovação no Movimento Hágios.",
     "",
     `Título: ${draft.title}`,
     draft.subtitle ? `Subtítulo: ${draft.subtitle}` : null,
@@ -150,7 +150,7 @@ export function buildBatchApprovalMessage({
   return [
     greeting,
     "",
-    `Separei ${drafts.length} novidades para aprovação na Comunidade Hágios.`,
+    `Separei ${drafts.length} novidades para aprovação no Movimento Hágios.`,
     "Use os botões abaixo ou responda por número:",
     "",
     ...items,
@@ -311,7 +311,7 @@ async function createUniquePostSlug(title: string) {
   for (let index = 0; index < 10; index += 1) {
     const slug = index === 0 ? baseSlug : `${baseSlug}-${index + 1}`;
     const { data } = await supabase
-      .from("community_posts")
+      .from("movement_posts")
       .select("id")
       .eq("slug", slug)
       .maybeSingle();
@@ -350,14 +350,14 @@ export async function approveAssistantDraft(token: string) {
   };
 
   const { data: post, error: postError } = await supabase
-    .from("community_posts")
+    .from("movement_posts")
     .insert(postPayload)
     .select("*")
     .single();
 
   if (postError?.message?.includes("cover_url")) {
     const { data: retryPost, error: retryPostError } = await supabase
-      .from("community_posts")
+      .from("movement_posts")
       .insert(withoutCoverUrl(postPayload))
       .select("*")
       .single();
@@ -366,17 +366,17 @@ export async function approveAssistantDraft(token: string) {
       throw new Error(retryPostError?.message || "Não foi possível publicar o conteúdo.");
     }
 
-    return updateApprovedDraft(token, now, retryPost as CommunityPost);
+    return updateApprovedDraft(token, now, retryPost as MovementPost);
   }
 
   if (postError || !post) {
     throw new Error(postError?.message || "Não foi possível publicar o conteúdo.");
   }
 
-  return updateApprovedDraft(token, now, post as CommunityPost);
+  return updateApprovedDraft(token, now, post as MovementPost);
 }
 
-async function updateApprovedDraft(token: string, now: string, post: CommunityPost) {
+async function updateApprovedDraft(token: string, now: string, post: MovementPost) {
   const supabase = getSupabaseAdminClient();
   if (!supabase) {
     throw new Error("Supabase admin não configurado.");
@@ -397,8 +397,8 @@ async function updateApprovedDraft(token: string, now: string, post: CommunityPo
     throw new Error(error?.message || "Conteúdo publicado, mas rascunho não atualizado.");
   }
 
-  revalidatePath("/comunidade");
-  revalidatePath("/comunidade/conteudos-recentes");
+  revalidatePath("/movimento");
+  revalidatePath("/movimento/conteudos-recentes");
 
   return data as AssistantDraft;
 }

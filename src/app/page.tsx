@@ -3,13 +3,13 @@ import {
   BrainCircuit,
   Check,
   Download,
-  MessageCircle,
   RefreshCw,
   Rocket,
   Users,
 } from "lucide-react";
 import Image from "next/image";
 import { LogoMark } from "@/components/brand/logo-mark";
+import { WhatsAppIcon } from "@/components/icons/whatsapp-icon";
 import { BenefitCard } from "@/components/landing/benefit-card";
 import { PublicFooter } from "@/components/landing/public-footer";
 import { PublicHeader } from "@/components/landing/public-header";
@@ -21,7 +21,7 @@ const benefits = [
   ["Mentorias mensais", Users],
   ["Desafios de implementação", Rocket],
   ["Biblioteca de ferramentas", Download],
-  ["Grupo exclusivo no WhatsApp", MessageCircle],
+  ["Canal de avisos e suporte no WhatsApp", WhatsAppIcon],
 ] as const;
 
 const successRules = [
@@ -32,14 +32,14 @@ const successRules = [
 
 const faqs = [
   {
-    question: "O que é a Comunidade Hágios?",
+    question: "O que é o Movimento Hágios?",
     answer:
-      "É um ambiente de implementação para empresários que querem aplicar IA em áreas importantes da empresa, com trilhas, conteúdos vivos, ferramentas, desafios, mentorias e comunidade.",
+      "É um movimento empresarial para quem quer aplicar IA em áreas importantes da empresa com método, trilhas, ferramentas, desafios, mentorias e acompanhamento prático.",
   },
   {
     question: "Preciso ter experiência com IA?",
     answer:
-      "Não. A comunidade foi pensada para empreendedores que querem começar de forma prática, com orientação clara e foco em implementação.",
+      "Não. O movimento foi pensado para empresários que querem começar de forma prática, com orientação clara e foco em implementação.",
   },
   {
     question: "Em quais áreas posso aplicar IA?",
@@ -65,7 +65,7 @@ export default function Home() {
       <section className="relative min-h-[calc(100svh-64px)] overflow-hidden bg-background">
         <Image
           src="/hagios-hero-mobile.png"
-          alt="Comunidade Hágios"
+          alt="Movimento Hágios"
           fill
           priority
           sizes="(max-width: 767px) 100vw, 0px"
@@ -73,7 +73,7 @@ export default function Home() {
         />
         <Image
           src="/hagios-hero-desktop.png"
-          alt="Comunidade Hágios"
+          alt="Movimento Hágios"
           fill
           priority
           sizes="(min-width: 768px) 100vw, 0px"
@@ -99,10 +99,10 @@ export default function Home() {
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <ButtonLink href="/checkout" size="lg">
-                Assinar comunidade
+                Entrar no Movimento
                 <ArrowRight className="h-5 w-5" />
               </ButtonLink>
-              <ButtonLink href="/login?next=/comunidade" variant="secondary" size="lg">
+              <ButtonLink href="/login?next=/movimento" variant="secondary" size="lg">
                 Já sou assinante
               </ButtonLink>
             </div>
@@ -163,7 +163,7 @@ export default function Home() {
             </h2>
           </div>
           <p className="text-lg leading-8 text-muted">
-            A Comunidade Hágios foi criada para empreendedores, gestores,
+            O Movimento Hágios foi criado para empreendedores, gestores,
             profissionais comerciais e donos de negócios que querem usar IA para
             modernizar operações, tomar decisões melhores, ganhar produtividade e
             criar processos mais inteligentes sem perder clareza estratégica.
@@ -176,7 +176,7 @@ export default function Home() {
           <div className="grid overflow-hidden rounded-lg border border-gold/25 bg-panel shadow-[0_24px_100px_rgba(0,0,0,0.35)] lg:grid-cols-[1fr_0.72fr]">
             <div className="p-6 sm:p-8">
             <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
-              Acesso à Comunidade Hágios
+              Acesso ao Movimento Hágios
             </p>
             <div className="mt-5">
               <div>
@@ -188,7 +188,7 @@ export default function Home() {
               {[
                 "Jornada Hágios com aulas práticas",
                 "Biblioteca de ferramentas por links externos",
-                "Grupo oficial no WhatsApp",
+                "Canal de avisos e suporte no WhatsApp",
                 "Mentorias, desafios e conteúdos recentes",
               ].map((item) => (
                 <div key={item} className="flex gap-3 text-sm text-muted">
@@ -200,7 +200,7 @@ export default function Home() {
             </div>
             <div className="border-t border-line bg-[linear-gradient(160deg,rgba(255,201,40,0.16),rgba(255,255,255,0.035))] p-6 sm:p-8 lg:border-l lg:border-t-0">
               <p className="text-sm font-semibold text-gold-strong">Plano mensal</p>
-              <h3 className="mt-3 text-2xl font-black">Comece pela comunidade completa.</h3>
+              <h3 className="mt-3 text-2xl font-black">Comece pelo método de implementação.</h3>
               <p className="mt-3 text-sm leading-6 text-muted">
                 Pagamento seguro e liberação automática quando a assinatura estiver ativa.
               </p>
@@ -209,11 +209,11 @@ export default function Home() {
                 size="lg"
                 className="mt-7 w-full"
               >
-                Assinar comunidade
+                Entrar no Movimento
                 <ArrowRight className="h-5 w-5" />
               </ButtonLink>
               <ButtonLink
-                href="/login?next=/comunidade"
+                href="/login?next=/movimento"
                 variant="secondary"
                 className="mt-3 w-full"
               >

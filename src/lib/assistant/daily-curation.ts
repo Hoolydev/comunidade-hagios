@@ -225,17 +225,17 @@ function getBusinessSubject(item: NewsItem) {
   return "IA aplicada ao negócio";
 }
 
-function communityTitle(item: NewsItem) {
+function movementTitle(item: NewsItem) {
   const category = getCategory(`${item.title} ${item.description}`);
   const subject = getBusinessSubject(item);
   return `${subject}: aplicação prática para ${areaLabel(category)} nas empresas`;
 }
 
-function communitySummary(item: NewsItem) {
+function movementSummary(item: NewsItem) {
   const category = getCategory(`${item.title} ${item.description}`);
   const area = areaLabel(category);
 
-  return `Uma atualização recente sobre inteligência artificial aponta novas oportunidades para ${area}. Para a Comunidade Hágios, o ponto central é transformar essa tendência em um teste prático dentro da empresa, com foco em processo, implementação e resultado.`;
+  return `Uma atualização recente sobre inteligência artificial aponta novas oportunidades para ${area}. Para o Movimento Hágios, o ponto central é transformar essa tendência em um teste prático dentro da empresa, com foco em processo, implementação e resultado.`;
 }
 
 function implementationPlaybook(category: string) {
@@ -303,7 +303,7 @@ function implementationPlaybook(category: string) {
 async function readFeed(source: NewsSource) {
   try {
     const response = await fetch(source.rss, {
-      headers: { "user-agent": "Comunidade-Hagios-Curadoria/1.0" },
+      headers: { "user-agent": "Movimento-Hagios-Curadoria/1.0" },
       next: { revalidate: 60 * 30 },
     });
     const xml = await response.text();
@@ -337,14 +337,14 @@ function newsToDraft(item: NewsItem): AssistantDraftInput {
   const sourceContext = decodeXml(item.description).slice(0, 320) || shortTitle(item.title);
 
   return {
-    title: communityTitle(item),
-    subtitle: communitySummary(item),
+    title: movementTitle(item),
+    subtitle: movementSummary(item),
     body: [
-      `Resumo da novidade: ${communitySummary(item)}`,
+      `Resumo da novidade: ${movementSummary(item)}`,
       "",
       `Contexto da fonte: ${sourceContext}`,
       "",
-      "Por que isso importa para empresários da Comunidade Hágios:",
+      "Por que isso importa para empresários do Movimento Hágios:",
       "- A notícia só vira valor quando ajuda a melhorar uma operação real da empresa.",
       "- O foco não é acompanhar tendência por curiosidade, é transformar IA em processo, rotina e resultado.",
       "- O melhor caminho é começar com um teste pequeno, medir o ganho e só depois escalar.",
@@ -432,7 +432,7 @@ export async function runDailyAssistantCuration(limit = 3) {
         {
           text: message,
           choices: buildDraftApprovalChoices(index + 1),
-          footerText: "Comunidade Hágios | Curadoria diária de IA",
+          footerText: "Movimento Hágios | Curadoria diária de IA",
           imageButton: coverUrls[index],
         },
         recipient,

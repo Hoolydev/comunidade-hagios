@@ -91,7 +91,7 @@ create table if not exists public.subscriptions (
   updated_at timestamptz not null default now()
 );
 
-create table if not exists public.community_posts (
+create table if not exists public.movement_posts (
   id uuid primary key default gen_random_uuid(),
   title text not null,
   slug text not null unique,
@@ -124,7 +124,7 @@ create table if not exists public.assistant_drafts (
   whatsapp_sent_at timestamptz,
   approved_at timestamptz,
   rejected_at timestamptz,
-  published_post_id uuid references public.community_posts(id) on delete set null,
+  published_post_id uuid references public.movement_posts(id) on delete set null,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -169,9 +169,9 @@ create trigger touch_subscriptions_updated_at
 before update on public.subscriptions
 for each row execute function public.touch_updated_at();
 
-drop trigger if exists touch_community_posts_updated_at on public.community_posts;
-create trigger touch_community_posts_updated_at
-before update on public.community_posts
+drop trigger if exists touch_movement_posts_updated_at on public.movement_posts;
+create trigger touch_movement_posts_updated_at
+before update on public.movement_posts
 for each row execute function public.touch_updated_at();
 
 drop trigger if exists touch_assistant_drafts_updated_at on public.assistant_drafts;
@@ -216,7 +216,7 @@ alter table public.lessons enable row level security;
 alter table public.materials enable row level security;
 alter table public.settings enable row level security;
 alter table public.subscriptions enable row level security;
-alter table public.community_posts enable row level security;
+alter table public.movement_posts enable row level security;
 alter table public.assistant_drafts enable row level security;
 
 drop policy if exists "profiles_read_own_or_admin" on public.profiles;
@@ -254,9 +254,9 @@ create policy "subscriptions_read_own_or_admin"
 on public.subscriptions for select
 using (auth.uid() = user_id or public.is_admin());
 
-drop policy if exists "published_community_posts_read" on public.community_posts;
-create policy "published_community_posts_read"
-on public.community_posts for select
+drop policy if exists "published_movement_posts_read" on public.movement_posts;
+create policy "published_movement_posts_read"
+on public.movement_posts for select
 using (status = 'published' or public.is_admin());
 
 drop policy if exists "assistant_drafts_read_admin" on public.assistant_drafts;

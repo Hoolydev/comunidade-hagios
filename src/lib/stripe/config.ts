@@ -1,5 +1,5 @@
 export const BILLING_CONFIG = {
-  productName: "Comunidade Hágios",
+  productName: "Movimento Hágios",
   amountInCents: 4990,
   currency: "brl",
   mode: "subscription" as const,

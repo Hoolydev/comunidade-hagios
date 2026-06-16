@@ -12,7 +12,7 @@ export default async function CheckoutPage() {
   const profile = user ? await getCurrentProfile() : null;
 
   if (hasActiveAccess(profile)) {
-    redirect("/comunidade");
+    redirect("/movimento");
   }
 
   return (
@@ -21,7 +21,7 @@ export default async function CheckoutPage() {
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 font-semibold">
             <LogoMark size="sm" priority />
-            Comunidade Hágios
+            Movimento Hágios
           </Link>
           <Link href="/" className="text-sm text-muted transition hover:text-foreground">
             Cancelar
@@ -33,7 +33,7 @@ export default async function CheckoutPage() {
             Assinatura mensal
           </p>
           <h1 className="mt-2 text-3xl font-black sm:text-4xl">
-            Acesso premium à Comunidade Hágios
+            Acesso premium ao Movimento Hágios
           </h1>
         </div>
 

@@ -15,7 +15,7 @@ export default async function AdminBannerPage() {
   return (
     <AdminSubpage
       title="Banner de boas-vindas"
-      description="Edite o texto e o vídeo do banner 'Aula de boas-vindas' que aparece no topo da comunidade."
+      description="Edite o texto e o vídeo do banner 'Aula de boas-vindas' que aparece no topo da área do membro."
     >
       <section className="grid gap-6 xl:grid-cols-[390px_1fr]">
         <Card className="p-5">

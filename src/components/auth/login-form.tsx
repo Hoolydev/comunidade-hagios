@@ -93,8 +93,8 @@ export function LoginForm() {
       const safeNext = next?.startsWith("/") ? next : null;
       const wantsCheckout = safeNext?.startsWith("/checkout");
       const memberDestination = safeNext?.startsWith("/checkout")
-        ? "/comunidade"
-        : safeNext || "/comunidade";
+        ? "/movimento"
+        : safeNext || "/movimento";
 
       if (access.hasAccess) router.push(memberDestination);
       else if (wantsCheckout) await startCheckout();
@@ -104,7 +104,7 @@ export function LoginForm() {
   }
 
   const title = {
-    login: "Entrar na Comunidade",
+    login: "Entrar no Movimento",
     signup: "Criar sua conta",
     reset: "Recuperar senha",
   }[mode];
@@ -119,7 +119,7 @@ export function LoginForm() {
         <p className="mt-2 text-sm leading-6 text-muted">
           {mode === "signup"
             ? "Crie sua conta para assinar e liberar a área de membros."
-            : "Entre para acessar sua área de membro da Comunidade Hágios."}
+            : "Entre para acessar sua área de membro do Movimento Hágios."}
         </p>
       </div>
 

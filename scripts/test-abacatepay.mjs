@@ -30,7 +30,7 @@ const res = await fetch("https://api.abacatepay.com/v2/subscriptions/create", {
   body: JSON.stringify({
     items: [{ id: productId, quantity: 1 }],
     externalId: "teste-integracao",
-    completionUrl: "http://localhost:3000/comunidade?checkout=success",
+    completionUrl: "http://localhost:3000/movimento?checkout=success",
     returnUrl: "http://localhost:3000/checkout?canceled=1",
     methods,
     metadata: { user_id: "teste-integracao" },

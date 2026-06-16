@@ -40,7 +40,7 @@ export default async function ApprovalPage({
       <div className="mx-auto grid w-full max-w-4xl gap-6">
         <Link href="/" className="flex items-center gap-3 font-semibold">
           <LogoMark size="sm" priority />
-          Comunidade Hágios
+          Movimento Hágios
         </Link>
 
         <Card className="overflow-hidden">
@@ -59,7 +59,7 @@ export default async function ApprovalPage({
                   Assistente editorial
                 </p>
                 <h1 className="mt-2 text-3xl font-black leading-tight sm:text-5xl">
-                  Revisar conteúdo para a comunidade
+                  Revisar conteúdo para o Movimento
                 </h1>
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">
                   Aprove apenas se o título e o texto estiverem prontos para aparecer
@@ -72,7 +72,7 @@ export default async function ApprovalPage({
           <div className="grid gap-5 p-5 sm:p-7">
             {query.status === "approved" ? (
               <div className="rounded-lg border border-emerald-300/25 bg-emerald-400/10 p-4 text-sm text-emerald-100">
-                Conteúdo aprovado e publicado na comunidade.
+                Conteúdo aprovado e publicado no Movimento.
               </div>
             ) : null}
             {query.status === "rejected" ? (
@@ -145,7 +145,7 @@ export default async function ApprovalPage({
                 </div>
               ) : (
                 <Link
-                  href="/comunidade/conteudos-recentes"
+                  href="/movimento/conteudos-recentes"
                   className="inline-flex min-h-11 items-center justify-center rounded-lg border border-line bg-white/[0.055] px-4 text-sm font-semibold transition hover:border-gold/70 hover:bg-white/[0.09]"
                 >
                   Ver Conteúdos Recentes

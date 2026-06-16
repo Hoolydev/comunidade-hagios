@@ -53,7 +53,7 @@ export async function POST() {
     mode: BILLING_CONFIG.mode,
     customer: customerId,
     line_items: [lineItem],
-    success_url: `${appUrl}/comunidade?checkout=success`,
+    success_url: `${appUrl}/movimento?checkout=success`,
     cancel_url: `${appUrl}/checkout?canceled=1`,
     allow_promotion_codes: true,
     metadata: {

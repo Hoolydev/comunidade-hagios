@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     const whatsapp = await sendUazapiMenuWithTextFallback({
       text: message,
       choices: buildBatchApprovalChoices(),
-      footerText: "Comunidade Hágios | Curadoria diária de IA",
+      footerText: "Movimento Hágios | Curadoria diária de IA",
     });
 
     if (whatsapp.ok && process.env.WHATSAPP_APPROVER_PHONE) {

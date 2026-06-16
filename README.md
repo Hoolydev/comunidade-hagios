@@ -1,9 +1,10 @@
-# Comunidade Hagios
+# Movimento Hagios
 
-Plataforma web da Hagios Marketing para uma comunidade paga de Marketing com IA.
-O MVP inclui landing page pública, login/cadastro, Stripe Checkout, webhook de
-assinatura, área interna protegida, cursos com YouTube embedado, materiais por
-links externos, grupo de WhatsApp configurável e painel admin.
+Plataforma web do Movimento Hagios para ajudar empresários a aplicar IA em áreas
+reais da empresa. O MVP inclui landing page pública, login/cadastro, Stripe
+Checkout, webhook de assinatura, área interna protegida, jornada de
+implementação, conteúdos recentes, ferramentas por links externos, canal de
+WhatsApp configurável e painel admin.
 
 ## Stack
 
@@ -68,7 +69,7 @@ set role = 'admin'
 where email = 'seu-email@dominio.com';
 ```
 
-O acesso à comunidade é liberado quando `profiles.subscription_status` for
+O acesso ao Movimento é liberado quando `profiles.subscription_status` for
 `active` ou `trialing`. Status como `canceled`, `past_due` e `unpaid` bloqueiam
 o acesso.
 
@@ -79,7 +80,7 @@ As aulas aceitam dois formatos de player no admin:
 
 ## Stripe
 
-Crie ou use um produto chamado `Comunidade Hagios`, assinatura mensal em BRL no
+Crie ou use um produto chamado `Movimento Hagios`, assinatura mensal em BRL no
 valor de R$39,90. Configure o webhook para:
 
 ```text
@@ -108,22 +109,22 @@ Copie o webhook secret gerado para `STRIPE_WEBHOOK_SECRET`.
 - `/` landing page pública
 - `/login` login, cadastro e recuperação de senha
 - `/checkout` compra da assinatura
-- `/comunidade` dashboard interno protegido
-- `/comunidade/conteudos-recentes` novidades e conteúdos recentes
-- `/comunidade/jornada` trilhas base da Jornada Hágios
-- `/comunidade/ferramentas` biblioteca de ferramentas
-- `/comunidade/mentorias` mentorias mensais
-- `/comunidade/desafios` desafios de implementação
-- `/comunidade/duvidas` área de dúvidas
-- `/comunidade/cursos/[slug]` curso com aulas e vídeos
-- `/comunidade/whatsapp` grupo oficial
-- `/comunidade/conta` dados e portal Stripe
+- `/movimento` dashboard interno protegido
+- `/movimento/conteudos-recentes` novidades e conteúdos recentes
+- `/movimento/jornada` trilhas base da Jornada Hágios
+- `/movimento/ferramentas` biblioteca de ferramentas
+- `/movimento/mentorias` mentorias mensais
+- `/movimento/desafios` desafios de implementação
+- `/movimento/duvidas` área de dúvidas
+- `/movimento/cursos/[slug]` curso com aulas e vídeos
+- `/movimento/whatsapp` canal oficial no WhatsApp
+- `/movimento/conta` dados e portal Stripe
 - `/admin` CRUD de cursos, aulas, materiais, WhatsApp e usuários
 
 ## PWA
 
 O app expõe `/manifest.webmanifest` e registra `/sw.js` apenas em produção.
-O start URL do PWA é `/comunidade`, mantendo a experiência de comunidade como
+O start URL do PWA é `/movimento`, mantendo a área de implementação como
 destino principal do membro.
 
 ## Testes
@@ -137,7 +138,7 @@ npm run test:e2e
 Os testes E2E usam Playwright em uma porta isolada (`127.0.0.1:3127`) para não
 conflitar com outro projeto aberto em `localhost:3000`. Quando
 `SUPABASE_SERVICE_ROLE_KEY` estiver configurada, a suíte cria um admin temporário,
-testa login, acesso à comunidade, cadastro de trilha/aula/material e remove os
+testa login, acesso ao Movimento, cadastro de trilha/aula/material e remove os
 dados temporários ao final.
 
 ## Assistente editorial por WhatsApp

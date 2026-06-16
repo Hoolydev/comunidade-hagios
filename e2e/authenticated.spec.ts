@@ -42,8 +42,8 @@ function inputWithValue(page: Page, value: string) {
   return page.locator(`input[value="${value}"]`);
 }
 
-test.describe("Authenticated community and admin flow", () => {
-  test("admin can enter the community and register a training lesson with resources", async ({
+test.describe("Authenticated movement and admin flow", () => {
+  test("admin can enter the movement and register a training lesson with resources", async ({
     page,
   }, testInfo) => {
     test.setTimeout(60_000);
@@ -86,7 +86,7 @@ test.describe("Authenticated community and admin flow", () => {
       await page.getByLabel("E-mail").fill(email);
       await page.getByLabel("Senha").fill(password);
       await page.getByRole("button", { name: "Entrar como assinante" }).click();
-      await expect(page).toHaveURL(/\/comunidade/, { timeout: 15_000 });
+      await expect(page).toHaveURL(/\/movimento/, { timeout: 15_000 });
       await expect(page.getByRole("heading", { name: /Olá, Admin/ })).toBeVisible();
 
       await page.goto("/admin");
@@ -133,7 +133,7 @@ test.describe("Authenticated community and admin flow", () => {
         .maybeSingle();
       const supportsVideoFormat = !videoFormatCheck.error;
 
-      await page.goto(`/comunidade/cursos/${slug}`);
+      await page.goto(`/movimento/cursos/${slug}`);
       await expect(page.getByRole("heading", { name: courseTitle })).toBeVisible();
       await expect(
         page.getByText(
@@ -144,8 +144,8 @@ test.describe("Authenticated community and admin flow", () => {
       ).toBeVisible();
       await expect(page.getByText(materialTitle)).toBeVisible();
 
-      await page.goto("/comunidade/whatsapp");
-      await expect(page.getByRole("link", { name: "Entrar no grupo" })).toHaveAttribute(
+      await page.goto("/movimento/whatsapp");
+      await expect(page.getByRole("link", { name: "Entrar no canal" })).toHaveAttribute(
         "href",
         "https://chat.whatsapp.com/LrjCUbrxG3HAcqQKbn2Ejv",
       );

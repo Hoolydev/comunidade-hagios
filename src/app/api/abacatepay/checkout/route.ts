@@ -24,7 +24,7 @@ export async function POST() {
     productId,
     externalId: user.id,
     userId: user.id,
-    completionUrl: `${appUrl}/comunidade?checkout=success`,
+    completionUrl: `${appUrl}/movimento?checkout=success`,
     returnUrl: `${appUrl}/checkout?canceled=1`,
   });
 

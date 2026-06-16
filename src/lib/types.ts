@@ -126,7 +126,7 @@ export type RecentContent = {
   source_url?: string | null;
 };
 
-export type CommunityPost = {
+export type MovementPost = {
   id: string;
   title: string;
   slug: string;
@@ -214,7 +214,7 @@ export type ToolResource = {
   updated_at: string;
 };
 
-export type CommunityQuestion = {
+export type MovementQuestion = {
   id: string;
   question: string;
   answer: string;
@@ -233,7 +233,7 @@ export type NextAction = {
   priority: "high" | "medium" | "low";
 };
 
-export type CommunityEvent = {
+export type MovementEvent = {
   id: string;
   type: "Mentoria" | "Votação" | "Desafio";
   title: string;

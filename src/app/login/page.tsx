@@ -9,17 +9,17 @@ export default function LoginPage() {
       <section className="hidden min-h-screen flex-col justify-between border-r border-line bg-panel-soft/40 p-10 lg:flex">
         <Link href="/" className="mx-auto flex flex-col items-center gap-3 text-center font-semibold">
           <LogoMark size="lg" priority />
-          <span>Comunidade Hágios</span>
+          <span>Movimento Hágios</span>
         </Link>
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
             Empreenda com IA
           </p>
           <h2 className="mt-4 max-w-xl text-5xl font-black leading-tight">
-            Conteúdo, implementação e comunidade para otimizar suas operações.
+            Método, implementação e acompanhamento para otimizar suas operações.
           </h2>
         </div>
-        <p className="text-sm text-muted">Comunidade Hágios</p>
+        <p className="text-sm text-muted">Movimento Hágios</p>
       </section>
       <section className="flex min-h-screen items-center justify-center">
         <Suspense>

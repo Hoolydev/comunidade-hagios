@@ -1,7 +1,7 @@
 import type {
   Challenge,
-  CommunityEvent,
-  CommunityQuestion,
+  MovementEvent,
+  MovementQuestion,
   Course,
   CourseWithLessons,
   JourneyTrack,
@@ -412,7 +412,7 @@ export const mockMaterials: Material[] = [
     lesson_id: "lesson-copy-2",
     title: "Banco de CTAs por Intenção",
     description:
-      "Sugestões de botões para compra, login, download, comunidade, diagnóstico e agendamento.",
+      "Sugestões de botões para compra, login, download, diagnóstico e agendamento.",
     file_url: "https://drive.google.com/",
     category: "Vendas",
     is_published: true,
@@ -479,7 +479,7 @@ export const mockNextActions: NextAction[] = [
     title: "Continue a trilha Fundamentos da IA",
     description:
       "Finalize a missão de prompts empresariais para criar comandos mais úteis no dia a dia.",
-    href: "/comunidade/jornada",
+    href: "/movimento/jornada",
     label: "Continuar jornada",
     priority: "high",
   },
@@ -488,7 +488,7 @@ export const mockNextActions: NextAction[] = [
     title: "Assista ao conteúdo novo da semana",
     description:
       "Veja o caso prático sobre como usar IA para revisar uma campanha antes de colocar no ar.",
-    href: "/comunidade/conteudos-recentes",
+    href: "/movimento/conteudos-recentes",
     label: "Ver novidade",
     priority: "medium",
   },
@@ -497,7 +497,7 @@ export const mockNextActions: NextAction[] = [
     title: "Prepare-se para a mentoria deste mês",
     description:
       "Tema: diagnóstico de gargalos comerciais com IA. Separe uma campanha ou funil para revisar.",
-    href: "/comunidade/mentorias",
+    href: "/movimento/mentorias",
     label: "Ver mentoria",
     priority: "medium",
   },
@@ -506,7 +506,7 @@ export const mockNextActions: NextAction[] = [
     title: "Conclua o desafio atual",
     description:
       "Faltam dois dias para finalizar o desafio de mapear oportunidades de automação no negócio.",
-    href: "/comunidade/desafios",
+    href: "/movimento/desafios",
     label: "Abrir desafio",
     priority: "low",
   },
@@ -658,7 +658,7 @@ export const mockRecentContents: RecentContent[] = [
     type: "Caso prático",
     published_at: "2026-05-30T12:00:00.000Z",
     duration: "21 min",
-    href: "/comunidade/conteudos-recentes",
+    href: "/movimento/conteudos-recentes",
   },
   {
     id: "recent-service-ai",
@@ -668,7 +668,7 @@ export const mockRecentContents: RecentContent[] = [
     category: "Atendimento",
     type: "Ferramenta",
     published_at: "2026-05-27T12:00:00.000Z",
-    href: "/comunidade/ferramentas",
+    href: "/movimento/ferramentas",
   },
   {
     id: "recent-dashboard-ai",
@@ -679,7 +679,7 @@ export const mockRecentContents: RecentContent[] = [
     type: "Tendência",
     published_at: "2026-05-24T12:00:00.000Z",
     duration: "14 min",
-    href: "/comunidade/conteudos-recentes",
+    href: "/movimento/conteudos-recentes",
   },
   {
     id: "recent-sales-script",
@@ -690,7 +690,7 @@ export const mockRecentContents: RecentContent[] = [
     type: "Vídeo",
     published_at: "2026-05-20T12:00:00.000Z",
     duration: "18 min",
-    href: "/comunidade/conteudos-recentes",
+    href: "/movimento/conteudos-recentes",
   },
   {
     id: "recent-update-tools",
@@ -700,7 +700,7 @@ export const mockRecentContents: RecentContent[] = [
     category: "Atualizações",
     type: "Atualização",
     published_at: "2026-05-16T12:00:00.000Z",
-    href: "/comunidade/ferramentas",
+    href: "/movimento/ferramentas",
   },
 ];
 
@@ -885,14 +885,14 @@ export const mockTools: ToolResource[] = [
   },
 ];
 
-export const mockQuestions: CommunityQuestion[] = [
+export const mockQuestions: MovementQuestion[] = [
   {
     id: "question-1",
     question: "Como sei se devo começar por marketing, vendas ou atendimento?",
     answer:
       "Comece pelo gargalo mais visível do negócio. Se falta demanda, vá para Marketing com IA. Se existem leads sem fechamento, priorize Vendas. Se o time perde tempo repetindo respostas, avance em Atendimento com IA.",
     category: "Jornada",
-    author: "Membro da comunidade",
+    author: "Membro do Movimento",
     answered_by: "Time Hágios",
     created_at: "2026-05-29T12:00:00.000Z",
   },
@@ -902,7 +902,7 @@ export const mockQuestions: CommunityQuestion[] = [
     answer:
       "Sim. Os prompts foram pensados para funcionar em ferramentas diferentes. O mais importante é adaptar contexto, objetivo e formato de saída para a sua empresa.",
     category: "Ferramentas",
-    author: "Membro da comunidade",
+    author: "Membro do Movimento",
     answered_by: "Time Hágios",
     created_at: "2026-05-24T12:00:00.000Z",
   },
@@ -912,20 +912,20 @@ export const mockQuestions: CommunityQuestion[] = [
     answer:
       "Não. O ciclo de três dias ajuda a criar foco, mas você pode adaptar ao seu ritmo. O essencial é concluir com uma implementação real, mesmo que pequena.",
     category: "Desafios",
-    author: "Membro da comunidade",
+    author: "Membro do Movimento",
     answered_by: "Time Hágios",
     created_at: "2026-05-19T12:00:00.000Z",
   },
 ];
 
-export const mockEvents: CommunityEvent[] = [
+export const mockEvents: MovementEvent[] = [
   {
     id: "event-june-mentorship",
     type: "Mentoria",
     title: "Mentoria: diagnóstico de gargalos comerciais",
     description: "Encontro ao vivo com análise prática e próximos passos.",
     date: "2026-06-18T19:30:00.000Z",
-    href: "/comunidade/mentorias",
+    href: "/movimento/mentorias",
   },
   {
     id: "event-vote",
@@ -933,7 +933,7 @@ export const mockEvents: CommunityEvent[] = [
     title: "Vote no tema da próxima mentoria",
     description: "Escolha entre vendas, atendimento, gestão ou produtividade.",
     date: "2026-06-05T12:00:00.000Z",
-    href: "/comunidade/mentorias",
+    href: "/movimento/mentorias",
   },
   {
     id: "event-challenge",
@@ -941,7 +941,7 @@ export const mockEvents: CommunityEvent[] = [
     title: "Novo desafio de automações comerciais",
     description: "Três dias para mapear e priorizar uma implementação simples.",
     date: "2026-06-10T09:00:00.000Z",
-    href: "/comunidade/desafios",
+    href: "/movimento/desafios",
   },
 ];
 

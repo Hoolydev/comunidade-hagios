@@ -38,9 +38,9 @@ function requireAdminClient() {
 
 function revalidateAdmin() {
   revalidatePath("/admin");
-  revalidatePath("/comunidade");
-  revalidatePath("/comunidade/conteudos");
-  revalidatePath("/comunidade/materiais");
+  revalidatePath("/movimento");
+  revalidatePath("/movimento/conteudos");
+  revalidatePath("/movimento/materiais");
 }
 
 const NEW_LESSON_COLUMNS = ["video_format", "content_type", "body", "available_at"] as const;
@@ -245,13 +245,13 @@ export async function updateWhatsappLink(formData: FormData) {
     },
     { onConflict: "key" },
   );
-  revalidatePath("/comunidade/whatsapp");
-  revalidatePath("/comunidade");
+  revalidatePath("/movimento/whatsapp");
+  revalidatePath("/movimento");
   revalidatePath("/admin");
 }
 
 // ---------------------------------------------------------------------------
-// CMS da comunidade (Próximo passo, Eventos, Mentorias, Desafios, Ferramentas,
+// CMS do Movimento (Próximo passo, Eventos, Mentorias, Desafios, Ferramentas,
 // Dúvidas) + banner "Aula de boas-vindas".
 // ---------------------------------------------------------------------------
 
@@ -279,19 +279,19 @@ function jsonValue(formData: FormData, key: string) {
   }
 }
 
-function revalidateCommunity() {
+function revalidateMovement() {
   revalidatePath("/admin");
-  revalidatePath("/comunidade");
-  revalidatePath("/comunidade/mentorias");
-  revalidatePath("/comunidade/desafios");
-  revalidatePath("/comunidade/ferramentas");
-  revalidatePath("/comunidade/duvidas");
+  revalidatePath("/movimento");
+  revalidatePath("/movimento/mentorias");
+  revalidatePath("/movimento/desafios");
+  revalidatePath("/movimento/ferramentas");
+  revalidatePath("/movimento/duvidas");
 }
 
 async function deleteRow(table: string, id: string) {
   await requireAdmin();
   await requireAdminClient().from(table).delete().eq("id", id);
-  revalidateCommunity();
+  revalidateMovement();
 }
 
 // Banner "Aula de boas-vindas" -------------------------------------------------
@@ -314,7 +314,7 @@ export async function updateWelcome(formData: FormData) {
     })),
     { onConflict: "key" },
   );
-  revalidatePath("/comunidade");
+  revalidatePath("/movimento");
   revalidatePath("/admin");
 }
 
@@ -323,7 +323,7 @@ function nextActionPayload(formData: FormData) {
   return {
     title: value(formData, "title"),
     description: value(formData, "description"),
-    href: value(formData, "href") || "/comunidade",
+    href: value(formData, "href") || "/movimento",
     label: value(formData, "label") || "Abrir",
     priority: (value(formData, "priority") || "medium") as "high" | "medium" | "low",
     order_index: number(formData, "order_index"),
@@ -334,7 +334,7 @@ function nextActionPayload(formData: FormData) {
 export async function createNextAction(formData: FormData) {
   await requireAdmin();
   await requireAdminClient().from("next_actions").insert(nextActionPayload(formData));
-  revalidateCommunity();
+  revalidateMovement();
 }
 
 export async function updateNextAction(formData: FormData) {
@@ -343,7 +343,7 @@ export async function updateNextAction(formData: FormData) {
     .from("next_actions")
     .update({ ...nextActionPayload(formData), updated_at: new Date().toISOString() })
     .eq("id", value(formData, "id"));
-  revalidateCommunity();
+  revalidateMovement();
 }
 
 export async function deleteNextAction(formData: FormData) {
@@ -357,28 +357,28 @@ function eventPayload(formData: FormData) {
     title: value(formData, "title"),
     description: value(formData, "description"),
     date: dateValue(formData, "date"),
-    href: value(formData, "href") || "/comunidade",
+    href: value(formData, "href") || "/movimento",
     is_published: checked(formData, "is_published"),
   };
 }
 
 export async function createEvent(formData: FormData) {
   await requireAdmin();
-  await requireAdminClient().from("community_events").insert(eventPayload(formData));
-  revalidateCommunity();
+  await requireAdminClient().from("movement_events").insert(eventPayload(formData));
+  revalidateMovement();
 }
 
 export async function updateEvent(formData: FormData) {
   await requireAdmin();
   await requireAdminClient()
-    .from("community_events")
+    .from("movement_events")
     .update({ ...eventPayload(formData), updated_at: new Date().toISOString() })
     .eq("id", value(formData, "id"));
-  revalidateCommunity();
+  revalidateMovement();
 }
 
 export async function deleteEvent(formData: FormData) {
-  await deleteRow("community_events", value(formData, "id"));
+  await deleteRow("movement_events", value(formData, "id"));
 }
 
 // Mentorias --------------------------------------------------------------------
@@ -398,7 +398,7 @@ function mentorshipPayload(formData: FormData) {
 export async function createMentorship(formData: FormData) {
   await requireAdmin();
   await requireAdminClient().from("mentorships").insert(mentorshipPayload(formData));
-  revalidateCommunity();
+  revalidateMovement();
 }
 
 export async function updateMentorship(formData: FormData) {
@@ -407,7 +407,7 @@ export async function updateMentorship(formData: FormData) {
     .from("mentorships")
     .update({ ...mentorshipPayload(formData), updated_at: new Date().toISOString() })
     .eq("id", value(formData, "id"));
-  revalidateCommunity();
+  revalidateMovement();
 }
 
 export async function deleteMentorship(formData: FormData) {
@@ -433,7 +433,7 @@ function challengePayload(formData: FormData) {
 export async function createChallenge(formData: FormData) {
   await requireAdmin();
   await requireAdminClient().from("challenges").insert(challengePayload(formData));
-  revalidateCommunity();
+  revalidateMovement();
 }
 
 export async function updateChallenge(formData: FormData) {
@@ -442,7 +442,7 @@ export async function updateChallenge(formData: FormData) {
     .from("challenges")
     .update({ ...challengePayload(formData), updated_at: new Date().toISOString() })
     .eq("id", value(formData, "id"));
-  revalidateCommunity();
+  revalidateMovement();
 }
 
 export async function deleteChallenge(formData: FormData) {
@@ -463,7 +463,7 @@ function toolPayload(formData: FormData) {
 export async function createTool(formData: FormData) {
   await requireAdmin();
   await requireAdminClient().from("tools").insert(toolPayload(formData));
-  revalidateCommunity();
+  revalidateMovement();
 }
 
 export async function updateTool(formData: FormData) {
@@ -472,7 +472,7 @@ export async function updateTool(formData: FormData) {
     .from("tools")
     .update({ ...toolPayload(formData), updated_at: new Date().toISOString() })
     .eq("id", value(formData, "id"));
-  revalidateCommunity();
+  revalidateMovement();
 }
 
 export async function deleteTool(formData: FormData) {
@@ -485,7 +485,7 @@ function questionPayload(formData: FormData) {
     question: value(formData, "question"),
     answer: value(formData, "answer"),
     category: value(formData, "category") || "Jornada",
-    author: value(formData, "author") || "Membro da comunidade",
+    author: value(formData, "author") || "Membro do Movimento",
     answered_by: value(formData, "answered_by") || "Time Hágios",
     is_published: checked(formData, "is_published"),
   };
@@ -493,19 +493,19 @@ function questionPayload(formData: FormData) {
 
 export async function createQuestion(formData: FormData) {
   await requireAdmin();
-  await requireAdminClient().from("community_questions").insert(questionPayload(formData));
-  revalidateCommunity();
+  await requireAdminClient().from("movement_questions").insert(questionPayload(formData));
+  revalidateMovement();
 }
 
 export async function updateQuestion(formData: FormData) {
   await requireAdmin();
   await requireAdminClient()
-    .from("community_questions")
+    .from("movement_questions")
     .update({ ...questionPayload(formData), updated_at: new Date().toISOString() })
     .eq("id", value(formData, "id"));
-  revalidateCommunity();
+  revalidateMovement();
 }
 
 export async function deleteQuestion(formData: FormData) {
-  await deleteRow("community_questions", value(formData, "id"));
+  await deleteRow("movement_questions", value(formData, "id"));
 }
