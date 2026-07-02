@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { BookOpen, CheckCircle2, Circle, Layers3 } from "lucide-react";
+import { BookOpen, CheckCircle2, Circle, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import type { JourneyTrack } from "@/lib/types";
@@ -13,6 +13,10 @@ type ProgressState = Record<string, boolean>;
 
 function getLessonIds(track: JourneyTrack) {
   return track.modules.flatMap((module) => module.lessons.map((lesson) => lesson.id));
+}
+
+function getMissions(track: JourneyTrack) {
+  return track.modules.flatMap((module) => module.lessons);
 }
 
 function calculateProgress(track: JourneyTrack, progress: ProgressState) {
@@ -71,7 +75,7 @@ export function JourneyProgressBoard({ tracks }: { tracks: JourneyTrack[] }) {
             <div className="mb-2 flex justify-between text-sm">
               <span className="font-semibold text-gold">{totals.percent}% concluído</span>
               <span className="text-muted">
-                {totals.completed}/{totals.total} aulas
+                {totals.completed}/{totals.total} missões
               </span>
             </div>
             <div className="h-3 rounded-full bg-white/10">
@@ -84,8 +88,16 @@ export function JourneyProgressBoard({ tracks }: { tracks: JourneyTrack[] }) {
         </div>
       </Card>
 
+      <section>
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gold">
+          Trilhas do Movimento
+        </p>
+        <h2 className="mt-2 text-2xl font-black">Avance por missões práticas</h2>
+      </section>
+
       {tracks.map((track) => {
         const trackProgress = calculateProgress(track, progress);
+        const missions = getMissions(track);
 
         return (
           <Card key={track.id} className="overflow-hidden">
@@ -93,13 +105,16 @@ export function JourneyProgressBoard({ tracks }: { tracks: JourneyTrack[] }) {
               <div>
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="rounded-full border border-gold/25 bg-gold/10 px-2.5 py-1 text-xs font-semibold text-gold-strong">
+                    Trilha
+                  </span>
+                  <span className="rounded-full border border-line bg-white/[0.045] px-2.5 py-1 text-xs text-muted">
                     {track.category}
                   </span>
                   <span className="rounded-full border border-line bg-white/[0.045] px-2.5 py-1 text-xs text-muted">
-                    {track.modules.length} missões
+                    {missions.length} missões
                   </span>
                 </div>
-                <h2 className="mt-3 text-2xl font-black">{track.title}</h2>
+                <h2 className="mt-3 text-2xl font-black">Trilha: {track.title}</h2>
                 <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
                   {track.description}
                 </p>
@@ -118,57 +133,71 @@ export function JourneyProgressBoard({ tracks }: { tracks: JourneyTrack[] }) {
               </div>
             </div>
 
-            <div className="grid gap-4 p-5 lg:grid-cols-2">
-              {track.modules.map((module) => (
-                <div key={module.id} className="rounded-lg border border-line bg-white/[0.035] p-4">
-                  <div className="mb-3 flex items-start gap-3">
-                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-gold/20 bg-gold/10">
-                      <Layers3 className="h-5 w-5 text-gold-strong" />
-                    </div>
-                    <div>
-                      <h3 className="font-black">{module.title}</h3>
-                      <p className="mt-1 text-sm leading-6 text-muted">{module.description}</p>
-                    </div>
-                  </div>
-                  <div className="grid gap-2">
-                    {module.lessons.map((lesson) => {
-                      const completed = Boolean(progress[lesson.id]);
+            <div className="grid gap-3 p-5 lg:grid-cols-2">
+              {missions.map((mission) => {
+                const completed = Boolean(progress[mission.id]);
 
-                      return (
-                        <button
-                          key={lesson.id}
-                          type="button"
-                          onClick={() => toggleLesson(lesson.id)}
-                          className={cn(
-                            "flex min-h-20 items-start gap-3 rounded-lg border p-3 text-left transition",
-                            completed
-                              ? "border-gold/35 bg-gold/10"
-                              : "border-line bg-navy-deep/35 hover:border-gold/30",
-                          )}
-                        >
-                          {completed ? (
-                            <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-gold-strong" />
-                          ) : (
-                            <Circle className="mt-0.5 h-5 w-5 shrink-0 text-muted" />
-                          )}
-                          <div className="min-w-0 flex-1">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <p className="font-semibold">{lesson.title}</p>
-                              {lesson.status !== "available" ? (
-                                <span className="rounded-full border border-gold/20 bg-gold/10 px-2 py-0.5 text-[11px] font-semibold text-gold-strong">
-                                  {lesson.status === "new" ? "novo" : "recomendado"}
-                                </span>
-                              ) : null}
-                            </div>
-                            <p className="mt-1 text-xs leading-5 text-muted">{lesson.description}</p>
-                          </div>
-                          <span className="shrink-0 text-xs text-muted">{lesson.duration}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
+                return (
+                  <button
+                    key={mission.id}
+                    type="button"
+                    onClick={() => toggleLesson(mission.id)}
+                    className={cn(
+                      "flex min-h-36 items-start gap-4 rounded-lg border p-4 text-left transition",
+                      completed
+                        ? "border-gold/40 bg-gold/10 shadow-[0_12px_34px_rgba(216,163,27,0.1)]"
+                        : "border-line bg-white/[0.035] hover:border-gold/35 hover:bg-white/[0.055]",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "grid h-11 w-11 shrink-0 place-items-center rounded-lg border",
+                        completed
+                          ? "border-gold/40 bg-gold/15"
+                          : "border-gold/20 bg-gold/10",
+                      )}
+                    >
+                      {completed ? (
+                        <CheckCircle2 className="h-5 w-5 text-gold-strong" />
+                      ) : (
+                        <Target className="h-5 w-5 text-gold-strong" />
+                      )}
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="flex flex-wrap items-center gap-2">
+                        <span className="rounded-full border border-gold/20 bg-gold/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-gold-strong">
+                          Missão
+                        </span>
+                        <span className="text-xs text-muted">{mission.duration}</span>
+                        {mission.status !== "available" ? (
+                          <span className="rounded-full border border-line bg-white/[0.045] px-2 py-0.5 text-[11px] font-semibold text-muted">
+                            {mission.status === "new" ? "novo" : "recomendado"}
+                          </span>
+                        ) : null}
+                      </span>
+                      <span className="mt-3 block text-lg font-black leading-snug">
+                        {mission.title}
+                      </span>
+                      <span className="mt-2 block text-sm leading-6 text-muted">
+                        {mission.description}
+                      </span>
+                      <span className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-gold-strong">
+                        {completed ? (
+                          <>
+                            <CheckCircle2 className="h-4 w-4" />
+                            Feito
+                          </>
+                        ) : (
+                          <>
+                            <Circle className="h-4 w-4" />
+                            Marcar como feito
+                          </>
+                        )}
+                      </span>
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </Card>
         );

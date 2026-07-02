@@ -529,14 +529,14 @@ export const mockJourneyTracks: JourneyTrack[] = [
         lessons: [
           {
             id: "journey-fundamentos-1",
-            title: "O mapa da IA dentro da empresa",
+            title: "Criar o mapa da IA dentro da empresa",
             duration: "12 min",
             description: "Identifique áreas onde a IA pode apoiar marketing, vendas e operação.",
             status: "recommended",
           },
           {
             id: "journey-fundamentos-2",
-            title: "Como pensar antes de pedir para a IA",
+            title: "Aprender a pedir para a IA com clareza",
             duration: "9 min",
             description: "Aprenda a transformar uma necessidade vaga em uma tarefa clara.",
             status: "available",
@@ -551,14 +551,14 @@ export const mockJourneyTracks: JourneyTrack[] = [
         lessons: [
           {
             id: "journey-prompt-1",
-            title: "A estrutura de prompt que evita resposta genérica",
+            title: "Montar um prompt para chegar no resultado certo",
             duration: "14 min",
             description: "Contexto, objetivo, restrições e formato de saída em uma estrutura simples.",
             status: "new",
           },
           {
             id: "journey-prompt-2",
-            title: "Transformando respostas em próximos passos",
+            title: "Transformar uma resposta da IA em próximos passos",
             duration: "11 min",
             description: "Como revisar, aprofundar e converter ideias em execução.",
             status: "available",
@@ -583,14 +583,14 @@ export const mockJourneyTracks: JourneyTrack[] = [
         lessons: [
           {
             id: "journey-marketing-1",
-            title: "Pesquisa de público em 20 minutos",
+            title: "Criar uma pesquisa de público em 20 minutos",
             duration: "18 min",
             description: "Monte uma visão rápida de público, objeções e proposta de valor.",
             status: "available",
           },
           {
             id: "journey-marketing-2",
-            title: "Oferta clara para vender melhor",
+            title: "Organizar uma oferta clara para vender melhor",
             duration: "16 min",
             description: "Organize promessa, entrega, diferenciais e CTA sem ruído.",
             status: "recommended",
@@ -605,7 +605,7 @@ export const mockJourneyTracks: JourneyTrack[] = [
         lessons: [
           {
             id: "journey-content-1",
-            title: "Sistema de ideias para 30 dias",
+            title: "Construir um sistema de ideias para 30 dias",
             duration: "13 min",
             description: "Crie uma matriz para não depender de inspiração.",
             status: "available",
@@ -630,14 +630,14 @@ export const mockJourneyTracks: JourneyTrack[] = [
         lessons: [
           {
             id: "journey-service-1",
-            title: "Mapa de perguntas frequentes",
+            title: "Criar um mapa de perguntas frequentes",
             duration: "10 min",
             description: "Transforme dúvidas repetidas em uma base de resposta útil.",
             status: "new",
           },
           {
             id: "journey-service-2",
-            title: "Follow-up que retoma contexto",
+            title: "Escrever um follow-up que retoma contexto",
             duration: "15 min",
             description: "Crie mensagens comerciais sem parecer insistente.",
             status: "available",

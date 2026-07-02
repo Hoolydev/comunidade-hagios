@@ -14,6 +14,7 @@ export default async function DuvidasPage() {
         eyebrow="Área de Dúvidas"
         title="Perguntas registradas viram suporte, conteúdo e melhoria."
         description="Consulte respostas do time e envie novas dúvidas para acelerar sua implementação com IA."
+        descriptionLabel="Como funciona a Área de Dúvidas?"
         icon={MessageSquareText}
       />
 

@@ -37,6 +37,7 @@ export default async function CoursePage({
         eyebrow={course.category}
         title={course.title}
         description={course.description}
+        descriptionLabel="Sobre esta trilha"
         icon={MonitorPlay}
       />
 
@@ -54,7 +55,7 @@ export default async function CoursePage({
                 )}
               </div>
               <div>
-                <p className="text-sm font-semibold text-gold">Aula em destaque</p>
+                <p className="text-sm font-semibold text-gold">Missão em destaque</p>
                 <h2 className="text-xl font-black">{currentLesson.title}</h2>
                 <p className="mt-1 text-sm leading-6 text-muted">
                   {isText
@@ -78,7 +79,7 @@ export default async function CoursePage({
                 </span>
                 <h2 className="text-xl font-black">Conteúdo agendado</h2>
                 <p className="max-w-md text-sm leading-6 text-muted">
-                  As aulas desta trilha são liberadas aos poucos. A próxima abre em{" "}
+                  As missões desta trilha são liberadas aos poucos. A próxima abre em{" "}
                   <span className="font-semibold text-gold">
                     {formatDate(currentLesson.available_at)}
                   </span>
@@ -140,8 +141,8 @@ export default async function CoursePage({
           <aside className="grid content-start gap-4 xl:sticky xl:top-8">
             <Card className="p-5">
               <div className="flex items-center justify-between gap-3">
-                <h2 className="font-bold">Aulas</h2>
-                <Badge tone="neutral">{course.lessons.length} aulas</Badge>
+                <h2 className="font-bold">Missões</h2>
+                <Badge tone="neutral">{course.lessons.length} missões</Badge>
               </div>
               <div className="mt-4 grid gap-3">
                 {course.lessons.map((lesson) => {
@@ -224,8 +225,8 @@ export default async function CoursePage({
         </section>
       ) : (
         <EmptyState
-          title="Curso sem aulas publicadas"
-          description="O administrador pode publicar aulas no painel admin."
+          title="Trilha sem missões publicadas"
+          description="O administrador pode publicar missões no painel admin."
         />
       )}
     </div>

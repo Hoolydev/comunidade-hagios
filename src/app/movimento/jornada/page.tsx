@@ -1,64 +1,22 @@
-import { ArrowRight } from "lucide-react";
-import { CourseCard } from "@/components/movement/course-card";
+import { Map } from "lucide-react";
 import { JourneyProgressBoard } from "@/components/movement/journey-progress-board";
-import { ButtonLink } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { getCourses, getJourneyTracks } from "@/lib/data";
+import { PageHero } from "@/components/movement/page-hero";
+import { getJourneyTracks } from "@/lib/data";
 
 export default async function JornadaPage() {
-  const [tracks, courses] = await Promise.all([
-    getJourneyTracks(),
-    getCourses(),
-  ]);
+  const tracks = await getJourneyTracks();
 
   return (
-    <div className="grid gap-7">
-      <section className="py-2">
-        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-gold">
-          Jornada Hágios
-        </p>
-        <h1 className="mt-3 max-w-4xl text-4xl font-black leading-tight sm:text-5xl">
-          A Jornada vai te guiar para suas primeiras implementações.
-        </h1>
-        <p className="mt-4 max-w-3xl text-sm leading-6 text-muted sm:text-base sm:leading-7">
-          A jornada é organizada em trilhas, que são implementações de soluções
-          de IA dentro de um macro tema. Nas trilhas você tem implementações
-          fundamentais. São aulas práticas, você assiste fazendo. Isso significa
-          que ao final de cada missão você já implementou aquela IA na sua
-          operação.
-        </p>
-      </section>
-
-      {courses.length ? (
-        <section>
-          <div className="mb-4 flex flex-col gap-1">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gold">
-              Trilhas do Movimento
-            </p>
-            <h2 className="text-2xl font-black">Escolha uma trilha para implementar</h2>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {courses.map((course) => (
-              <CourseCard key={course.id} course={course} />
-            ))}
-          </div>
-        </section>
-      ) : null}
+    <div className="grid gap-6">
+      <PageHero
+        eyebrow="Jornada Hágios"
+        title="A Jornada vai te guiar para suas primeiras implementações."
+        description="A jornada é organizada em trilhas, que são implementações de soluções de IA dentro de um macro tema. Nas trilhas você encontra missões fundamentais com prática guiada para fazer enquanto acompanha. Ao final de cada missão, você já implementou aquela IA em uma parte da sua operação."
+        descriptionLabel="O que é Jornada?"
+        icon={Map}
+      />
 
       <JourneyProgressBoard tracks={tracks} />
-
-      <Card className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-xl font-black">Depois da base, avance para a prática.</h2>
-          <p className="mt-1 text-sm leading-6 text-muted">
-            Os conteúdos recentes e desafios mostram onde aplicar o que você aprendeu.
-          </p>
-        </div>
-        <ButtonLink href="/movimento/conteudos-recentes" className="w-full sm:w-auto">
-          Ver conteúdos recentes
-          <ArrowRight className="h-4 w-4" />
-        </ButtonLink>
-      </Card>
     </div>
   );
 }

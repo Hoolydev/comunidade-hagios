@@ -16,6 +16,7 @@ export default async function AccountPage() {
         eyebrow="Minha conta"
         title="Dados e assinatura"
         description="Consulte seus dados de acesso, status da assinatura e opções de gerenciamento."
+        descriptionLabel="O que posso ver aqui?"
         icon={UserRound}
       />
       <Card className="p-6">

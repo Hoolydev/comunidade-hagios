@@ -1,4 +1,5 @@
 import type { ComponentType, SVGProps } from "react";
+import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
@@ -7,6 +8,7 @@ export function PageHero({
   eyebrow,
   title,
   description,
+  descriptionLabel = "O que é esta área?",
   icon: Icon,
   action,
   className,
@@ -14,6 +16,7 @@ export function PageHero({
   eyebrow: string;
   title: string;
   description: string;
+  descriptionLabel?: string;
   icon?: IconComponent;
   action?: React.ReactNode;
   className?: string;
@@ -40,9 +43,17 @@ export function PageHero({
           <h1 className="max-w-4xl text-4xl font-black leading-tight sm:text-5xl">
             {title}
           </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-muted sm:text-base sm:leading-7">
-            {description}
-          </p>
+          <details className="group mt-4 max-w-2xl">
+            <summary className="inline-flex min-h-10 cursor-pointer list-none items-center gap-2 rounded-lg border border-line bg-white/[0.045] px-4 text-sm font-semibold text-foreground transition hover:border-gold/45 hover:bg-white/[0.07] [&::-webkit-details-marker]:hidden">
+              {descriptionLabel}
+              <ChevronDown className="h-4 w-4 text-gold-strong transition group-open:rotate-180" />
+            </summary>
+            <div className="mt-3 rounded-lg border border-line bg-white/[0.035] p-4">
+              <p className="text-sm leading-6 text-muted sm:text-base sm:leading-7">
+                {description}
+              </p>
+            </div>
+          </details>
         </div>
         {action ? <div className="flex flex-col gap-3 sm:flex-row">{action}</div> : null}
       </div>

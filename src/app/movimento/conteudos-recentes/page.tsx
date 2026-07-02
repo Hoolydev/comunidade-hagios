@@ -12,6 +12,7 @@ export default async function ConteudosRecentesPage() {
         eyebrow="Conteúdos Recentes"
         title="O que entrou agora no Movimento."
         description="Vídeos, atualizações, ferramentas, tendências e casos práticos em ordem de publicação, para você sempre saber o que é novo."
+        descriptionLabel="O que são Conteúdos Recentes?"
         icon={Clock3}
       />
 

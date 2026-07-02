@@ -20,6 +20,7 @@ export default async function WhatsappPage() {
         eyebrow="Canal WhatsApp"
         title="Entre no canal oficial do Movimento Hágios."
         description="Avisos importantes, orientações práticas e dúvidas de implementação acontecem no WhatsApp. É o canal para acompanhar o que precisa ser aplicado agora."
+        descriptionLabel="Por que entrar no WhatsApp?"
         icon={WhatsAppIcon}
         action={
           <ButtonLink href={whatsappLink} size="lg" className="w-full sm:w-auto">

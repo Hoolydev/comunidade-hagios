@@ -14,6 +14,7 @@ export default async function MentoriasPage() {
         eyebrow="Mentorias"
         title="Encontros mensais para transformar dúvida em decisão."
         description="Acompanhe próximas mentorias, gravações, materiais complementares e desafios relacionados."
+        descriptionLabel="O que são Mentorias?"
         icon={CalendarDays}
       />
 

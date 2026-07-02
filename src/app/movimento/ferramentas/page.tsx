@@ -12,6 +12,7 @@ export default async function FerramentasPage() {
         eyebrow="Biblioteca de Ferramentas"
         title="Encontre rápido o que ajuda você a implementar."
         description="Prompts, templates, checklists, planilhas, fluxogramas, guias, automações e ferramentas recomendadas para aplicar IA no negócio."
+        descriptionLabel="O que tem na biblioteca?"
         icon={LibraryBig}
       />
 

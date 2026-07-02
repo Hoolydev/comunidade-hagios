@@ -14,6 +14,7 @@ export default async function DesafiosPage() {
         eyebrow="Desafios"
         title="Implementação em ciclos curtos."
         description="Cada desafio transforma um tema em ação prática. O objetivo é terminar com uma melhoria real no negócio, mesmo que pequena."
+        descriptionLabel="O que são Desafios?"
         icon={Trophy}
       />
 
